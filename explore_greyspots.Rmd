@@ -56,17 +56,22 @@ adm0_shp <- readRDS("data/BGD_adm0.rds")
 adm2_shp <- readRDS("data/BGD_adm2.rds")
 
 ## import buffer files (multipolygon versions)
-buff10_mp <- st_read("generated_data/buff_sf_multipoly_10km.shp")
-buff30_mp <- st_read("generated_data/buff_sf_multipoly_30km.shp")
-buff50_mp <- st_read("generated_data/buff_sf_multipoly_50km.shp")
+mp_filenames <- grep("multipoly", list.files("generated_data/", pattern = "*.shp"), value = TRUE)
+buff_mp_ls <- lapply(mp_filenames, function(fn){
+  st_read(paste0("generated_data/", fn))
+})
+mp_names <- sub(".shp", "", sub("buff_sf_multipoly_", "", mp_filenames))
+names(buff_mp_ls) <- mp_names
 
 ## import buffer files (single polygon versions)
-buff10_sp <- st_read("generated_data/buff_sf_singlepoly_10km.shp")
-buff30_sp <- st_read("generated_data/buff_sf_singlepoly_30km.shp")
-buff50_sp <- st_read("generated_data/buff_sf_singlepoly_50km.shp")
+sp_filenames <- grep("singlepoly", list.files("generated_data/", pattern = "*.shp"), value = TRUE)
+buff_sp_ls <- lapply(sp_filenames, function(fn){
+  st_read(paste0("generated_data/", fn))
+})
+sp_names <- sub(".shp", "", sub("buff_sf_singlepoly_", "", sp_filenames))
+names(buff_sp_ls) <- sp_names
 
 ```
-
 
 There are 22 sentinel hospital sites (`r tab_nums("tab-hospnames", display = "cite")`).
 
@@ -85,37 +90,17 @@ knitr::kable(display_hospnames_tab, format = "pandoc", booktabs = T, align = "c"
 
 ```
 
-We defined 3 versions of basic hospital population catchment areas with 10 km, 30 km, and 50 km radial buffers (`r tab_nums("tab-hosp", display = "cite")`).
-
-
-```{r, proc-tab-hosp}
-
-display_hosp_tab <- hosp_dat %>%
-  dplyr::mutate(HOSP = as.character(HOSP)) %>%
-  dplyr::mutate(pop_buff10 = buff10_sp$pop, pop_buff30 = buff30_sp$pop, pop_buff50 = buff50_sp$pop) %>%
-  dplyr::select(HOSP, contains("buff"))
-
-#tot_row <- data.frame(HOSP = "Total", pop_buff10 = sum(hosp_rows$pop_buff10), pop_buff30 = sum(hosp_rows$pop_buff30), pop_buff50 = sum(hosp_rows$pop_buff50))
-
-tab_nums(name = "tab-hosp", caption = "**Sentinel hospital catchment areas.**", display = FALSE)
-```
-
-`r tab_nums("tab-hosp", display = "full")`
-
-```{r, disp-tab-hosp}
-knitr::kable(display_hosp_tab, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("ID", "Pop (10km)", "Pop (30km)", "Pop (50km)"))
-
-```
-
-Cholera surveillance zone summaries (`r tab_nums("tab-survzones", display = "cite")`)
+Cholera surveillance zone summaries (`r tab_nums("tab-survzone", display = "cite")`, `r fig_nums("fig-survzone", display = "cite")`).
 
 ```{r, proc-tab-survzone}
 
 tot_pop <- sum(values(pop_rast), na.rm = TRUE)
 
-display_survzone_tab <- data.frame(buffer = c(10, 30, 50), 
-                      pop_buffer = c(buff10_mp$pop, buff30_mp$pop, buff50_mp$pop)) %>%
-                      dplyr::mutate(prop_buffer = pop_buffer/tot_pop)
+display_survzone_tab <- map_dfr(mp_names, function(mp_nm){
+  
+  data.frame(buffer = as.numeric(sub("km", "", mp_nm)), pop_buffer = buff_mp_ls[[mp_nm]]$pop) %>%
+    dplyr::mutate(prop_buffer = pop_buffer/tot_pop)
+})
 
 
 tab_nums(name = "tab-survzone", caption = "**Cholera surveillance zone summary.**", display = FALSE)
@@ -123,10 +108,50 @@ tab_nums(name = "tab-survzone", caption = "**Cholera surveillance zone summary.*
 
 `r tab_nums("tab-survzone", display = "full")`
 
-```{r, disp-tab-survzones}
-knitr::kable(display_survzone_tab, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer (km)", "Pop", "Prop of Pop"))
+```{r, disp-tab-survzone}
+knitr::kable(display_survzone_tab, format = "pandoc", booktabs = T, align = "c", row.names = FALSE)
+##, col.names = c("Buffer (km)", "Pop", "Prop of Pop")
 
 ```
+
+```{r, fig-survzone}
+ggplot(display_survzone_tab, aes(x = buffer, y = prop_buffer)) +
+  geom_point() +
+  theme_bw() + 
+  scale_x_continuous("Buffer (km)", limits = c(0,60)) +
+  scale_y_continuous("Proportion", limits = c(0,1))
+
+fig_nums(name = "fig-survzone", caption = "**Proportion of total population captured in cholera surveillance zone, by buffer radius size**", display = FALSE)
+```
+
+`r fig_nums("fig-survzone", display = "full")`
+
+
+
+## Need to update
+
+We defined 3 versions of basic hospital population catchment areas with 10 km, 30 km, and 50 km radial buffers (`r tab_nums("tab-hosp", display = "cite")`).
+
+
+```{r, proc-tab-hosp, eval = FALSE}
+
+display_hosp_tab <- hosp_dat %>%
+ dplyr::mutate(HOSP = as.character(HOSP)) %>%
+ dplyr::mutate(pop_buff10 = buff10_sp$pop, pop_buff30 = buff30_sp$pop, pop_buff50 = buff50_sp$pop) %>%
+ dplyr::select(HOSP, contains("buff"))
+
+tot_row <- data.frame(HOSP = "Total", pop_buff10 = sum(hosp_rows$pop_buff10), pop_buff30 = sum(hosp_rows$pop_buff30), pop_buff50 = sum(hosp_rows$pop_buff50))
+
+tab_nums(name = "tab-hosp", caption = "**Sentinel hospital catchment areas.**", display = FALSE)
+```
+
+#`r tab_nums("tab-hosp", display = "full")`
+
+```{r, disp-tab-hosp, eval = FALSE}
+knitr::kable(display_hosp_tab, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("ID", "Pop (10km)", "Pop (30km)", "Pop (50km)"))
+
+```
+
 
 
 

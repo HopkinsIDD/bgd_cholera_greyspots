@@ -8,6 +8,7 @@ reload_source <- function(){
   library(ggsn)
   library(mapview)
   library(readr)
+  library(purrr)
   
   source("source/util.R")
   

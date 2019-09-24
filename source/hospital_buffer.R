@@ -4,7 +4,7 @@ source("source/util.R")
 reload_source()
 out_wd <- "generated_data/"
 fig_wd <- "figures/"
-d <- seq(5, 60, by = 5) ## define buffer size
+d <- seq(5, 5, by = 5) ## define buffer size
 
 #############################Load data
 ##load bangladesh shapefiles
@@ -31,7 +31,7 @@ for (i in unique(d)) {
   pop_dist_buff <-bgd_pop_v$extract(sp=dub_buffer, fun=function(x) sum(x, na.rm=T))
   #pop_dist_buff_df<-data.frame(cbind(1:22,pop_dist_buff)) %>% dplyr::rename(HOSP=X1,pop=X2) #to create separate df with pop data
   sp_file <- dub_buffer %>% dplyr::mutate(pop=pop_dist_buff)
-  st_write(sp_file, paste0(out_wd, "buff_sf_singlepoly_", i, "km.shp"))
+  st_write(sp_file, paste0(out_wd, "buff_sf_singlepoly_", ifelse(nchar(i)==2, i, paste0("0",i)), "km.shp"))
 
   ## multipolygons
   #combine buffer polygons per hospital into single multipolygon
@@ -39,7 +39,7 @@ for (i in unique(d)) {
   #measure population in all buffers of the multipolygon
   pop_dist_buff_mp <- bgd_pop_v$extract(sp=dub_buffer_mp, fun=function(x) sum(x, na.rm=T))
   mp_file <- dub_buffer_mp %>% dplyr::mutate(pop = pop_dist_buff_mp)
-  st_write(mp_file, paste0(out_wd, "buff_sf_multipoly_", i, "km.shp"))
+  st_write(mp_file, paste0(out_wd, "buff_sf_multipoly_", ifelse(nchar(i)==2, i, paste0("0",i)), "km.shp"))
   
   ## save plot
   buff_map <- map_buffers(bang.map, bang.map, hosp_loc, mp_file)

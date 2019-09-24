@@ -1,41 +1,18 @@
 reload_source <- function(){
   library(sf)
   library(dplyr)
-  library(tidyxl)
-  library(readxl)
-  library(stringr)
-  library(purrr)
-  library(tidyr)
-  library(ggplot2)
-  library(readr)
-  library(DT)
-  library(stringr)
-  library(sf)
-  library(knitr)
-  library(gridExtra)
-  library(mgcv)
   library(velox)
   library(raster)
-  library(plyr)
-  library(scales)
-  library(zoo)
-  library(fasterize)
-  library(ggrepel)
+  library(tidyr)
+  library(ggplot2)
   library(ggsn)
-  library(haven)
-  library(FNN)
-  library(rgdal)
   library(mapview)
-  library(brms)
-  library(malariaAtlas)
-  library(geosphere)
-  library(matrixStats)
-  library(Hmisc)
-  library(lubridate)
+  library(readr)
   
   source("source/util.R")
   
 }
+
 
 
 ## transforms sf file to Bangladesh Transverse Mercator projection

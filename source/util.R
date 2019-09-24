@@ -13,7 +13,20 @@ reload_source <- function(){
   
 }
 
-
+## map buffer zones
+map_buffers <- function(map0_shp, map2_shp, hosp_coord, polyfile){
+  mapview(polyfile)
+  plt <- ggplot() + 
+    geom_sf(data = map0_shp, fill = NA, lwd = 0.1, alpha = .1) + 
+    geom_sf(data = polyfile, color = "red", alpha = .4, show.legend = "point") +
+    geom_sf(data = hosp_coord, shape = 3, color = "black", size = 1, lty = 4) +
+    coord_sf(datum = NA) + 
+    labs(x = "") + labs(y = "") + 
+    theme_void() + 
+    ggsn::north(map2_shp) +
+    scalebar(map2_shp, dist = 50, dist_unit = "km",transform = TRUE, model = "WGS84", st.size = 3)
+  return(plt)
+}
 
 ## transforms sf file to Bangladesh Transverse Mercator projection
 transform_to_btm <- function(my_sf){

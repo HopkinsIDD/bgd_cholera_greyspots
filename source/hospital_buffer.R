@@ -4,7 +4,7 @@ source("source/util.R")
 reload_source()
 out_wd <- "generated_data/"
 fig_wd <- "figures/"
-d <- c(10, 30, 50) ## define buffer size
+d <- seq(5, 60, by = 5) ## define buffer size
 
 #############################Load data
 ##load bangladesh shapefiles
@@ -15,23 +15,6 @@ hosp<-read_csv("data/hosp_GPS.csv")
 ##load BGD population raster
 bgd_pop <- raster("data/BGD_ppp_2015_adj_v2.tif")
 bgd_pop_v <- velox(bgd_pop)
-
-#############################
-## Custom functions
-map_buffers <- function(polyfile){
-  mapview(polyfile)
-  plt <- ggplot() + 
-    geom_sf(data=bang.map0,fill=NA,lwd=0.1, alpha=.1) + 
-    geom_sf(data=mp_file,color="red",alpha=.4,show.legend="point") +
-    geom_sf(data=hosp_loc,shape=3,color="black",size=1,lty=4) +
-    coord_sf(datum=NA) + 
-    labs(x="") + labs(y="") + 
-    theme_void() + 
-    ggsn::north(bang.map) +
-    scalebar(bang.map, dist = 50, dist_unit = "km",transform = TRUE, model = "WGS84", st.size = 3)
-  return(plt)
-}
-
 
 ############################# Buffers
 ##hospital locations transformed to populate buffers
@@ -59,7 +42,7 @@ for (i in unique(d)) {
   st_write(mp_file, paste0(out_wd, "buff_sf_multipoly_", i, "km.shp"))
   
   ## save plot
-  buff_map <- map_buffers(mp_file)
+  buff_map <- map_buffers(bang.map, bang.map, hosp_loc, mp_file)
   ggsave(paste0(fig_wd, "buff_", i, "km.pdf"), buff_map, width = 4, height = 4)
 }
 

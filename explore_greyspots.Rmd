@@ -1,0 +1,137 @@
+---
+title: "Bangladesh surveillance greyspots"
+author: "Elonia"
+output: 
+  pdf_document:
+    toc: true
+    toc_depth: 3
+---
+
+```{r setup, include=FALSE, eval=TRUE}
+options(tinytex.verbose = TRUE)
+knitr::opts_chunk$set(echo = FALSE, cache=FALSE, warning=FALSE, message=FALSE, fig.align="center")
+library(kableExtra)
+
+```
+
+```{r captioner, include=FALSE, eval=TRUE}
+library(captioner)
+tab_nums <- captioner(prefix = "Table ", auto_space = FALSE)
+fig_nums <- captioner(prefix = "Figure ", auto_space = FALSE)
+```
+
+```{r, settings}
+source("source/util.R")
+reload_source()
+
+```
+
+## Notes
+The goal of this study is to identify how well the Bangladesh national cholera surveillance system captures:
+1. the Bangladeshi population
+1. the Bangladeshi population living in high, medium, and low risk cholera areas
+
+We define cholera surveillance zones as geographies surrounding one of the 22 cholera sentinel hospitals. Surveillance zones are defined as the area enclosed within a circular buffer with a radius of 10 km, 30 km, or 50 km surrounding the coordinates of a given sentinel hospital.
+
+The values we want to estimate include:
+1. percentage of the population living in cholera surveillance zones
+1. number and percentage of infections residing in cholera surveillance zones within the last year
+1. number and percentage of infections residing in cholera surveillance zones that are in high, medium, and low infection risk areas
+1. number and percentage of people living in high, medium, and low infection risk areas that would be captured by cholera surveillance zones
+
+We use the following threshold for defining high, medium, and low risk infection areas:
+* RR >= 1.5 is high risk
+* 0.5 < RR < 1.5 is medium risk
+* RR <= 0.5 is low risk
+
+```{r, import-data, include = FALSE}
+
+## sentinel hospital location data
+hosp_dat <- read_csv("data/hosp_GPS.csv")
+
+## WorldPop population raster (log-linear interpolation for 2015 from all WorldPop raster data )
+pop_rast <- raster("data/BGD_ppp_2015_adj_v2.tif")
+## shapefiles for Bangladesh
+adm0_shp <- readRDS("data/BGD_adm0.rds")
+adm2_shp <- readRDS("data/BGD_adm2.rds")
+
+## import buffer files (multipolygon versions)
+buff10_mp <- st_read("generated_data/buff_sf_multipoly_10km.shp")
+buff30_mp <- st_read("generated_data/buff_sf_multipoly_30km.shp")
+buff50_mp <- st_read("generated_data/buff_sf_multipoly_50km.shp")
+
+## import buffer files (single polygon versions)
+buff10_sp <- st_read("generated_data/buff_sf_singlepoly_10km.shp")
+buff30_sp <- st_read("generated_data/buff_sf_singlepoly_30km.shp")
+buff50_sp <- st_read("generated_data/buff_sf_singlepoly_50km.shp")
+
+```
+
+
+There are 22 sentinel hospital sites (`r tab_nums("tab-hospnames", display = "cite")`).
+
+```{r, proc-tab-hospnames}
+
+display_hospnames_tab <- hosp_dat %>% 
+  dplyr::select(HOSP, Name, Division, LAT, LON)
+
+tab_nums(name = "tab-hospnames", caption = "**Sentinel hospital IDs and locations.**", display = FALSE)
+```
+
+`r tab_nums("tab-hospnames", display = "full")`
+
+```{r, disp-tab-hospnames}
+knitr::kable(display_hospnames_tab, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("ID", "Hospital", "Division", "Latitude", "Longitude"))
+
+```
+
+We defined 3 versions of basic hospital population catchment areas with 10 km, 30 km, and 50 km radial buffers (`r tab_nums("tab-hosp", display = "cite")`).
+
+
+```{r, proc-tab-hosp}
+
+display_hosp_tab <- hosp_dat %>%
+  dplyr::mutate(HOSP = as.character(HOSP)) %>%
+  dplyr::mutate(pop_buff10 = buff10_sp$pop, pop_buff30 = buff30_sp$pop, pop_buff50 = buff50_sp$pop) %>%
+  dplyr::select(HOSP, contains("buff"))
+
+#tot_row <- data.frame(HOSP = "Total", pop_buff10 = sum(hosp_rows$pop_buff10), pop_buff30 = sum(hosp_rows$pop_buff30), pop_buff50 = sum(hosp_rows$pop_buff50))
+
+tab_nums(name = "tab-hosp", caption = "**Sentinel hospital catchment areas.**", display = FALSE)
+```
+
+`r tab_nums("tab-hosp", display = "full")`
+
+```{r, disp-tab-hosp}
+knitr::kable(display_hosp_tab, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("ID", "Pop (10km)", "Pop (30km)", "Pop (50km)"))
+
+```
+
+Cholera surveillance zone summaries (`r tab_nums("tab-survzones", display = "cite")`)
+
+```{r, proc-tab-survzone}
+
+tot_pop <- sum(values(pop_rast), na.rm = TRUE)
+
+display_survzone_tab <- data.frame(buffer = c(10, 30, 50), 
+                      pop_buffer = c(buff10_mp$pop, buff30_mp$pop, buff50_mp$pop)) %>%
+                      dplyr::mutate(prop_buffer = pop_buffer/tot_pop)
+
+
+tab_nums(name = "tab-survzone", caption = "**Cholera surveillance zone summary.**", display = FALSE)
+```
+
+`r tab_nums("tab-survzone", display = "full")`
+
+```{r, disp-tab-survzones}
+knitr::kable(display_survzone_tab, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer (km)", "Pop", "Prop of Pop"))
+
+```
+
+
+
+## To do
+* Add the buffer maps
+* x-axis buffer size (0-60 km in 5 km increments), y-axis percentage of population captured.
+* loop through all potential buffer sizes
+* High risk infection areas by cases and relative risk

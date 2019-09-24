@@ -9,7 +9,7 @@ output:
 
 ```{r setup, include=FALSE, eval=TRUE}
 options(tinytex.verbose = TRUE)
-knitr::opts_chunk$set(echo = FALSE, cache=FALSE, warning=FALSE, message=FALSE, fig.align="center")
+knitr::opts_chunk$set(echo = FALSE, cache = FALSE, warning=FALSE, message=FALSE, fig.align="center")
 library(kableExtra)
 
 ```
@@ -157,6 +157,4 @@ knitr::kable(display_hosp_tab, format = "pandoc", booktabs = T, align = "c", row
 
 ## To do
 * Add the buffer maps
-* x-axis buffer size (0-60 km in 5 km increments), y-axis percentage of population captured.
-* loop through all potential buffer sizes
 * High risk infection areas by cases and relative risk

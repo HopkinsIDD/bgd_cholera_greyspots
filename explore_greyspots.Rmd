@@ -48,12 +48,13 @@ We use the following threshold for defining high, medium, and low risk infection
 
 ## sentinel hospital location data
 hosp_dat <- read_csv("data/hosp_GPS.csv")
+hosp_loc <- sf::st_as_sf(hosp_dat %>% dplyr::select(LON,LAT), coords = c("LON","LAT"),crs="+proj=longlat +datum=WGS84 +no_defs") ## lat/lon coords on different crs
 
 ## WorldPop population raster (log-linear interpolation for 2015 from all WorldPop raster data )
 pop_rast <- raster("data/BGD_ppp_2015_adj_v2.tif")
 ## shapefiles for Bangladesh
-adm0_shp <- readRDS("data/BGD_adm0.rds")
-adm2_shp <- readRDS("data/BGD_adm2.rds")
+adm0_shp <- readRDS("data/BGD_adm0.rds") %>% st_as_sf()
+adm2_shp <- readRDS("data/BGD_adm2.rds") %>% st_as_sf()
 
 ## import buffer files (multipolygon versions)
 mp_filenames <- grep("multipoly", list.files("generated_data/", pattern = "*.shp"), value = TRUE)
@@ -102,7 +103,6 @@ display_survzone_tab <- map_dfr(mp_names, function(mp_nm){
     dplyr::mutate(prop_buffer = pop_buffer/tot_pop)
 })
 
-
 tab_nums(name = "tab-survzone", caption = "**Cholera surveillance zone summary.**", display = FALSE)
 ```
 
@@ -127,34 +127,22 @@ fig_nums(name = "fig-survzone", caption = "**Proportion of total population capt
 `r fig_nums("fig-survzone", display = "full")`
 
 
-
-## Need to update
-
-We defined 3 versions of basic hospital population catchment areas with 10 km, 30 km, and 50 km radial buffers (`r tab_nums("tab-hosp", display = "cite")`).
+In the absence of better data on health care utilization around the hospital sentinel surveillance sites, we assumed that buffers with radii of 10 km, 30 km, and 50 km around the hospital could serve as proxies for potential hospital catchment areas (`r fig_nums("fig-map-buffers", display = "cite")`).
 
 
-```{r, proc-tab-hosp, eval = FALSE}
+```{r, fig-map-buffers}
 
-display_hosp_tab <- hosp_dat %>%
- dplyr::mutate(HOSP = as.character(HOSP)) %>%
- dplyr::mutate(pop_buff10 = buff10_sp$pop, pop_buff30 = buff30_sp$pop, pop_buff50 = buff50_sp$pop) %>%
- dplyr::select(HOSP, contains("buff"))
+buffermaps <- lapply(paste0(c(10, 30, 50), "km"), function(dist){
+  map_buffers(adm0_shp, adm2_shp, hosp_loc, buff_mp_ls[[dist]])
+}) 
 
-tot_row <- data.frame(HOSP = "Total", pop_buff10 = sum(hosp_rows$pop_buff10), pop_buff30 = sum(hosp_rows$pop_buff30), pop_buff50 = sum(hosp_rows$pop_buff50))
-
-tab_nums(name = "tab-hosp", caption = "**Sentinel hospital catchment areas.**", display = FALSE)
-```
-
-#`r tab_nums("tab-hosp", display = "full")`
-
-```{r, disp-tab-hosp, eval = FALSE}
-knitr::kable(display_hosp_tab, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("ID", "Pop (10km)", "Pop (30km)", "Pop (50km)"))
+wrap_plots(buffermaps) 
+fig_nums(name = "fig-map-buffers", caption = "**Map of 10 km, 30 km, and 50 km buffers around sentinel hospital sites (left, center, right, respectively).**", display = FALSE)
 
 ```
 
-
+`r fig_nums("fig-map-buffers", display = "full")`
 
 
 ## To do
-* Add the buffer maps
 * High risk infection areas by cases and relative risk

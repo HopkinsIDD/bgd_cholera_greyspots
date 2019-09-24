@@ -42,7 +42,7 @@ for (i in unique(d)) {
   st_write(mp_file, paste0(out_wd, "buff_sf_multipoly_", ifelse(nchar(i)==2, i, paste0("0",i)), "km.shp"))
   
   ## save plot
-  buff_map <- map_buffers(bang.map, bang.map, hosp_loc, mp_file)
+  buff_map <- map_buffers(bang.map0, bang.map, hosp_loc, mp_file)
   ggsave(paste0(fig_wd, "buff_", i, "km.pdf"), buff_map, width = 4, height = 4)
 }
 

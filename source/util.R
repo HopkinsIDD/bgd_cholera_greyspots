@@ -10,6 +10,7 @@ reload_source <- function(){
   library(readr)
   library(purrr)
   library(patchwork)
+  library(formattable)
   
   source("source/util.R")
   

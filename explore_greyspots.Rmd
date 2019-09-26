@@ -28,12 +28,14 @@ reload_source()
 
 ## Notes
 The goal of this study is to identify how well the Bangladesh national cholera surveillance system captures:
+
 1. the Bangladeshi population
 1. the Bangladeshi population living in high, medium, and low risk cholera areas
 
 We define cholera surveillance zones as geographies surrounding one of the 22 cholera sentinel hospitals. Surveillance zones are defined as the area enclosed within a circular buffer with a radius of 10 km, 30 km, or 50 km surrounding the coordinates of a given sentinel hospital.
 
 The values we want to estimate include:
+
 1. percentage of the population living in cholera surveillance zones
 1. number and percentage of infections residing in cholera surveillance zones within the last year
 1. number and percentage of infections residing in cholera surveillance zones that are in high, medium, and low infection risk areas
@@ -146,14 +148,14 @@ buffermaps <- lapply(buffer_labels, function(dist){
 }) 
 
 wrap_plots(buffermaps) 
-fig_nums(name = "fig-buffers", caption = "**Map of 10 km, 30 km, and 50 km buffers around sentinel hospital sites (left, center, right, respectively).**", display = FALSE)
+fig_nums(name = "fig-buffers", caption = paste("**Map of**", paste(buffer_labels, collapse = ", "), "**buffers around sentinel hospital sites (left to right, top row to bottom row, respectively).**"), display = FALSE)
 
 ```
 
 `r fig_nums("fig-buffers", display = "full")`
 
 
-## Mapping cholera infections with serological data
+## Mapping infections with serological data
 
 
 ```{r, import-serodata}
@@ -177,7 +179,7 @@ tot_inf <- sum(sero$inf)
 
 ```
 
-Using data from a nationally-representative survey across Bangladesh, we developed maps of cholera infection across 5 km x 5km cells in Bangladesh. This map suggests that `r tot_inf` cholera infections occurred in Bangladesh over the past year (estimated population size ###) [NEED TO ADD DETAILS ON TIME PERIOD FOR THESE ESTIMATES]. We standardized the infection rate estimates in each cell by the population-weighted mean of the Bangladesh infection rate in that cell. This yielded a relative risk of cholera infection for each grid cell (`r fig_nums("fig-sero-rr-map", display = "cite")`). 
+Using data from a nationally-representative survey across Bangladesh, we developed maps of infection across 5 km x 5km cells in Bangladesh. This map suggests that `r tot_inf` infections occurred in Bangladesh over the past year (estimated population size ###) [NEED TO ADD DETAILS ON TIME PERIOD FOR THESE ESTIMATES]. We standardized the infection rate estimates in each cell by the population-weighted mean of the Bangladesh infection rate in that cell. This yielded a relative risk of infection for each grid cell (`r fig_nums("fig-sero-rr-map", display = "cite")`). 
 
 
 ```{r, fig-sero-rr-map, fig.dim = c(6,6)}
@@ -197,7 +199,7 @@ plt <- ggplot() +
 print(plt)
 ggsave(filename = paste0("figures/sero-rr.pdf"), plt, width = 6, height = 6, units = "in")
 
-fig_nums(name = paste0("fig-sero-rr-map"), caption = paste("**Risk of cholera infection relative to population-weighted mean**"), display = "false")
+fig_nums(name = paste0("fig-sero-rr-map"), caption = paste("**Risk of infection relative to population-weighted mean**"), display = "false")
 
 ```
 
@@ -206,28 +208,28 @@ fig_nums(name = paste0("fig-sero-rr-map"), caption = paste("**Risk of cholera in
 
 ### Determining infection risk categories
 
-We examined the distribution of relative risks (`r fig_nums("fig-sero-rr-hist", display = "cite")`) and estimated cholera infections (`r fig_nums("fig-sero-inf-hist", display = "cite")`) by grid cell in order to identify thresholds for binning cholera infection risk into categories .
+We examined the distribution of relative risks (`r fig_nums("fig-sero-rr-hist", display = "cite")`) and estimated infections (`r fig_nums("fig-sero-inf-hist", display = "cite")`) by grid cell in order to identify thresholds for binning infection risk into categories .
 
 ```{r, fig-sero-rr-hist, fig.dim = c(3,3)}
 
-hist(sero$rr2_cor, main = "", xlab = "Relative risk of cholera infection")
-fig_nums(name = paste0("fig-sero-rr-hist"), caption = paste("**Histogram of the risk of cholera infection relative to population-weighted mean**"), display = "false")
+hist(sero$rr2_cor, main = "", xlab = "Relative risk of infection")
+fig_nums(name = paste0("fig-sero-rr-hist"), caption = paste("**Histogram of the risk of infection relative to population-weighted mean**"), display = "false")
 
 ```
 
-`r fig_nums("fig-sero-inf-hist", display = "full")`
+`r fig_nums("fig-sero-rr-hist", display = "full")`
 
 
 ```{r, fig-sero-inf-hist, fig.dim = c(3,3)}
 
-hist(log(sero$inf), main = "", xlab = "Log total cholera infections")
-fig_nums(name = paste0("fig-sero-inf-hist"), caption = paste("**Histogram of the log total number of cholera infections**"), display = "false")
+hist(log(sero$inf), main = "", xlab = "Log total infections")
+fig_nums(name = paste0("fig-sero-inf-hist"), caption = paste("**Histogram of the log total number of infections**"), display = "false")
 
 ```
 
 `r fig_nums("fig-sero-inf-hist", display = "full")`
 
-We used two sets of fixed thresholds to delineate areas with high, moderate, and low cholera infection risk. The first set of thresholds was based on low, moderate, and high risk (RR) of cholera infection relative to the mean cholera infection rate across Bangladesh adjusted by the population of each cell (i.e. the expected infection rate in the cell). 5 km x 5km grid cells were categorized as low risk if RR < 0.5, moderate risk if RR >= 0.5 and RR < 1.5, and high risk if RR >= 1.5 (`r fig_nums("fig-sero-rrcat", display = "cite")`). The second set of threshold was based on absolute case counts, where grid cells were categorized as low risk if infections < 2000, moderate risk if infections >= 2000 and infections < 5000, and high risk if infections >= 5000 (`r fig_nums("fig-sero-infcat", display = "cite")`).
+We used two sets of fixed thresholds to delineate areas with high, moderate, and low infection risk. The first set of thresholds was based on low, moderate, and high risk (RR) of infection relative to the mean infection rate across Bangladesh adjusted by the population of each cell (i.e. the expected infection rate in the cell). 5 km x 5km grid cells were categorized as low risk if RR < 0.5, moderate risk if RR >= 0.5 and RR < 1.5, and high risk if RR >= 1.5 (`r fig_nums("fig-sero-rrcat", display = "cite")`). The second set of threshold was based on absolute case counts, where grid cells were categorized as low risk if infections < 2000, moderate risk if infections >= 2000 and infections < 5000, and high risk if infections >= 5000 (`r fig_nums("fig-sero-infcat", display = "cite")`). The number of infection thresholds were based on the 20th and 80th percentiles from the distribution of the relative risk of infection.
 
 
 ```{r, process-sero-rrcat}
@@ -269,7 +271,7 @@ plt <- ggplot() +
 print(plt)
 ggsave(filename = paste0("figures/sero-rrcat.pdf"), plt, width = 6, height = 6, units = "in")
 
-fig_nums(name = paste0("fig-sero-rrcat"), caption = paste("**Cholera risk map as categorized by the risk of cholera infection relative to a population-weighted mean**"), display = "false")
+fig_nums(name = paste0("fig-sero-rrcat"), caption = paste("**Cholera risk map as categorized by the risk of infection relative to a population-weighted mean**"), display = "false")
 
 ```
 
@@ -300,9 +302,7 @@ fig_nums(name = paste0("fig-sero-infcat"), caption = paste("**Cholera risk map a
 `r fig_nums("fig-sero-infcat", display = "full")`
 
 
-## Intersecting cholera infections and the cholera surveillance zone
-
-We overlaid the cholera surveillance zone with the binned cholera infection risk maps to examine the distribution of risks in the surveilled areas. This was done for infection risk as categorized by relative risk (`r fig_nums(paste0("sero-buffers-rr-", buffer_labels[1], "-plt"), display = "cite")`-`r fig_nums(paste0("sero-buffers-rr-", length(buffer_labels), "-plt"), display = "cite")`) and by total infections (`r fig_nums(paste0("sero-buffers-inf-", buffer_labels[1], "-plt"), display = "cite")`-`r fig_nums(paste0("sero-buffers-inf-", length(buffer_labels), "-plt"), display = "cite")`).
+## Intersecting infections and the cholera surveillance zone
 
 
 ```{r, process-sero-buffers}
@@ -340,7 +340,7 @@ for(i in 1:length(buffer_labels)){
   print(plt)
   ggsave(filename = paste0("figures/sero-buffers-rr-", km_label, ".pdf"), plt, width = 6.5, height = 4, units = "in")
 
-  cat(fig_nums(name = paste0("sero-buffers-rr-", km_label, "-plt"), caption = paste0("**Risk of cholera infection, as categorized by relative risk, within cholera surveillance zones (**", km_label, "**)**"), display = "full"))
+  cat(fig_nums(name = paste0("sero-buffers-rr-", km_label, "-plt"), caption = paste0("**Infection risk, as categorized by relative risk, within cholera surveillance zones (**", km_label, "**)**"), display = "full"))
 }
 
 ```
@@ -366,13 +366,15 @@ for(i in 1:length(buffer_labels)){
   print(plt)
   ggsave(filename = paste0("figures/sero-buffers-inf-", km_label, ".pdf"), plt, width = 6.5, height = 4, units = "in")
 
-  cat(fig_nums(name = paste0("sero-buffers-inf-", km_label, "-plt"), caption = paste0("**Risk of cholera infection, as categorized by number of infections, within cholera surveillance zones (**", km_label, "**)**"), display = "full"))
+  cat(fig_nums(name = paste0("sero-buffers-inf-", km_label, "-plt"), caption = paste0("**Infection risk, as categorized by number of infections, within cholera surveillance zones (**", km_label, "**)**"), display = "full"))
 }
 
 ## caption for table in next chunk
 tab_nums(name = "intersect-sero-buffers-tab", caption = "**Number and percent infections that may be captured in cholera surveillance zones**", display = FALSE)
 
 ```
+
+We overlaid the cholera surveillance zone with the binned infection risk maps to examine the distribution of risks in the surveilled areas. This was done for infection risk as categorized by relative risk (`r fig_nums(paste0("sero-buffers-rr-", buffer_labels[1], "-plt"), display = "cite")` - `r fig_nums(paste0("sero-buffers-rr-", buffer_labels[length(buffer_labels)], "-plt"), display = "cite")`) and by the total number of infections (`r fig_nums(paste0("sero-buffers-inf-", buffer_labels[1], "-plt"), display = "cite")` - `r fig_nums(paste0("sero-buffers-inf-", buffer_labels[length(buffer_labels)], "-plt"), display = "cite")`).
 
 ### Populations in the cholera surveillance zone
 

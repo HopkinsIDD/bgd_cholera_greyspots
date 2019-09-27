@@ -18,12 +18,13 @@ buff.50 <- st_read("bgd_cholera_greyspots/generated_data/buff_sf_multipoly_50km.
 sero <- st_transform(sero, crs = crs(buff.10))
 ##intersect sero data with bangladesh map
 sero <- st_intersection(sero,bang.map0)
-saveRDS(sero.bgd,"Elonia/grey_out_BGD/data/village_preds_all_bgdintersect.rds")
+saveRDS(sero,"Elonia/grey_out_BGD/data/village_preds_all_bgdintersect.rds")
 
 ##create risk categories
 #look at distribution of number of infections and population weighted RR in country and categorize 
 summary(sero$inf)
 summary(sero$rr2_cor)
+hist(sero$rr2_cor)
 #RR > 1.5 is high, 1.5-0.5 is medium, < 0.5 is low 
 #Number of infections > 5000 is high, 5000-2000 is medium, < 2000 is low (based on percentiles)
 sero <- sero %>% dplyr::mutate(rr_risk_cat=ifelse(rr2_cor<0.5,"Low",ifelse(rr2_cor>=0.5&rr2_cor<1.5,"Moderate","High")),
@@ -41,15 +42,16 @@ catch <- rbind(int.10,int.30,int.50)
 ##map 
 gg = ggplot() + 
   geom_sf(data=bang.map0,fill=NA,lwd=0.1, alpha=.1) + 
-  geom_sf(data =int.30,aes(fill=rr_risk_cat),color=NA,lwd=0) +
+  geom_sf(data =sero,aes(fill=rr2_cor),color=NA,lwd=0) +
   geom_sf(data=hosp_loc,shape=3,color="black",size=1,lty=4) +
-  scale_colour_manual(values = c("#e41a1c","#377eb8","#4daf4a","#984ea3")) +
+  #scale_colour_manual(values = c("#e41a1c","#377eb8","#4daf4a","#984ea3")) +
+  scale_fill_gradient2(low ="#4191e1", mid = "white",high = "#b20000",midpoint=1.0) +
   coord_sf(datum=NA) + 
   labs(x="") + labs(y="") + 
   theme_void() + 
   ggsn::north(bang.map) +
   scalebar(bang.map, dist = 50, dist_unit = "km",transform = TRUE, model = "WGS84", st.size = 3)
-ggsave("bgd_cholera_greyspots/figures/test_infectriskcatmap_30km.pdf") 
+ggsave("bgd_cholera_greyspots/figures/test_infectriskmap.pdf") 
 
 ##############################estimates & tables
 ##number and percent of total infections in catchment
@@ -115,7 +117,7 @@ formattable(est3, align =c("l","c","c","c","r"), list(
 ))
 
 ##percent of population captured in sentinel polygons that are in high risk areas (rr)
-tot_pop <- sum(sero$pop)
+tot_pop <- sum(sero$pop) 
 #restrict data to just high risk areas
 sero.rr.high <- sero %>% dplyr::filter (rr_risk_cat=="High")
 #re-intersect shapefile of buffers with sf files 
@@ -138,8 +140,9 @@ formattable(est4, align =c("l","c","c","c","r"), list(
   Risk.category = color_tile("#71CA97", "#DeF7E9")
 ))
   
-  
-  
+##people in high-risk areas may not have ready access to cholera diagnostics and care
+#high risk population in BGD (est2 table: Total infected) - high risk population living in buffers (est 2 table: Number infected)
+14529898.38-4909856.81
   
 
 

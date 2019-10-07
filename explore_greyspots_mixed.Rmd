@@ -1,0 +1,575 @@
+---
+title: "Bangladesh surveillance greyspots"
+author: "Elonia"
+description: "Descriptive analysis of cholera surveillance zones in Bangladesh. This version of the Rmd file creates buffer shapefiles and enables different buffer radii to be specified for each sentinel hospital"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+---
+
+```{r setup, include=FALSE, eval=TRUE}
+options(tinytex.verbose = TRUE)
+knitr::opts_chunk$set(echo = FALSE, cache = FALSE, warning=FALSE, message=FALSE, fig.align="center")
+library(kableExtra)
+
+```
+
+```{r captioner, include=FALSE, eval=TRUE}
+library(captioner)
+tab_nums <- captioner(prefix = "Table ", auto_space = FALSE)
+fig_nums <- captioner(prefix = "Figure ", auto_space = FALSE)
+```
+
+```{r, settings}
+source("source/util.R")
+reload_source()
+
+```
+
+## Notes
+The goal of this study is to identify how well the Bangladesh national cholera surveillance system captures:
+
+1. the Bangladeshi population
+1. the Bangladeshi population living in high, medium, and low risk cholera areas
+
+We define cholera surveillance zones as geographies surrounding one of the 22 cholera sentinel hospitals. Surveillance zones are defined as the area enclosed within a circular buffer with a radius of x km surrounding the coordinates of a given sentinel hospital. Subdistrict, district, and tertiary care hospitals may have different radii.
+
+The values we want to estimate include:
+
+1. percentage of the population living in cholera surveillance zones
+1. number and percentage of infections residing in cholera surveillance zones within the last year
+1. number and percentage of infections residing in cholera surveillance zones that are in high, medium, and low infection risk areas
+1. number and percentage of people living in high, medium, and low infection risk areas that would be captured by cholera surveillance zones
+
+We use the following threshold for defining high, medium, and low risk infection areas:
+
+* RR >= 1.5 is high risk
+* 0.5 < RR < 1.5 is medium risk
+* RR <= 0.5 is low risk
+
+```{r, import-data, include = FALSE}
+
+## sentinel hospital location data
+hosp_dat <- read_csv("data/hosp_GPS.csv")
+hosp_loc <- sf::st_as_sf(hosp_dat %>% dplyr::select(LON,LAT), coords = c("LON","LAT"),crs="+proj=longlat +datum=WGS84 +no_defs") ## lat/lon coords on different crs
+hosp_transformed <- st_transform(hosp_loc,"+proj=tmerc +lat_0=0 +lon_0=90 +k=0.9996 +x_0=500000 +y_0=0 +a=6377276.345 +b=6356075.41314024 +towgs84=283.7,735.9,261.1,0,0,0,0 +units=km +no_defs")
+
+## WorldPop population raster (log-linear interpolation for 2015 from all WorldPop raster data )
+pop_rast <- raster("data/BGD_ppp_2015_adj_v2.tif")
+pop_rast_v <- velox(pop_rast)
+
+## shapefiles for Bangladesh
+adm0_shp <- readRDS("data/BGD_adm0.rds") %>% st_as_sf()
+adm2_shp <- readRDS("data/BGD_adm2.rds") %>% st_as_sf()
+
+out_wd <- "generated_data/"
+fig_wd <- "figures/"
+
+```
+
+```{r, generate-buffers, include = FALSE}
+
+## SET THIS: radii in km for subdistrict, district, and tertiary hospitals, respectively
+km_vec_ls <- list(B1= c(10, 20, 30), B2 = c(10, 10, 30), B3 = c(20, 20, 30), B4 = c(15, 25, 35)) 
+
+for(i in 1:length(km_vec_ls)){
+
+  km_vec <- km_vec_ls[[i]]
+
+  hosp_dat2 <- hosp_dat %>%  
+    dplyr::mutate(buff_radius = ifelse(Type == "subdistrict", km_vec[1], ifelse(Type == "district", km_vec[2], ifelse(Type == "tertiary", km_vec[3], NA))))
+
+  buff <- st_buffer(hosp_transformed, dist=hosp_dat2$buff_radius, nQuadSegs = 30, endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1)
+  dub_buffer <- st_transform(buff, 4326)
+
+  ## singlepolygons per sentinel site
+  pop_dist_buff <-pop_rast_v$extract(sp=dub_buffer, fun=function(x) sum(x, na.rm=T))
+  # pop_dist_buff_df<-data.frame(cbind(1:22,pop_dist_buff)) %>% dplyr::rename(HOSP=X1,pop=X2) #to create separate df with pop data
+  sp_file <- dub_buffer %>% dplyr::mutate(pop=pop_dist_buff)
+  if(!file.exists(paste0(out_wd, "buff_sf_singlepoly_mixed_", paste(km_vec, collapse = "-"), "km.shp"))){
+    st_write(sp_file, paste0(out_wd, "buff_sf_singlepoly_mixed_", paste(km_vec, collapse = "-"), "km.shp"))
+  }
+  
+
+  ## multipolygons
+  # combine buffer polygons per hospital into single multipolygon
+  dub_buffer_mp <- st_sf(st_union(dub_buffer))
+  # measure population in all buffers of the multipolygon
+  pop_dist_buff_mp <- pop_rast_v$extract(sp=dub_buffer_mp, fun=function(x) sum(x, na.rm=T))
+  mp_file <- dub_buffer_mp %>% dplyr::mutate(pop = pop_dist_buff_mp)
+  if(!file.exists(paste0(out_wd, "buff_sf_multipoly_mixed_", paste(km_vec, collapse = "-"), "km.shp"))){
+    st_write(mp_file, paste0(out_wd, "buff_sf_multipoly_mixed_", paste(km_vec, collapse = "-"), "km.shp"))
+  }
+  
+
+  ## save plot
+  buff_map <- map_buffers(adm0_shp, adm2_shp, hosp_loc, mp_file)
+  ggsave(paste0(fig_wd, "buff_", paste(km_vec, collapse = "-"), "km.pdf"), buff_map, width = 4, height = 4)
+}
+
+
+
+```
+
+```{r, import-buffers, include = FALSE}
+
+## import buffer files (multipolygon versions)
+mp_filenames <- grep("multipoly_mixed", list.files("generated_data/", pattern = "*.shp"), value = TRUE)
+buff_mp_ls <- lapply(mp_filenames, function(fn){
+  st_read(paste0("generated_data/", fn))
+})
+mp_names <- sub(".shp", "", sub("buff_sf_multipoly_mixed_", "", mp_filenames))
+names(buff_mp_ls) <- mp_names
+
+## import buffer files (single polygon versions)
+sp_filenames <- grep("singlepoly_mixed", list.files("generated_data/", pattern = "*.shp"), value = TRUE)
+buff_sp_ls <- lapply(sp_filenames, function(fn){
+  st_read(paste0("generated_data/", fn))
+})
+sp_names <- sub(".shp", "", sub("buff_sf_singlepoly_mixed_", "", sp_filenames))
+names(buff_sp_ls) <- sp_names
+
+```
+
+## Identifying the cholera surveillance zone
+
+There are 22 sentinel hospital sites (`r tab_nums("tab-hospnames", display = "cite")`).
+
+```{r, proc-tab-hospnames}
+
+display_hospnames_tab <- hosp_dat %>% 
+  dplyr::select(HOSP, Name, Division, Type, LAT, LON)
+
+tab_nums(name = "tab-hospnames", caption = "**Sentinel hospital IDs and locations.**", display = FALSE)
+```
+
+`r tab_nums("tab-hospnames", display = "full")`
+
+```{r, disp-tab-hospnames}
+knitr::kable(display_hospnames_tab, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("ID", "Hospital", "Division", "Type", "Latitude", "Longitude"))
+
+```
+
+This is a summary of the populations living within buffers of varying sizes around hospital sentinel surveillance sites (`r tab_nums("tab-survzone", display = "cite")`, `r fig_nums("fig-survzone", display = "cite")`). 
+
+```{r, proc-tab-survzone}
+
+tot_pop <- sum(values(pop_rast), na.rm = TRUE)
+
+display_survzone_tab <- map_dfr(mp_names, function(mp_nm){
+  
+  data.frame(buffer = as.character(sub("km", "", mp_nm)), pop_buffer = buff_mp_ls[[mp_nm]]$pop) %>%
+    dplyr::mutate(prop_buffer = pop_buffer/tot_pop)
+})
+
+tab_nums(name = "tab-survzone", caption = "**Proportion of population living within sentinel hospital buffers.**", display = FALSE)
+```
+
+`r tab_nums("tab-survzone", display = "full")`
+
+```{r, disp-tab-survzone}
+knitr::kable(display_survzone_tab, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer (Subdistrict-District-Tertiary in km)", "Pop", "Proportion"))
+
+
+```
+
+<!-- ```{r, fig-survzone}
+ggplot(display_survzone_tab, aes(x = buffer, y = prop_buffer)) +
+  geom_point() +
+  theme_bw() + 
+  scale_x_continuous("Buffer (km)", limits = c(0,60)) +
+  scale_y_continuous("Proportion", limits = c(0,1))
+
+fig_nums(name = "fig-survzone", caption = "**Proportion of total population captured in cholera surveillance zone, by buffer radius size**", display = FALSE)
+```
+
+`r fig_nums("fig-survzone", display = "full")` -->
+
+
+```{r, set-buffer-sizes}
+## Set buffers here for subsequent analyses
+buffer_labels <- mp_names
+
+```
+
+In the absence of better data on health care utilization around the hospital sentinel surveillance sites, we assumed that buffers with radii of `r buffer_labels` around the hospital could serve as proxies for potential hospital catchment areas (`r fig_nums("fig-map-buffers", display = "cite")`). Subdistrict, district, and tertiary care sentinel hospitals could have buffer radii of different sizes. We refer to the joint buffer areas as the "cholera surveillance zone" for the national cholera sentinel surveillance system.
+
+```{r, fig-buffers}
+
+buffermaps <- lapply(buffer_labels, function(dist){
+  map_buffers(adm0_shp, adm2_shp, hosp_loc, buff_mp_ls[[dist]])
+}) 
+
+wrap_plots(buffermaps) 
+fig_nums(name = "fig-buffers", caption = paste("**Map of**", paste(buffer_labels, collapse = ", "), "**buffers around (subdistrict-district-tertiary care) sentinel hospital sites (left to right, top row to bottom row, respectively).**"), display = FALSE)
+
+```
+
+`r fig_nums("fig-buffers", display = "full")`
+
+
+## Mapping infections with serological data
+
+
+```{r, import-serodata}
+
+## import modeled infection raster and crop out Bangladesh borders
+if(file.exists("data/village_preds_all_bgdintersect.rds")){
+  sero <- readRDS("data/village_preds_all_bgdintersect.rds")
+} else{
+  sero <- readRDS("data/village_preds_all.rds") %>%
+    dplyr::mutate(inf = mean2_cor*pop)
+
+  ## transform sero data to match buffer data crs
+  sero <- st_transform(sero, crs = crs(buff_mp_ls[[1]]))
+  ## intersect sero data with bangladesh map
+  sero <- st_intersection(sero, adm0_shp)
+  saveRDS(sero,"data/village_preds_all_bgdintersect.rds")
+}
+
+#total number of infections in BGD
+tot_inf <- sum(sero$inf)
+
+```
+
+Using data from a nationally-representative survey across Bangladesh, we developed maps of infection across 5 km x 5km cells in Bangladesh. This map suggests that `r tot_inf` infections occurred in Bangladesh over the past year (estimated population size ###) [NEED TO ADD DETAILS ON TIME PERIOD FOR THESE ESTIMATES]. We standardized the infection rate estimates in each cell by the population-weighted mean of the Bangladesh infection rate in that cell. This yielded a relative risk of infection for each grid cell (`r fig_nums("fig-sero-rr-map", display = "cite")`). 
+
+
+```{r, fig-sero-rr-map, fig.dim = c(6,6)}
+
+plt <- ggplot() + 
+  geom_sf(data = adm0_shp, fill=NA, lwd=0.1, alpha=.1) + 
+  geom_sf(data = sero, aes(fill=rr2_cor), color=NA, lwd=0) +
+  geom_sf(data = hosp_loc, shape=3, color="black", size=1, lty=4) +
+  #scale_colour_manual(values = c("#e41a1c","#377eb8","#4daf4a","#984ea3")) +
+  scale_fill_gradient2(low ="#4191e1", mid = "white", high = "#b20000", midpoint=1.0) +
+  coord_sf(datum=NA) + 
+  labs(x="") + labs(y="") + 
+  theme_void() + 
+  ggsn::north(adm2_shp) +
+  scalebar(adm2_shp, dist = 50, dist_unit = "km",transform = TRUE, model = "WGS84", st.size = 3)
+
+print(plt)
+ggsave(filename = paste0("figures/sero-rr.pdf"), plt, width = 6, height = 6, units = "in")
+
+fig_nums(name = paste0("fig-sero-rr-map"), caption = paste("**Risk of infection relative to population-weighted mean**"), display = "false")
+
+```
+
+`r fig_nums("fig-sero-rr-map", display = "full")`
+
+
+### Determining infection risk categories
+
+We examined the distribution of relative risks (`r fig_nums("fig-sero-rr-hist", display = "cite")`) and estimated infections (`r fig_nums("fig-sero-inf-hist", display = "cite")`) by grid cell in order to identify thresholds for binning infection risk into categories .
+
+```{r, fig-sero-rr-hist, fig.dim = c(3,3)}
+
+hist(sero$rr2_cor, main = "", xlab = "Relative risk of infection")
+fig_nums(name = paste0("fig-sero-rr-hist"), caption = paste("**Histogram of the risk of infection relative to population-weighted mean**"), display = "false")
+
+```
+
+`r fig_nums("fig-sero-rr-hist", display = "full")`
+
+
+```{r, fig-sero-inf-hist, fig.dim = c(3,3)}
+
+hist(log(sero$inf), main = "", xlab = "Log total infections")
+fig_nums(name = paste0("fig-sero-inf-hist"), caption = paste("**Histogram of the log total number of infections**"), display = "false")
+
+```
+
+`r fig_nums("fig-sero-inf-hist", display = "full")`
+
+We used two sets of fixed thresholds to delineate areas with high, moderate, and low infection risk. The first set of thresholds was based on low, moderate, and high risk (RR) of infection relative to the mean infection rate across Bangladesh adjusted by the population of each cell (i.e. the expected infection rate in the cell). 5 km x 5km grid cells were categorized as low risk if RR < 0.5, moderate risk if RR >= 0.5 and RR < 1.5, and high risk if RR >= 1.5 (`r fig_nums("fig-sero-rrcat", display = "cite")`). The second set of threshold was based on absolute case counts, where grid cells were categorized as low risk if infections < 2000, moderate risk if infections >= 2000 and infections < 5000, and high risk if infections >= 5000 (`r fig_nums("fig-sero-infcat", display = "cite")`). The number of infection thresholds were based on the 20th and 80th percentiles from the distribution of the relative risk of infection.
+
+
+```{r, process-sero-rrcat}
+
+## create risk categories
+## look at distribution of number of infections and population weighted RR in country and categorize 
+print("Distribution of relative risk across by 5 km x 5 km cell")
+cat(summary(sero$rr2_cor))
+
+print("Distribution of number of infections by 5 km x 5 km cell")
+cat(summary(sero$inf))
+
+## RR > 1.5 is high, 1.5-0.5 is medium, < 0.5 is low 
+## Number of infections > 5000 is high, 5000-2000 is medium, < 2000 is low (based on percentiles)
+
+sero_df <- sero %>% 
+  dplyr::mutate(rr_risk_cat = ifelse(rr2_cor < 0.5, "Low", ifelse(rr2_cor >= 0.5 & rr2_cor < 1.5, "Moderate", "High")),
+                inf_risk_cat = ifelse(inf < 2000, "Low", ifelse(inf >= 2000 & inf < 5000, "Moderate", "High"))) %>% 
+  dplyr::mutate(rr_risk_cat = factor(rr_risk_cat, levels = c("High","Moderate","Low")),
+                inf_risk_cat = factor(inf_risk_cat, levels = c("High","Moderate","Low")))
+
+```
+
+
+```{r, fig-sero-rrcat, fig.dim = c(6,4)}
+
+plt <- ggplot() + 
+  geom_sf(data = adm0_shp, fill = NA, lwd = 0.1, alpha = .1) + 
+  geom_sf(data = sero_df, aes(fill = rr_risk_cat), color = NA, lwd = 0) +
+  geom_sf(data = hosp_loc, shape = 3, color = "black", size = 1, lty = 4) +
+  scale_colour_manual(values = c("#e41a1c","#377eb8","#4daf4a","#984ea3")) +
+  # scale_fill_gradient2(low ="#4191e1", mid = "white", high = "#b20000", midpoint=1.0) +
+  coord_sf(datum = NA) + 
+  labs(x="") + labs(y="") + 
+  theme_void() + 
+  ggsn::north(adm2_shp) +
+  scalebar(adm2_shp, dist = 50, dist_unit = "km",transform = TRUE, model = "WGS84", st.size = 3)
+
+print(plt)
+ggsave(filename = paste0("figures/sero-rrcat.pdf"), plt, width = 6, height = 6, units = "in")
+
+fig_nums(name = paste0("fig-sero-rrcat"), caption = paste("**Cholera risk map as categorized by the risk of infection relative to a population-weighted mean**"), display = "false")
+
+```
+
+`r fig_nums("fig-sero-rrcat", display = "full")`
+
+
+```{r, fig-sero-infcat, fig.dim = c(6,4)}
+
+plt <- ggplot() + 
+  geom_sf(data = adm0_shp, fill = NA, lwd = 0.1, alpha = .1) + 
+  geom_sf(data = sero_df, aes(fill = inf_risk_cat), color = NA, lwd = 0) +
+  geom_sf(data = hosp_loc, shape = 3, color = "black", size = 1, lty = 4) +
+  scale_colour_manual(values = c("#e41a1c","#377eb8","#4daf4a","#984ea3")) +
+  # scale_fill_gradient2(low ="#4191e1", mid = "white", high = "#b20000", midpoint=1.0) +
+  coord_sf(datum = NA) + 
+  labs(x="") + labs(y="") + 
+  theme_void() + 
+  ggsn::north(adm2_shp) +
+  scalebar(adm2_shp, dist = 50, dist_unit = "km",transform = TRUE, model = "WGS84", st.size = 3)
+
+print(plt)
+ggsave(filename = paste0("figures/sero-infcat.pdf"), plt, width = 6, height = 6, units = "in")
+
+fig_nums(name = paste0("fig-sero-infcat"), caption = paste("**Cholera risk map as categorized by number of infections**"), display = "false")
+
+```
+
+`r fig_nums("fig-sero-infcat", display = "full")`
+
+
+## Intersecting infections and the cholera surveillance zone
+
+
+```{r, process-sero-buffers}
+
+## intersect shapefile of buffers with raster and combine into one list of sf objects
+catch_ls <- lapply(buffer_labels, function(buff_lab){
+  st_intersection(sero_df, buff_mp_ls[[buff_lab]]) 
+})
+names(catch_ls) <- buffer_labels
+
+## dataframe version of sero-buffers intersections without geometries
+catch_df <- sf::st_as_sf(data.table::rbindlist(catch_ls, idcol = "buff")) %>%
+  sf::st_drop_geometry() %>%
+  tbl_df 
+
+```
+
+```{r, fig-sero-buffers-rr, fig.dim = c(6.5,4), results = "asis"}
+
+for(i in 1:length(buffer_labels)){
+  
+  km_label <- buffer_labels[i]
+  intersect_sero <- catch_ls[[km_label]]
+  
+  plt <- ggplot() + 
+    geom_sf(data = adm0_shp, fill = NA, lwd = 0.1, alpha = .1) + 
+    geom_sf(data = intersect_sero, aes(fill = rr_risk_cat), color = NA, lwd = 0) +
+    geom_sf(data = hosp_loc, shape = 3, color = "black", size = 1, lty = 4) +
+    scale_colour_manual(values = c("#e41a1c","#377eb8","#4daf4a","#984ea3")) +
+    coord_sf(datum = NA) + 
+    labs(x="") + labs(y="") + 
+    theme_void() + 
+    ggsn::north(adm2_shp) +
+    scalebar(adm2_shp, dist = 50, dist_unit = "km",transform = TRUE, model = "WGS84", st.size = 2)
+  print(plt)
+  ggsave(filename = paste0("figures/sero-buffers-rr-", km_label, ".pdf"), plt, width = 6.5, height = 4, units = "in")
+
+  cat(fig_nums(name = paste0("sero-buffers-rr-", km_label, "-plt"), caption = paste0("**Infection risk, as categorized by relative risk, within cholera surveillance zones (", km_label, " for subdistrict, district, and tertiary care hospitals)**"), display = "full"))
+}
+
+```
+
+
+```{r, fig-sero-buffers-inf, fig.dim = c(6.5,4), results = "asis"}
+
+for(i in 1:length(buffer_labels)){
+  
+  km_label <- buffer_labels[i]
+  intersect_sero <- catch_ls[[km_label]]
+  
+  plt <- ggplot() + 
+    geom_sf(data = adm0_shp, fill = NA, lwd = 0.1, alpha = .1) + 
+    geom_sf(data = intersect_sero, aes(fill = inf_risk_cat), color = NA, lwd = 0) +
+    geom_sf(data = hosp_loc, shape = 3, color = "black", size = 1, lty = 4) +
+    scale_colour_manual(values = c("#e41a1c","#377eb8","#4daf4a","#984ea3")) +
+    coord_sf(datum = NA) + 
+    labs(x="") + labs(y="") + 
+    theme_void() + 
+    ggsn::north(adm2_shp) +
+    scalebar(adm2_shp, dist = 50, dist_unit = "km",transform = TRUE, model = "WGS84", st.size = 2)
+  print(plt)
+  ggsave(filename = paste0("figures/sero-buffers-inf-", km_label, ".pdf"), plt, width = 6.5, height = 4, units = "in")
+
+  cat(fig_nums(name = paste0("sero-buffers-inf-", km_label, "-plt"), caption = paste0("**Infection risk, as categorized by number of infections, within cholera surveillance zones (", km_label, " for subdistrict, district, and tertiary care hospitals)**"), display = "full"))
+}
+
+## caption for table in next chunk
+tab_nums(name = "intersect-sero-buffers-tab", caption = "**Number and percent infections that may be captured in cholera surveillance zones**", display = FALSE)
+
+```
+
+We overlaid the cholera surveillance zone with the binned infection risk maps to examine the distribution of risks in the surveilled areas. This was done for infection risk as categorized by relative risk (`r fig_nums(paste0("sero-buffers-rr-", buffer_labels[1], "-plt"), display = "cite")` - `r fig_nums(paste0("sero-buffers-rr-", buffer_labels[length(buffer_labels)], "-plt"), display = "cite")`) and by the total number of infections (`r fig_nums(paste0("sero-buffers-inf-", buffer_labels[1], "-plt"), display = "cite")` - `r fig_nums(paste0("sero-buffers-inf-", buffer_labels[length(buffer_labels)], "-plt"), display = "cite")`).
+
+### Populations in the cholera surveillance zone
+
+We examined the number and percentage of total infections falling within each buffer distance (`r tab_nums("intersect-sero-buffers-tab", display = "cite")`).
+
+`r tab_nums("intersect-sero-buffers-tab", display = "full")`
+
+```{r, tab-intersect-sero-buffers}
+
+#total number of infections in BGD
+tot_inf <- sum(sero$inf)
+
+#calculate number and percent of infections
+display_intersect_sero_buffers_tab <- catch_df %>% 
+  group_by(buff) %>%
+  dplyr::summarise(num_inf = sum(inf), pop = sum(pop)) %>%
+  ungroup %>%
+  dplyr::mutate(perc_inf = round(num_inf/tot_inf*100, 2)) %>% 
+  dplyr::select(buff, pop, num_inf, perc_inf)
+
+knitr::kable(display_intersect_sero_buffers_tab, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Population size", "Number infected", "Percent infected"))
+
+
+## caption for table in next chunks
+tab_nums(name = "rrcat-in-buffers-tab", caption = "**Number and percent infections that may be captured in cholera surveillance zones, categorized by relative risk**", display = FALSE)
+tab_nums(name = "infcat-in-buffers-tab", caption = "**Number and percent infections that may be captured in cholera surveillance zones, categorized by number of infections**", display = FALSE)
+```
+
+We then examined the distribution of relative-risk-based categories (`r tab_nums("rrcat-in-buffers-tab", display = "cite")`) and number-of-infection-based categories (`r tab_nums("infcat-in-buffers-tab", display = "cite")`) within the cholera surveillance zone, for each buffer distance.
+
+`r tab_nums("rrcat-in-buffers-tab", display = "full")`
+
+```{r, tab-rrcat-in-buffers}
+
+tot_inf_rrcat <- catch_df %>% 
+  group_by(rr_risk_cat) %>%
+  dplyr::summarise(tot_inf=sum(inf)) 
+
+display_rrcat_in_buffers <- catch_df %>% 
+  group_by(buff, rr_risk_cat) %>%
+  dplyr::summarise(num_inf = sum(inf)) %>%
+  left_join(tot_inf_rrcat, by = c("rr_risk_cat")) %>%
+  dplyr::mutate(perc_inf = round(num_inf/tot_inf*100, 2)) %>% 
+  dplyr::select(buff, rr_risk_cat, num_inf, perc_inf)
+
+knitr::kable(display_rrcat_in_buffers, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Risk Category", "Number Infected", "Percent in Surveillance Zone"))
+
+```
+
+`r tab_nums("infcat-in-buffers-tab", display = "full")`
+
+```{r, tab-infcat-in-buffers}
+
+tot_inf_infcat <- catch_df %>% 
+  group_by(inf_risk_cat) %>%
+  dplyr::summarise(tot_inf=sum(inf)) 
+
+display_infcat_in_buffers <- catch_df %>% 
+  group_by(buff, inf_risk_cat) %>%
+  dplyr::summarise(num_inf = sum(inf)) %>%
+  left_join(tot_inf_infcat, by = c("inf_risk_cat")) %>%
+  dplyr::mutate(perc_inf = round(num_inf/tot_inf*100, 2)) %>% 
+  dplyr::select(buff, inf_risk_cat, num_inf, perc_inf)
+
+knitr::kable(display_infcat_in_buffers, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Risk Category", "Number Infected", "Percent in Surveillance Zone"))
+
+```
+
+### Populations at different levels of infection risk in Bangladesh
+
+We sought to describe how well the cholera surveillance zones capture `r sort(unique(sero_df$rr_risk_cat))` risk categories of populations in Bangladesh. 
+
+```{r, process-serobuffers-in-bang}
+
+tot_pop <- sum(sero$pop)
+rrcat_vec <- sort(unique(sero_df$rr_risk_cat))
+infcat_vec <- sort(unique(sero_df$inf_risk_cat))
+
+processed_rrcatIntersect_in_bang <- map_dfr(rrcat_vec, function(rrcat){
+  sero_df_cat <- sero_df %>% dplyr::filter(rr_risk_cat == rrcat)
+
+  cat1_buff_ls <- lapply(buffer_labels, function(buff_lab){
+    st_intersection(sero_df_cat, buff_mp_ls[[buff_lab]]) %>% st_drop_geometry()
+  })
+  names(cat1_buff_ls) <- buffer_labels
+
+  cat1_buff_df <- data.table::rbindlist(cat1_buff_ls, idcol = "buff") %>% 
+    tbl_df %>%
+    dplyr::mutate(risk_cat = as.character(rrcat))
+
+  return(cat1_buff_df)
+}) 
+
+processed_infcatIntersect_in_bang <- map_dfr(infcat_vec, function(infcat){
+  sero_df_cat <- sero_df %>% dplyr::filter(inf_risk_cat == infcat)
+
+  cat1_buff_ls <- lapply(buffer_labels, function(buff_lab){
+    st_intersection(sero_df_cat, buff_mp_ls[[buff_lab]]) %>% st_drop_geometry()
+  })
+  names(cat1_buff_ls) <- buffer_labels
+
+  cat1_buff_df <- data.table::rbindlist(cat1_buff_ls, idcol = "buff") %>% 
+    tbl_df %>%
+    dplyr::mutate(risk_cat = as.character(infcat))
+
+  return(cat1_buff_df)
+}) 
+
+## caption for table in next chunks
+tab_nums(name = "rrcatIntersect-in-bang-tab", caption = "**Number and percent infections that may be captured in Bangladesh, categorized by relative risk**", display = FALSE)
+tab_nums(name = "infcatIntersect-in-bang-tab", caption = "**Number and percent infections that may be captured in Bangladesh, categorized by number of infections**", display = FALSE)
+
+```
+
+We summarized the percentage of high, moderate, and low infection risk populations in Bangladesh that would be captured by cholera surveillance zones at different buffer sizes when risk was categorized both by relative risk (`r tab_nums("rrcatIntersect-in-bang-tab", display = "cite")`) and by the number of infections (`r tab_nums("infcatIntersect-in-bang-tab", display = "cite")`).
+
+`r tab_nums("rrcatIntersect-in-bang-tab", display = "full")`
+
+```{r, tab-rrcatIntersect-in-bang}
+
+display_rrcatIntersect_in_bang <- processed_rrcatIntersect_in_bang %>%
+  group_by(buff, rr_risk_cat) %>%
+  dplyr::summarise(num_inf = sum(inf), pop = sum(pop)) %>%
+  dplyr::mutate(perc_pop = round(pop/tot_pop*100, 2)) %>%
+  dplyr::select(buff, rr_risk_cat, pop, num_inf, perc_pop)
+
+knitr::kable(display_rrcatIntersect_in_bang, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Risk Category", "Population", "Number Infected", "Percent in Risk Category"))
+
+```
+
+`r tab_nums("infcatIntersect-in-bang-tab", display = "full")`
+
+```{r, tab-infcatIntersect-in-bang}
+
+display_infcatIntersect_in_bang <- processed_infcatIntersect_in_bang %>%
+  group_by(buff, inf_risk_cat) %>%
+  dplyr::summarise(num_inf = sum(inf), pop = sum(pop)) %>%
+  dplyr::mutate(perc_pop = round(pop/tot_pop*100, 2)) %>%
+  dplyr::select(buff, inf_risk_cat, pop, num_inf, perc_pop)
+
+knitr::kable(display_infcatIntersect_in_bang, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Risk Category", "Population", "Number Infected", "Percent in Risk Category"))
+
+```
+

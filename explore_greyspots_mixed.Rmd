@@ -55,13 +55,14 @@ hosp_dat <- read_csv("data/hosp_GPS.csv")
 hosp_loc <- sf::st_as_sf(hosp_dat %>% dplyr::select(LON,LAT), coords = c("LON","LAT"),crs="+proj=longlat +datum=WGS84 +no_defs") ## lat/lon coords on different crs
 hosp_transformed <- st_transform(hosp_loc,"+proj=tmerc +lat_0=0 +lon_0=90 +k=0.9996 +x_0=500000 +y_0=0 +a=6377276.345 +b=6356075.41314024 +towgs84=283.7,735.9,261.1,0,0,0,0 +units=km +no_defs")
 
-## WorldPop population raster (log-linear interpolation for 2015 from all WorldPop raster data )
-pop_rast <- raster("data/BGD_ppp_2015_adj_v2.tif")
-pop_rast_v <- velox(pop_rast)
-
 ## shapefiles for Bangladesh
 adm0_shp <- readRDS("data/BGD_adm0.rds") %>% st_as_sf()
 adm2_shp <- readRDS("data/BGD_adm2.rds") %>% st_as_sf()
+
+## WorldPop population raster (log-linear interpolation for 2015 from all WorldPop raster data )
+pop_rast <- raster("data/BGD_ppp_2015_adj_v2.tif") 
+pop_rast_v <- velox(pop_rast)
+pop_rast_v$crop(adm0_shp)
 
 out_wd <- "generated_data/"
 fig_wd <- "figures/"
@@ -223,8 +224,9 @@ if(file.exists("data/village_preds_all_bgdintersect.rds")){
 
   ## transform sero data to match buffer data crs
   sero <- st_transform(sero, crs = crs(buff_mp_ls[[1]]))
+  
   ## intersect sero data with bangladesh map
-  sero <- st_intersection(sero, adm0_shp)
+  sero <- st_intersection(sero, adm0_shp) ## Note that this may not yield the same results as crop
   saveRDS(sero,"data/village_preds_all_bgdintersect.rds")
 }
 
@@ -370,7 +372,10 @@ names(catch_ls) <- buffer_labels
 ## dataframe version of sero-buffers intersections without geometries
 catch_df <- sf::st_as_sf(data.table::rbindlist(catch_ls, idcol = "buff")) %>%
   sf::st_drop_geometry() %>%
-  tbl_df 
+  tbl_df %>%
+  rowwise %>%
+  dplyr::mutate(buff = gsub("km", "", buff)) %>%
+  ungroup
 
 ```
 
@@ -424,7 +429,7 @@ for(i in 1:length(buffer_labels)){
 }
 
 ## caption for table in next chunk
-tab_nums(name = "intersect-sero-buffers-tab", caption = "**Number and percent infections that may be captured in cholera surveillance zones**", display = FALSE)
+tab_nums(name = "intersect-sero-buffers-tab", caption = "**Number and percent infections that may be captured in cholera surveillance zones.** The percent infected represents the percentage of infected individuals captured within the cholera surveillance zone out of all infected individuals in Bangladesh.", display = FALSE)
 
 ```
 
@@ -432,7 +437,7 @@ We overlaid the cholera surveillance zone with the binned infection risk maps to
 
 ### Populations in the cholera surveillance zone
 
-We examined the number and percentage of total infections falling within each buffer distance (`r tab_nums("intersect-sero-buffers-tab", display = "cite")`).
+We examined the number of infections falling within each set of buffer distances. We also calculated the percentage of the buffer population infected, and the percentage of total infections across Bangladesh represented for each set of buffer distances (`r tab_nums("intersect-sero-buffers-tab", display = "cite")`).
 
 `r tab_nums("intersect-sero-buffers-tab", display = "full")`
 
@@ -444,17 +449,19 @@ tot_inf <- sum(sero$inf)
 #calculate number and percent of infections
 display_intersect_sero_buffers_tab <- catch_df %>% 
   group_by(buff) %>%
-  dplyr::summarise(num_inf = sum(inf), pop = sum(pop)) %>%
+  dplyr::summarise(num_inf = sum(inf)) %>%
   ungroup %>%
-  dplyr::mutate(perc_inf = round(num_inf/tot_inf*100, 2)) %>% 
-  dplyr::select(buff, pop, num_inf, perc_inf)
+  left_join(display_survzone_tab %>% dplyr::select(buffer, pop_buffer), by = c("buff"="buffer")) %>%
+  dplyr::mutate(perc_inf_buffpop = round(num_inf/pop_buffer*100, 2)) %>%
+  dplyr::mutate(perc_inf_tot = round(num_inf/tot_inf*100, 2)) %>% 
+  dplyr::select(buff, pop_buffer, num_inf, perc_inf_buffpop, perc_inf_tot)
 
-knitr::kable(display_intersect_sero_buffers_tab, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Population size", "Number infected", "Percent infected"))
+knitr::kable(display_intersect_sero_buffers_tab, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Buffer population", "Number infected", "Infections in buffer pop (%)", "Infections in BGD (%)"))
 
 
 ## caption for table in next chunks
-tab_nums(name = "rrcat-in-buffers-tab", caption = "**Number and percent infections that may be captured in cholera surveillance zones, categorized by relative risk**", display = FALSE)
-tab_nums(name = "infcat-in-buffers-tab", caption = "**Number and percent infections that may be captured in cholera surveillance zones, categorized by number of infections**", display = FALSE)
+tab_nums(name = "rrcat-in-buffers-tab", caption = "**Number and percent infections that may be captured in cholera surveillance zones, categorized by relative risk.** The infections in surveillance zone represents the percentage of infected people in high/moderate/low risk grid cells among all infections within the cholera surveillance zone. The population in surveillance zone represents the percentage of people living in high/moderate/low risk grid cells among all people within the cholera surveillance zone. The distribution should across risk categories should sum to 100% for each set of buffer sizes.", display = FALSE)
+tab_nums(name = "infcat-in-buffers-tab", caption = "**Number and percent infections that may be captured in cholera surveillance zones, categorized by number of infections** The infections in surveillance zone represents the percentage of infected people in high/moderate/low risk grid cells among all infections within the cholera surveillance zone. The population in surveillance zone represents the percentage of people living in high/moderate/low risk grid cells among all people within the cholera surveillance zone. The distribution should across risk categories should sum to 100% for each set of buffer sizes.", display = FALSE)
 ```
 
 We then examined the distribution of relative-risk-based categories (`r tab_nums("rrcat-in-buffers-tab", display = "cite")`) and number-of-infection-based categories (`r tab_nums("infcat-in-buffers-tab", display = "cite")`) within the cholera surveillance zone, for each buffer distance.
@@ -464,17 +471,18 @@ We then examined the distribution of relative-risk-based categories (`r tab_nums
 ```{r, tab-rrcat-in-buffers}
 
 tot_inf_rrcat <- catch_df %>% 
-  group_by(rr_risk_cat) %>%
-  dplyr::summarise(tot_inf=sum(inf)) 
+  group_by(buff) %>%
+  dplyr::summarise(tot_infcat=sum(inf), tot_popcat=sum(pop)) 
 
 display_rrcat_in_buffers <- catch_df %>% 
   group_by(buff, rr_risk_cat) %>%
-  dplyr::summarise(num_inf = sum(inf)) %>%
-  left_join(tot_inf_rrcat, by = c("rr_risk_cat")) %>%
-  dplyr::mutate(perc_inf = round(num_inf/tot_inf*100, 2)) %>% 
-  dplyr::select(buff, rr_risk_cat, num_inf, perc_inf)
+  dplyr::summarise(num_inf = sum(inf), num_pop = sum(pop)) %>%
+  left_join(tot_inf_rrcat, by = c("buff")) %>%
+  dplyr::mutate(perc_inf = round(num_inf/tot_infcat*100, 2),
+                perc_pop = round(num_pop/tot_popcat*100, 2)) %>% 
+  dplyr::select(buff, rr_risk_cat, num_inf, perc_inf, perc_pop)
 
-knitr::kable(display_rrcat_in_buffers, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Risk Category", "Number Infected", "Percent in Surveillance Zone"))
+knitr::kable(display_rrcat_in_buffers, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Risk Category", "Number Infected", "Infections in Surveillance Zone (%)", "Population in Surveillance Zone (%)"))
 
 ```
 
@@ -483,23 +491,24 @@ knitr::kable(display_rrcat_in_buffers, format = "pandoc", booktabs = T, align = 
 ```{r, tab-infcat-in-buffers}
 
 tot_inf_infcat <- catch_df %>% 
-  group_by(inf_risk_cat) %>%
-  dplyr::summarise(tot_inf=sum(inf)) 
+  group_by(buff) %>%
+  dplyr::summarise(tot_infcat=sum(inf), tot_popcat=sum(pop))
 
 display_infcat_in_buffers <- catch_df %>% 
   group_by(buff, inf_risk_cat) %>%
-  dplyr::summarise(num_inf = sum(inf)) %>%
-  left_join(tot_inf_infcat, by = c("inf_risk_cat")) %>%
-  dplyr::mutate(perc_inf = round(num_inf/tot_inf*100, 2)) %>% 
-  dplyr::select(buff, inf_risk_cat, num_inf, perc_inf)
+  dplyr::summarise(num_inf = sum(inf), num_pop = sum(pop)) %>%
+  left_join(tot_inf_infcat, by = c("buff")) %>%
+  dplyr::mutate(perc_inf = round(num_inf/tot_infcat*100, 2),
+                perc_pop = round(num_pop/tot_popcat*100, 2)) %>% 
+  dplyr::select(buff, inf_risk_cat, num_inf, perc_inf, perc_pop)
 
-knitr::kable(display_infcat_in_buffers, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Risk Category", "Number Infected", "Percent in Surveillance Zone"))
+knitr::kable(display_infcat_in_buffers, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Risk Category", "Number Infected", "Infections in Surveillance Zone (%)", "Population in Surveillance Zone (%)"))
 
 ```
 
 ### Populations at different levels of infection risk in Bangladesh
 
-We sought to describe how well the cholera surveillance zones capture `r sort(unique(sero_df$rr_risk_cat))` risk categories of populations in Bangladesh. 
+We sought to describe how well the cholera surveillance zones capture `r sort(unique(sero_df$rr_risk_cat))` populations across the population of Bangladesh and `r sort(unique(sero_df$rr_risk_cat))` infections among infections in Bangladesh. 
 
 ```{r, process-serobuffers-in-bang}
 
@@ -538,8 +547,8 @@ processed_infcatIntersect_in_bang <- map_dfr(infcat_vec, function(infcat){
 }) 
 
 ## caption for table in next chunks
-tab_nums(name = "rrcatIntersect-in-bang-tab", caption = "**Number and percent infections that may be captured in Bangladesh, categorized by relative risk**", display = FALSE)
-tab_nums(name = "infcatIntersect-in-bang-tab", caption = "**Number and percent infections that may be captured in Bangladesh, categorized by number of infections**", display = FALSE)
+tab_nums(name = "rrcatIntersect-in-bang-tab", caption = "**Number and percent infections that may be captured in Bangladesh, categorized by relative risk.** The captured at-risk population represents the percentage of high/moderate/low risk populations captured by the cholera surveillance zone out of all high/moderate/low risk populations in Bangladesh. The captured infections represents the percentage of infections in high/moderate/low risk grid cells among all infections in high/moderate/low risk grid cells across Bangladesh.", display = FALSE)
+tab_nums(name = "infcatIntersect-in-bang-tab", caption = "**Number and percent infections that may be captured in Bangladesh, categorized by number of infections.** The captured at-risk population represents the percentage of high/moderate/low risk populations captured by the cholera surveillance zone out of all high/moderate/low risk populations in Bangladesh. The captured infections represents the percentage of infections in high/moderate/low risk grid cells among all infections in high/moderate/low risk grid cells across Bangladesh.", display = FALSE)
 
 ```
 
@@ -549,13 +558,19 @@ We summarized the percentage of high, moderate, and low infection risk populatio
 
 ```{r, tab-rrcatIntersect-in-bang}
 
+rrcat <- sero_df %>% 
+  group_by(rr_risk_cat) %>%
+  summarise(popcat = sum(pop), infcat = sum(inf))
+
 display_rrcatIntersect_in_bang <- processed_rrcatIntersect_in_bang %>%
   group_by(buff, rr_risk_cat) %>%
   dplyr::summarise(num_inf = sum(inf), pop = sum(pop)) %>%
-  dplyr::mutate(perc_pop = round(pop/tot_pop*100, 2)) %>%
-  dplyr::select(buff, rr_risk_cat, pop, num_inf, perc_pop)
+  left_join(rrcat, by = c("rr_risk_cat")) %>%
+  dplyr::mutate(perc_pop = round(pop/popcat*100, 2)) %>%
+  dplyr::mutate(perc_inf = round(num_inf/infcat*100, 2)) %>%
+  dplyr::select(buff, rr_risk_cat, pop, num_inf, perc_pop, perc_inf)
 
-knitr::kable(display_rrcatIntersect_in_bang, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Risk Category", "Population", "Number Infected", "Percent in Risk Category"))
+knitr::kable(display_rrcatIntersect_in_bang, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Risk Category", "Buffer Pop (Sero)", "Number Infected", "Captured At-Risk Pop (%)", "Captured Infections (%)"))
 
 ```
 
@@ -563,13 +578,19 @@ knitr::kable(display_rrcatIntersect_in_bang, format = "pandoc", booktabs = T, al
 
 ```{r, tab-infcatIntersect-in-bang}
 
+infcat <- sero_df %>% 
+  group_by(inf_risk_cat) %>%
+  summarise(popcat = sum(pop), infcat = sum(inf))
+
 display_infcatIntersect_in_bang <- processed_infcatIntersect_in_bang %>%
   group_by(buff, inf_risk_cat) %>%
   dplyr::summarise(num_inf = sum(inf), pop = sum(pop)) %>%
-  dplyr::mutate(perc_pop = round(pop/tot_pop*100, 2)) %>%
-  dplyr::select(buff, inf_risk_cat, pop, num_inf, perc_pop)
+  left_join(infcat, by = c("inf_risk_cat")) %>%
+  dplyr::mutate(perc_pop = round(pop/popcat*100, 2)) %>%
+  dplyr::mutate(perc_inf = round(num_inf/infcat*100, 2)) %>%
+  dplyr::select(buff, inf_risk_cat, pop, num_inf, perc_pop, perc_inf)
 
-knitr::kable(display_infcatIntersect_in_bang, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Risk Category", "Population", "Number Infected", "Percent in Risk Category"))
+knitr::kable(display_infcatIntersect_in_bang, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Risk Category", "Buffer Pop (Sero)", "Number Infected", "Captured At-Risk Pop (%)", "Captured Infections (%)"))
 
 ```
 

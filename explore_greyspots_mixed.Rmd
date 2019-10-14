@@ -60,9 +60,30 @@ adm0_shp <- readRDS("data/BGD_adm0.rds") %>% st_as_sf()
 adm2_shp <- readRDS("data/BGD_adm2.rds") %>% st_as_sf()
 
 ## WorldPop population raster (log-linear interpolation for 2015 from all WorldPop raster data )
-pop_rast <- raster("data/BGD_ppp_2015_adj_v2.tif") 
-pop_rast_v <- velox(pop_rast)
-pop_rast_v$crop(adm0_shp)
+#pop_rast <- raster("data/BGD_ppp_2015_adj_v2.tif") 
+#pop_rast_v <- velox(pop_rast)
+#pop_rast_v$crop(adm0_shp)
+
+## import modeled infection raster and crop out Bangladesh borders
+if(file.exists("data/village_preds_all_bgdintersect.rds")){
+  sero <- readRDS("data/village_preds_all_bgdintersect.rds")
+} else{
+  sero <- readRDS("data/village_preds_all.rds") %>%
+    dplyr::mutate(inf = mean2_cor*pop)
+
+  ## transform sero data to match buffer data crs
+  sero <- st_transform(sero, crs = crs(buff_mp_ls[[1]]))
+  
+  ## intersect sero data with bangladesh map
+  sero <- st_intersection(sero, adm0_shp) ## Note that this may not yield the same results as crop
+  saveRDS(sero,"data/village_preds_all_bgdintersect.rds")
+}
+
+## using pop data from Andrew's sero file as the btm transformation changed estimates slightly (total population sum off by 1.4 million)
+m <- st_make_valid(sero) %>% st_cast("MULTIPOLYGON")
+r <- raster(m, res = .01)
+pop_rast <- fasterize(m, r, field = "pop", fun="sum")
+pop_rast_v<- velox(pop_rast)
 
 out_wd <- "generated_data/"
 fig_wd <- "figures/"
@@ -156,7 +177,8 @@ This is a summary of the populations living within buffers of varying sizes arou
 
 ```{r, proc-tab-survzone}
 
-tot_pop <- sum(values(pop_rast), na.rm = TRUE)
+#tot_pop <- sum(values(pop_rast), na.rm = TRUE)
+tot_pop <- sum(sero$pop)
 
 display_survzone_tab <- map_dfr(mp_names, function(mp_nm){
   
@@ -214,21 +236,6 @@ fig_nums(name = "fig-buffers", caption = paste("**Map of**", paste(buffer_labels
 
 
 ```{r, import-serodata}
-
-## import modeled infection raster and crop out Bangladesh borders
-if(file.exists("data/village_preds_all_bgdintersect.rds")){
-  sero <- readRDS("data/village_preds_all_bgdintersect.rds")
-} else{
-  sero <- readRDS("data/village_preds_all.rds") %>%
-    dplyr::mutate(inf = mean2_cor*pop)
-
-  ## transform sero data to match buffer data crs
-  sero <- st_transform(sero, crs = crs(buff_mp_ls[[1]]))
-  
-  ## intersect sero data with bangladesh map
-  sero <- st_intersection(sero, adm0_shp) ## Note that this may not yield the same results as crop
-  saveRDS(sero,"data/village_preds_all_bgdintersect.rds")
-}
 
 #total number of infections in BGD
 tot_inf <- sum(sero$inf)
@@ -446,7 +453,7 @@ We examined the number of infections falling within each set of buffer distances
 #total number of infections in BGD
 tot_inf <- sum(sero$inf)
 
-#calculate number and percent of infections
+#calculate number and percent of total infections
 display_intersect_sero_buffers_tab <- catch_df %>% 
   group_by(buff) %>%
   dplyr::summarise(num_inf = sum(inf)) %>%
@@ -480,9 +487,9 @@ display_rrcat_in_buffers <- catch_df %>%
   left_join(tot_inf_rrcat, by = c("buff")) %>%
   dplyr::mutate(perc_inf = round(num_inf/tot_infcat*100, 2),
                 perc_pop = round(num_pop/tot_popcat*100, 2)) %>% 
-  dplyr::select(buff, rr_risk_cat, num_inf, perc_inf, perc_pop)
+  dplyr::select(buff, rr_risk_cat, num_inf, perc_inf, num_pop, perc_pop)
 
-knitr::kable(display_rrcat_in_buffers, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Risk Category", "Number Infected", "Infections in Surveillance Zone (%)", "Population in Surveillance Zone (%)"))
+knitr::kable(display_rrcat_in_buffers, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Risk Category", "Number Infected", "% infections in Surveillance Zone", "Population number", "% population in Surveillance Zone"))
 
 ```
 
@@ -593,4 +600,7 @@ display_infcatIntersect_in_bang <- processed_infcatIntersect_in_bang %>%
 knitr::kable(display_infcatIntersect_in_bang, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Risk Category", "Buffer Pop (Sero)", "Number Infected", "Captured At-Risk Pop (%)", "Captured Infections (%)"))
 
 ```
+
+(Evaluate according to CDC surveillance guidelines) How representative and sensitive is the system to capturing a proportion of cases?
+
 

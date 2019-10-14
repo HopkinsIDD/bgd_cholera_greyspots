@@ -12,6 +12,8 @@ reload_source <- function(){
   library(patchwork)
   library(formattable)
   library(data.table)
+  library(fasterize)
+  library(lwgeom)
   
   source("source/util.R")
   

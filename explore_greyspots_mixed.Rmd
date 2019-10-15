@@ -200,7 +200,7 @@ knitr::kable(display_survzone_tab, format = "pandoc", booktabs = T, align = "c",
 <!-- ```{r, fig-survzone}
 ggplot(display_survzone_tab, aes(x = buffer, y = prop_buffer)) +
   geom_point() +
-  theme_bw() + 
+  theme_bw() +
   scale_x_continuous("Buffer (km)", limits = c(0,60)) +
   scale_y_continuous("Proportion", limits = c(0,1))
 
@@ -313,6 +313,28 @@ sero_df <- sero %>%
                 inf_risk_cat = ifelse(inf < 2000, "Low", ifelse(inf >= 2000 & inf < 5000, "Moderate", "High"))) %>% 
   dplyr::mutate(rr_risk_cat = factor(rr_risk_cat, levels = c("High","Moderate","Low")),
                 inf_risk_cat = factor(inf_risk_cat, levels = c("High","Moderate","Low")))
+
+
+## caption for table in next chunk
+tab_nums(name = "tab-seropop-risk", caption = "**Population living in each risk category.** The population living in high, moderate, and low risk areas according to relative risk and infection thresholds across all of Bangladesh.", display = FALSE)
+
+```
+
+`r tab_nums("tab-seropop-risk", display = "full")`
+
+```{r, tab-seropop-risk}
+rr_riskpops <- sero_df %>%
+  group_by(rr_risk_cat) %>%
+  summarise(pop1 = sum(pop, na.rm = TRUE)) %>% data.frame %>%
+  dplyr::select(rr_risk_cat, pop1)
+inf_riskpops <- sero_df %>%
+  group_by(inf_risk_cat) %>%
+  summarise(pop2 = sum(pop, na.rm = TRUE)) %>% data.frame %>%
+  dplyr::select(inf_risk_cat, pop2)
+
+display_seropop_risk_tab <- full_join(rr_riskpops, inf_riskpops, by = c("rr_risk_cat" = "inf_risk_cat"))
+
+knitr::kable(display_seropop_risk_tab, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Risk Level", "Population (RR threshold)", "Population (Infection threshold)"))
 
 ```
 
@@ -567,7 +589,9 @@ We summarized the percentage of high, moderate, and low infection risk populatio
 
 rrcat <- sero_df %>% 
   group_by(rr_risk_cat) %>%
-  summarise(popcat = sum(pop), infcat = sum(inf))
+  summarise(popcat = sum(pop), infcat = sum(inf)) %>%
+  data.frame %>%
+  dplyr::select(rr_risk_cat, popcat, infcat)
 
 display_rrcatIntersect_in_bang <- processed_rrcatIntersect_in_bang %>%
   group_by(buff, rr_risk_cat) %>%

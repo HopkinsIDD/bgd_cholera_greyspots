@@ -464,6 +464,60 @@ tab_nums(name = "intersect-sero-buffers-tab", caption = "**Number and percent in
 
 We overlaid the cholera surveillance zone with the binned infection risk maps to examine the distribution of risks in the surveilled areas. This was done for infection risk as categorized by relative risk (`r fig_nums(paste0("sero-buffers-rr-", buffer_labels[1], "-plt"), display = "cite")` - `r fig_nums(paste0("sero-buffers-rr-", buffer_labels[length(buffer_labels)], "-plt"), display = "cite")`) and by the total number of infections (`r fig_nums(paste0("sero-buffers-inf-", buffer_labels[1], "-plt"), display = "cite")` - `r fig_nums(paste0("sero-buffers-inf-", buffer_labels[length(buffer_labels)], "-plt"), display = "cite")`).
 
+We also identified high risk populations that were not captured by the surveillance zone, as categorized by relative risk (`r fig_nums(paste0("sero-nonbuffers-rr-", buffer_labels[1], "-plt"), display = "cite")` - `r fig_nums(paste0("sero-nonbuffers-rr-", buffer_labels[length(buffer_labels)], "-plt"), display = "cite")`) and by total infections (`r fig_nums(paste0("sero-nonbuffers-inf-", buffer_labels[1], "-plt"), display = "cite")` - `r fig_nums(paste0("sero-nonbuffers-inf-", buffer_labels[length(buffer_labels)], "-plt"), display = "cite")`).
+
+```{r, fig-sero-nonbuffers-rr, fig.dim = c(6.5,4), results = "asis"}
+
+for(i in 1:length(buffer_labels)){
+  
+  km_label <- buffer_labels[i]
+  intersect_sero <- catch_ls[[km_label]]
+  
+  plt <- ggplot() + 
+    geom_sf(data = adm0_shp, fill = NA, lwd = 0.1, alpha = .1) + 
+    geom_sf(data = sero_df, aes(fill = rr_risk_cat), color = NA, lwd = 0) +
+    geom_sf(data = intersect_sero, fill = "white", color = NA, lwd = 0) +
+    geom_sf(data = hosp_loc, shape = 3, color = "black", size = 1, lty = 4) +
+    scale_colour_manual(values = c("#e41a1c","#377eb8","#4daf4a","#984ea3")) +
+    coord_sf(datum = NA) + 
+    labs(x="") + labs(y="") + 
+    theme_void() + 
+    ggsn::north(adm2_shp) +
+    scalebar(adm2_shp, dist = 50, dist_unit = "km",transform = TRUE, model = "WGS84", st.size = 2)
+  print(plt)
+  ggsave(filename = paste0("figures/sero-nonbuffers-rr-", km_label, ".pdf"), plt, width = 6.5, height = 4, units = "in")
+
+  cat(fig_nums(name = paste0("sero-nonbuffers-rr-", km_label, "-plt"), caption = paste0("**Infection risk, as categorized by relative risk, outside of cholera surveillance zones (", km_label, " for subdistrict, district, and tertiary care hospitals)**"), display = "full"))
+}
+
+```
+
+```{r, fig-sero-nonbuffers-inf, fig.dim = c(6.5,4), results = "asis"}
+
+for(i in 1:length(buffer_labels)){
+  
+  km_label <- buffer_labels[i]
+  intersect_sero <- catch_ls[[km_label]]
+  
+  plt <- ggplot() + 
+    geom_sf(data = adm0_shp, fill = NA, lwd = 0.1, alpha = .1) + 
+    geom_sf(data = sero_df, aes(fill = inf_risk_cat), color = NA, lwd = 0) +
+    geom_sf(data = intersect_sero, fill = "white", color = NA, lwd = 0) +
+    geom_sf(data = hosp_loc, shape = 3, color = "black", size = 1, lty = 4) +
+    scale_colour_manual(values = c("#e41a1c","#377eb8","#4daf4a","#984ea3")) +
+    coord_sf(datum = NA) + 
+    labs(x="") + labs(y="") + 
+    theme_void() + 
+    ggsn::north(adm2_shp) +
+    scalebar(adm2_shp, dist = 50, dist_unit = "km",transform = TRUE, model = "WGS84", st.size = 2)
+  print(plt)
+  ggsave(filename = paste0("figures/sero-nonbuffers-inf-", km_label, ".pdf"), plt, width = 6.5, height = 4, units = "in")
+
+  cat(fig_nums(name = paste0("sero-nonbuffers-inf-", km_label, "-plt"), caption = paste0("**Infection risk, as categorized by number of infections, outside of cholera surveillance zones (", km_label, " for subdistrict, district, and tertiary care hospitals)**"), display = "full"))
+}
+
+```
+
 ### Populations in the cholera surveillance zone
 
 We examined the number of infections falling within each set of buffer distances. We also calculated the percentage of the buffer population infected, and the percentage of total infections across Bangladesh represented for each set of buffer distances (`r tab_nums("intersect-sero-buffers-tab", display = "cite")`).

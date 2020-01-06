@@ -93,14 +93,14 @@ fig_wd <- "figures/"
 ```{r, generate-buffers, include = FALSE}
 
 ## SET THIS: radii in km for subdistrict, district, and tertiary hospitals, respectively
-km_vec_ls <- list(B1= c(10, 20, 30), B2 = c(10, 10, 30), B3 = c(20, 20, 30), B4 = c(15, 25, 35)) 
+km_vec_ls <- list(B1= c(10, 20, 30, 50), B2 = c(10, 10, 30, 50), B3 = c(20, 20, 30, 50), B4 = c(15, 25, 35, 50)) 
 
 for(i in 1:length(km_vec_ls)){
 
   km_vec <- km_vec_ls[[i]]
 
   hosp_dat2 <- hosp_dat %>%  
-    dplyr::mutate(buff_radius = ifelse(Type == "subdistrict", km_vec[1], ifelse(Type == "district", km_vec[2], ifelse(Type == "tertiary", km_vec[3], NA))))
+    dplyr::mutate(buff_radius = ifelse(Type == "subdistrict", km_vec[1], ifelse(Type == "district", km_vec[2], ifelse(Type == "tertiary", km_vec[3], ifelse(Type == "icddr,b", km_vec[4], NA)))))
 
   buff <- st_buffer(hosp_transformed, dist=hosp_dat2$buff_radius, nQuadSegs = 30, endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1)
   dub_buffer <- st_transform(buff, 4326)
@@ -344,6 +344,7 @@ knitr::kable(display_seropop_risk_tab, format = "pandoc", booktabs = T, align = 
 plt <- ggplot() + 
   geom_sf(data = adm0_shp, fill = NA, lwd = 0.1, alpha = .1) + 
   geom_sf(data = sero_df, aes(fill = rr_risk_cat), color = NA, lwd = 0) +
+  geom_sf(data = mp_file, lwd = 0.3, alpha = 0.1) +
   geom_sf(data = hosp_loc, shape = 3, color = "black", size = 1, lty = 4) +
   scale_colour_manual(values = c("#e41a1c","#377eb8","#4daf4a","#984ea3")) +
   # scale_fill_gradient2(low ="#4191e1", mid = "white", high = "#b20000", midpoint=1.0) +
@@ -368,6 +369,7 @@ fig_nums(name = paste0("fig-sero-rrcat"), caption = paste("**Cholera risk map as
 plt <- ggplot() + 
   geom_sf(data = adm0_shp, fill = NA, lwd = 0.1, alpha = .1) + 
   geom_sf(data = sero_df, aes(fill = inf_risk_cat), color = NA, lwd = 0) +
+  geom_sf(data = mp_file, lwd = 0.3, alpha = 0.1) +
   geom_sf(data = hosp_loc, shape = 3, color = "black", size = 1, lty = 4) +
   scale_colour_manual(values = c("#e41a1c","#377eb8","#4daf4a","#984ea3")) +
   # scale_fill_gradient2(low ="#4191e1", mid = "white", high = "#b20000", midpoint=1.0) +

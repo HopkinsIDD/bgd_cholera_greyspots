@@ -247,17 +247,21 @@ Using data from a nationally-representative survey across Bangladesh, we develop
 
 ```{r, fig-sero-rr-map, fig.dim = c(6,6)}
 
+seroplt <- sero %>% dplyr::mutate(rrlog2 = ifelse(log2(rr2_cor) < -2, -2, ifelse(log2(rr2_cor) > 2, 2, log2(rr2_cor))))
+
 plt <- ggplot() + 
   geom_sf(data = adm0_shp, fill=NA, lwd=0.1, alpha=.1) + 
-  geom_sf(data = sero, aes(fill=rr2_cor), color=NA, lwd=0) +
+  geom_sf(data = seroplt, aes(fill=rrlog2), color=NA, lwd=0) +
   geom_sf(data = hosp_loc, shape=3, color="black", size=1, lty=4) +
   #scale_colour_manual(values = c("#e41a1c","#377eb8","#4daf4a","#984ea3")) +
-  scale_fill_gradient2(low ="#4191e1", mid = "white", high = "#b20000", midpoint=1.0) +
+  # scale_fill_gradient2(low ="#4191e1", mid = "white", high = "#b20000", midpoint=1.0) +
+  # scale_fill_distiller(palette="Spectral", limits=c(-3, 2.5), breaks=seq(-2, 2, 1), labels=c(expression("">= 0.25), "0.5", "1", "2", expression("">=4))) +
+  scale_fill_distiller(palette="Spectral", limits=c(-2, 2), breaks=seq(-2, 2, 1), labels=c("0.25", "0.5", "1", "2", "4")) +
   coord_sf(datum=NA) + 
   labs(x="") + labs(y="") + 
-  theme_void() + 
-  ggsn::north(adm2_shp) +
-  scalebar(adm2_shp, dist = 50, dist_unit = "km",transform = TRUE, model = "WGS84", st.size = 3)
+  theme_void() #+ 
+  # ggsn::north(adm2_shp) +
+  # scalebar(adm2_shp, dist = 50, dist_unit = "km",transform = TRUE, model = "WGS84", st.size = 3)
 
 print(plt)
 ggsave(filename = paste0("figures/sero-rr.pdf"), plt, width = 6, height = 6, units = "in")

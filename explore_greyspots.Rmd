@@ -410,13 +410,13 @@ We then examined the distribution of relative-risk-based categories (`r tab_nums
 ```{r, tab-rrcat-in-buffers}
 
 tot_inf_rrcat <- catch_df %>% 
-  group_by(rr_risk_cat) %>%
+  group_by(rr_risk_cat, buff) %>%
   dplyr::summarise(tot_inf=sum(inf)) 
 
 display_rrcat_in_buffers <- catch_df %>% 
   group_by(buff, rr_risk_cat) %>%
   dplyr::summarise(num_inf = sum(inf)) %>%
-  left_join(tot_inf_rrcat, by = c("rr_risk_cat")) %>%
+  left_join(tot_inf_rrcat, by = c("rr_risk_cat", "buff")) %>%
   dplyr::mutate(perc_inf = round(num_inf/tot_inf*100, 2)) %>% 
   dplyr::select(buff, rr_risk_cat, num_inf, perc_inf)
 

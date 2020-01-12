@@ -1,5 +1,6 @@
 ---
 title: "Bangladesh surveillance greyspots"
+subtitle: "January 12, 2020 - with icddr,b hospital"
 author: "Elonia"
 description: "Descriptive analysis of cholera surveillance zones in Bangladesh. This version of the Rmd file creates buffer shapefiles and enables different buffer radii to be specified for each sentinel hospital"
 output: 
@@ -10,7 +11,7 @@ output:
 knit: (function(inputFile, encoding) { 
           rmarkdown::render(inputFile,
                         encoding=encoding, 
-                output_file='explore_greyspots_mixed_20200112.html') })
+                output_file='explore_greyspots_mixed_wicddrb_20200112.html') })
 ---
 
 ```{r setup, include=FALSE, eval=TRUE}
@@ -56,7 +57,7 @@ We use the following threshold for defining high, medium, and low risk infection
 ```{r, import-data, include = FALSE}
 
 ## sentinel hospital location data
-hosp_dat <- read_csv("data/hosp_GPS.csv")
+hosp_dat <- read_csv("data/hosp_GPS_with_icddrb.csv")
 hosp_loc <- sf::st_as_sf(hosp_dat %>% dplyr::select(LON,LAT), coords = c("LON","LAT"),crs="+proj=longlat +datum=WGS84 +no_defs") ## lat/lon coords on different crs
 hosp_transformed <- st_transform(hosp_loc,"+proj=tmerc +lat_0=0 +lon_0=90 +k=0.9996 +x_0=500000 +y_0=0 +a=6377276.345 +b=6356075.41314024 +towgs84=283.7,735.9,261.1,0,0,0,0 +units=km +no_defs")
 
@@ -90,22 +91,21 @@ r <- raster(m, res = .01)
 pop_rast <- fasterize(m, r, field = "pop", fun="sum")
 pop_rast_v<- velox(pop_rast)
 
-out_wd <- "generated_data/mixed/"
+out_wd <- "generated_data/mixed_wicddrb/"
 fig_wd <- "figures/"
 
 ```
 
 ```{r, generate-buffers, include = FALSE}
 
-## SET THIS: radii in km for subdistrict, district, and tertiary hospitals, respectively
-##not including icddrb
+## SET THIS: radii in km for subdistrict, district, tertiary, and icddr,b (special) hospitals, respectively
 
 
 ##including 30km radial buffer for icddrb catchment area
-km_vec_ls <- list(B1 = c(10, 20, 30), 
-                  B2 = c(10, 10, 30)#,
-                  #B3 = c(20, 20, 30), 
-                  #B4 = c(15, 25, 35)
+km_vec_ls <- list(B1 = c(10, 20, 30, 30), 
+                  B2 = c(10, 10, 30, 30)#,
+                  #B3 = c(20, 20, 30, 30), 
+                  #B4 = c(15, 25, 35, 30)
                   ) 
 
 for(i in 1:length(km_vec_ls)){
@@ -113,7 +113,7 @@ for(i in 1:length(km_vec_ls)){
   km_vec <- km_vec_ls[[i]]
 
   hosp_dat2 <- hosp_dat %>%  
-    dplyr::mutate(buff_radius = ifelse(Type == "subdistrict", km_vec[1], ifelse(Type == "district", km_vec[2], ifelse(Type == "tertiary", km_vec[3], NA))))
+    dplyr::mutate(buff_radius = ifelse(Type == "subdistrict", km_vec[1], ifelse(Type == "district", km_vec[2], ifelse(Type == "tertiary", km_vec[3], ifelse(Type == "special", km_vec[4], NA)))))
 
   buff <- st_buffer(hosp_transformed, dist=hosp_dat2$buff_radius, nQuadSegs = 30, endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1)
   dub_buffer <- st_transform(buff, 4326)
@@ -169,7 +169,7 @@ names(buff_sp_ls) <- sp_names
 
 ## Identifying the cholera surveillance zone
 
-There are 22 sentinel hospital sites (`r tab_nums("tab-hospnames", display = "cite")`).
+There are 23 sentinel hospital sites (`r tab_nums("tab-hospnames", display = "cite")`).
 
 ```{r, proc-tab-hospnames}
 
@@ -205,7 +205,7 @@ tab_nums(name = "tab-survzone", caption = "**Proportion of population living wit
 `r tab_nums("tab-survzone", display = "full")`
 
 ```{r, disp-tab-survzone}
-knitr::kable(display_survzone_tab, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer (Subdistrict-District-Tertiary in km)", "Pop", "Proportion"))
+knitr::kable(display_survzone_tab, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer (Subdistrict-District-Tertiary-icddr,b in km)", "Pop", "Proportion"))
 
 
 ```
@@ -229,7 +229,7 @@ buffer_labels <- mp_names
 
 ```
 
-In the absence of better data on health care utilization around the hospital sentinel surveillance sites, we assumed that buffers with radii of `r buffer_labels` around the hospital could serve as proxies for potential hospital catchment areas (`r fig_nums("fig-map-buffers", display = "cite")`). Subdistrict, district, and tertiary care sentinel hospitals could have buffer radii of different sizes. We refer to the joint buffer areas as the "cholera surveillance zone" for the national cholera sentinel surveillance system.
+In the absence of better data on health care utilization around the hospital sentinel surveillance sites, we assumed that buffers with radii of `r buffer_labels` around the hospital could serve as proxies for potential hospital catchment areas (`r fig_nums("fig-map-buffers", display = "cite")`). Subdistrict, district, tertiary care sentinel hospitals and the icddr,b Dhaka cholera hospital could have buffer radii of different sizes. We refer to the joint buffer areas as the "cholera surveillance zone" for the national cholera sentinel surveillance system.
 
 ```{r, fig-buffers}
 
@@ -238,7 +238,7 @@ buffermaps <- lapply(buffer_labels, function(dist){
 }) 
 
 wrap_plots(buffermaps) 
-fig_nums(name = "fig-buffers", caption = paste("**Map of**", paste(buffer_labels, collapse = ", "), "**buffers around (subdistrict-district-tertiary care) sentinel hospital sites (left to right, top row to bottom row, respectively).**"), display = FALSE)
+fig_nums(name = "fig-buffers", caption = paste("**Map of**", paste(buffer_labels, collapse = ", "), "**buffers around (subdistrict-district-tertiary-icddr,b) sentinel hospital sites (left to right, top row to bottom row, respectively).**"), display = FALSE)
 
 ```
 
@@ -506,7 +506,7 @@ for(i in 1:length(buffer_labels)){
   print(plt)
   ggsave(filename = paste0("figures/sero-nonbuffers-rr-", km_label, ".pdf"), plt, width = 6.5, height = 4, units = "in")
 
-  cat(fig_nums(name = paste0("sero-nonbuffers-rr-", km_label, "-plt"), caption = paste0("**Infection risk, as categorized by relative risk, outside of cholera surveillance zones (", km_label, " for subdistrict, district, and tertiary care hospitals)**"), display = "full"))
+  cat(fig_nums(name = paste0("sero-nonbuffers-rr-", km_label, "-plt"), caption = paste0("**Infection risk, as categorized by relative risk, outside of cholera surveillance zones (", km_label, " for subdistrict, district, tertiary care, and icddr,b hospitals)**"), display = "full"))
 }
 
 ```
@@ -532,7 +532,7 @@ for(i in 1:length(buffer_labels)){
   print(plt)
   ggsave(filename = paste0("figures/sero-nonbuffers-inf-", km_label, ".pdf"), plt, width = 6.5, height = 4, units = "in")
 
-  cat(fig_nums(name = paste0("sero-nonbuffers-inf-", km_label, "-plt"), caption = paste0("**Infection risk, as categorized by number of infections, outside of cholera surveillance zones (", km_label, " for subdistrict, district, and tertiary care hospitals)**"), display = "full"))
+  cat(fig_nums(name = paste0("sero-nonbuffers-inf-", km_label, "-plt"), caption = paste0("**Infection risk, as categorized by number of infections, outside of cholera surveillance zones (", km_label, " for subdistrict, district, tertiary care, and icddr,b hospitals)**"), display = "full"))
 }
 
 ```
@@ -700,4 +700,4 @@ knitr::kable(display_infcatIntersect_in_bang, format = "pandoc", booktabs = T, a
 
 (Evaluate according to CDC surveillance guidelines) How representative and sensitive is the system to capturing a proportion of cases?
 
-
+Incorporate the uncertainty results here

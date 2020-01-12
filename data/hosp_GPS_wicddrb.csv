@@ -1,0 +1,24 @@
+﻿HOSP,Name,LAT,LON,Division,Type
+1,District Hospital Norshingdi,23.920224,90.718459,Dhaka,district
+2,Adhunik Sadar Hospital Habiganj,24.373456,91.417688,Sylhet,district
+3,District Sadar Hospital Cox's Bazar,21.44159,91.976834,Chittagong,district
+4,Adhunik Sadar Hospital Naogaon,24.822625,88.93793,Rajshahi,district
+5,General Hospital Patuakhali,22.358846,90.32737,Barisal,tertiary
+6,Adhunik Sadar Hospital Thakurgaon,26.029522,88.476566,Rangpur,district
+7,District Sadar Hospital Satkhira,22.690323,89.046789,Khulna,district
+8,Dhaka Medical College Dhaka,23.725392,90.397008,Dhaka,tertiary
+9,Uttara Adhunik Medical College Hospital,23.874816,90.396747,Dhaka,tertiary
+10,Bangladesh Institute of Tropical and Infectious Diseases Chittagong,22.392736,91.758553,Chittagong,tertiary
+11,General Hospital Tangail,24.264324,89.924837,Dhaka,district
+12,General Hospital Narayanganj,23.624553,90.501208,Dhaka,district
+13,Sadar Hospital Chuadanga,23.635169,88.846404,Khulna,district
+14,General Hospital Meherpur,23.778352,88.642398,Khulna,district
+15,General Hospital Comilla,23.455959,91.182037,Chittagong,district
+16,Upazila Health Complex Chaugachha Jesssore,23.259575,89.02446,Khulna,subdistrict
+17,General Hospital Kusthia,23.901199,89.124264,Khulna,district
+18,Upazila Health Complex Madan,24.716687,90.945304,Mymensingh,subdistrict
+19,Upazila Health Complex Chhatak Sunamganj,25.03337,91.668692,Sylhet,subdistrict
+20,Upazila Health Complex Mathbariya,22.285752,89.953652,Barisal,subdistrict
+21,Upazila Health Complex Bakerganj,22.538813,90.34633,Barisal,subdistrict
+22,Health Complex Shibganj,24.687695,88.158444,Rajshahi,subdistrict
+23,"icddr,b Cholera Hospital",23.776369,90.399705,Dhaka,icddrb

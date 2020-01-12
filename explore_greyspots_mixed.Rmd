@@ -84,10 +84,11 @@ if(file.exists("data/village_preds_all_bgdintersect.rds")){
   saveRDS(sero,"data/village_preds_all_bgdintersect.rds")
 }
 
+## 1/12/20 ECL: THERE IS A PROBLEM WITH THE RASTERIZATION. WHEN YOU SUM THE POPULATION AFTER RASTERIZATION ITS IN THE BILLIONS, BUT IT'S A REASONABLE 163 MILLION BEFORE THAT STEP
 ## using pop data from Andrew's sero file as the btm transformation changed estimates slightly (total population sum off by 1.4 million)
 m <- st_make_valid(sero) %>% st_cast("MULTIPOLYGON")
-r <- raster(m, res = .01)
-pop_rast <- fasterize(m, r, field = "pop", fun="sum")
+r <- raster(m, res = .05)
+pop_rast <- fasterize(m, r, field = "pop", fun="last")
 pop_rast_v<- velox(pop_rast)
 
 out_wd <- "generated_data/mixed/"
@@ -277,7 +278,7 @@ plt <- ggplot() +
   # scalebar(adm2_shp, dist = 50, dist_unit = "km",transform = TRUE, model = "WGS84", st.size = 3)
 
 print(plt)
-ggsave(filename = paste0("figures/sero-rr.pdf"), plt, width = 6, height = 6, units = "in")
+ggsave(filename = paste0(fig_wd, "sero-rr.pdf"), plt, width = 6, height = 6, units = "in")
 
 fig_nums(name = paste0("fig-sero-rr-map"), caption = paste("**Risk of infection relative to population-weighted mean**"), display = "false")
 
@@ -372,7 +373,7 @@ plt <- ggplot() +
   scalebar(adm2_shp, dist = 50, dist_unit = "km",transform = TRUE, model = "WGS84", st.size = 3)
 
 print(plt)
-ggsave(filename = paste0("figures/sero-rrcat.pdf"), plt, width = 6, height = 6, units = "in")
+ggsave(filename = paste0(fig_wd, "sero-rrcat.pdf"), plt, width = 6, height = 6, units = "in")
 
 fig_nums(name = paste0("fig-sero-rrcat"), caption = paste("**Cholera risk map as categorized by the risk of infection relative to a population-weighted mean**"), display = "false")
 
@@ -397,7 +398,7 @@ plt <- ggplot() +
   scalebar(adm2_shp, dist = 50, dist_unit = "km",transform = TRUE, model = "WGS84", st.size = 3)
 
 print(plt)
-ggsave(filename = paste0("figures/sero-infcat.pdf"), plt, width = 6, height = 6, units = "in")
+ggsave(filename = paste0(fig_wd, "sero-infcat.pdf"), plt, width = 6, height = 6, units = "in")
 
 fig_nums(name = paste0("fig-sero-infcat"), caption = paste("**Cholera risk map as categorized by number of infections**"), display = "false")
 
@@ -445,7 +446,7 @@ for(i in 1:length(buffer_labels)){
     ggsn::north(adm2_shp) +
     scalebar(adm2_shp, dist = 50, dist_unit = "km",transform = TRUE, model = "WGS84", st.size = 2)
   print(plt)
-  ggsave(filename = paste0("figures/sero-buffers-rr-", km_label, ".pdf"), plt, width = 6.5, height = 4, units = "in")
+  ggsave(filename = paste0(fig_wd, "sero-buffers-rr-", km_label, ".pdf"), plt, width = 6.5, height = 4, units = "in")
 
   cat(fig_nums(name = paste0("sero-buffers-rr-", km_label, "-plt"), caption = paste0("**Infection risk, as categorized by relative risk, within cholera surveillance zones (", km_label, " for subdistrict, district, and tertiary care hospitals)**"), display = "full"))
 }
@@ -471,7 +472,7 @@ for(i in 1:length(buffer_labels)){
     ggsn::north(adm2_shp) +
     scalebar(adm2_shp, dist = 50, dist_unit = "km",transform = TRUE, model = "WGS84", st.size = 2)
   print(plt)
-  ggsave(filename = paste0("figures/sero-buffers-inf-", km_label, ".pdf"), plt, width = 6.5, height = 4, units = "in")
+  ggsave(filename = paste0(fig_wd, "sero-buffers-inf-", km_label, ".pdf"), plt, width = 6.5, height = 4, units = "in")
 
   cat(fig_nums(name = paste0("sero-buffers-inf-", km_label, "-plt"), caption = paste0("**Infection risk, as categorized by number of infections, within cholera surveillance zones (", km_label, " for subdistrict, district, and tertiary care hospitals)**"), display = "full"))
 }
@@ -504,7 +505,7 @@ for(i in 1:length(buffer_labels)){
     ggsn::north(adm2_shp) +
     scalebar(adm2_shp, dist = 50, dist_unit = "km",transform = TRUE, model = "WGS84", st.size = 2)
   print(plt)
-  ggsave(filename = paste0("figures/sero-nonbuffers-rr-", km_label, ".pdf"), plt, width = 6.5, height = 4, units = "in")
+  ggsave(filename = paste0(fig_wd, "sero-nonbuffers-rr-", km_label, ".pdf"), plt, width = 6.5, height = 4, units = "in")
 
   cat(fig_nums(name = paste0("sero-nonbuffers-rr-", km_label, "-plt"), caption = paste0("**Infection risk, as categorized by relative risk, outside of cholera surveillance zones (", km_label, " for subdistrict, district, and tertiary care hospitals)**"), display = "full"))
 }
@@ -530,7 +531,7 @@ for(i in 1:length(buffer_labels)){
     ggsn::north(adm2_shp) +
     scalebar(adm2_shp, dist = 50, dist_unit = "km",transform = TRUE, model = "WGS84", st.size = 2)
   print(plt)
-  ggsave(filename = paste0("figures/sero-nonbuffers-inf-", km_label, ".pdf"), plt, width = 6.5, height = 4, units = "in")
+  ggsave(filename = paste0(fig_wd, "sero-nonbuffers-inf-", km_label, ".pdf"), plt, width = 6.5, height = 4, units = "in")
 
   cat(fig_nums(name = paste0("sero-nonbuffers-inf-", km_label, "-plt"), caption = paste0("**Infection risk, as categorized by number of infections, outside of cholera surveillance zones (", km_label, " for subdistrict, district, and tertiary care hospitals)**"), display = "full"))
 }

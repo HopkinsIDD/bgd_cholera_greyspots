@@ -25,7 +25,7 @@ map_buffers <- function(map0_shp, map2_shp, hosp_coord, polyfile){
   plt <- ggplot() + 
     geom_sf(data = map0_shp, fill = NA, lwd = 0.1, alpha = .1) + 
     geom_sf(data = polyfile, color = "red", alpha = .4, show.legend = "point") +
-    geom_sf(data = hosp_coord, shape = 3, color = "black", size = 1, lty = 4) +
+    geom_sf(data = hosp_coord, shape = 3, color = "black", size = 1, lty = 1) +
     coord_sf(datum = NA) + 
     labs(x = "") + labs(y = "") + 
     theme_void() + 

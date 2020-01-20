@@ -261,7 +261,7 @@ seroplt <- sero %>% dplyr::mutate(rrlog2 = ifelse(log2(rr2_cor) < -2, -2, ifelse
 plt <- ggplot() + 
   geom_sf(data = adm0_shp, fill=NA, lwd=0.1, alpha=.1) + 
   geom_sf(data = seroplt, aes(fill=rrlog2), color=NA, lwd=0) +
-  geom_sf(data = hosp_loc, shape=3, color="black", size=1, lty=4) +
+  geom_sf(data = hosp_loc, shape=3, color="black", size=1, lty=1) +
   #scale_colour_manual(values = c("#e41a1c","#377eb8","#4daf4a","#984ea3")) +
   # scale_fill_gradient2(low ="#4191e1", mid = "white", high = "#b20000", midpoint=1.0) +
   # scale_fill_distiller(palette="Spectral", limits=c(-3, 2.5), breaks=seq(-2, 2, 1), labels=c(expression("">= 0.25), "0.5", "1", "2", expression("">=4))) +
@@ -358,7 +358,7 @@ plt <- ggplot() +
   geom_sf(data = adm0_shp, fill = NA, lwd = 0.1, alpha = .1) + 
   geom_sf(data = sero_df, aes(fill = rr_risk_cat), color = NA, lwd = 0) +
   geom_sf(data = mp_file, lwd = 0.3, alpha = 0.1) +
-  geom_sf(data = hosp_loc, shape = 3, color = "black", size = 1, lty = 4) +
+  geom_sf(data = hosp_loc, shape = 3, color = "black", size = 1, lty = 1) +
   scale_colour_manual(values = c("#e41a1c","#377eb8","#4daf4a","#984ea3")) +
   # scale_fill_gradient2(low ="#4191e1", mid = "white", high = "#b20000", midpoint=1.0) +
   coord_sf(datum = NA) + 
@@ -383,7 +383,7 @@ plt <- ggplot() +
   geom_sf(data = adm0_shp, fill = NA, lwd = 0.1, alpha = .1) + 
   geom_sf(data = sero_df, aes(fill = inf_risk_cat), color = NA, lwd = 0) +
   geom_sf(data = mp_file, lwd = 0.3, alpha = 0.1) +
-  geom_sf(data = hosp_loc, shape = 3, color = "black", size = 1, lty = 4) +
+  geom_sf(data = hosp_loc, shape = 3, color = "black", size = 1, lty = 1) +
   scale_colour_manual(values = c("#e41a1c","#377eb8","#4daf4a","#984ea3")) +
   # scale_fill_gradient2(low ="#4191e1", mid = "white", high = "#b20000", midpoint=1.0) +
   coord_sf(datum = NA) + 
@@ -433,7 +433,7 @@ for(i in 1:length(buffer_labels)){
   plt <- ggplot() + 
     geom_sf(data = adm0_shp, fill = NA, lwd = 0.1, alpha = .1) + 
     geom_sf(data = intersect_sero, aes(fill = rr_risk_cat), color = NA, lwd = 0) +
-    geom_sf(data = hosp_loc, shape = 3, color = "black", size = 1, lty = 4) +
+    geom_sf(data = hosp_loc, shape = 3, color = "black", size = 1, lty = 1) +
     scale_colour_manual(values = c("#e41a1c","#377eb8","#4daf4a","#984ea3")) +
     coord_sf(datum = NA) + 
     labs(x="") + labs(y="") + 
@@ -459,7 +459,7 @@ for(i in 1:length(buffer_labels)){
   plt <- ggplot() + 
     geom_sf(data = adm0_shp, fill = NA, lwd = 0.1, alpha = .1) + 
     geom_sf(data = intersect_sero, aes(fill = inf_risk_cat), color = NA, lwd = 0) +
-    geom_sf(data = hosp_loc, shape = 3, color = "black", size = 1, lty = 4) +
+    geom_sf(data = hosp_loc, shape = 3, color = "black", size = 1, lty = 1) +
     scale_colour_manual(values = c("#e41a1c","#377eb8","#4daf4a","#984ea3")) +
     coord_sf(datum = NA) + 
     labs(x="") + labs(y="") + 
@@ -492,7 +492,7 @@ for(i in 1:length(buffer_labels)){
     geom_sf(data = adm0_shp, fill = NA, lwd = 0.1, alpha = .1) + 
     geom_sf(data = sero_df, aes(fill = rr_risk_cat), color = NA, lwd = 0) +
     geom_sf(data = intersect_sero, fill = "white", color = NA, lwd = 0) +
-    geom_sf(data = hosp_loc, shape = 3, color = "black", size = 1, lty = 4) +
+    geom_sf(data = hosp_loc, shape = 3, color = "black", size = 1, lty = 1) +
     scale_colour_manual(values = c("#e41a1c","#377eb8","#4daf4a","#984ea3")) +
     coord_sf(datum = NA) + 
     labs(x="") + labs(y="") + 
@@ -518,7 +518,7 @@ for(i in 1:length(buffer_labels)){
     geom_sf(data = adm0_shp, fill = NA, lwd = 0.1, alpha = .1) + 
     geom_sf(data = sero_df, aes(fill = inf_risk_cat), color = NA, lwd = 0) +
     geom_sf(data = intersect_sero, fill = "white", color = NA, lwd = 0) +
-    geom_sf(data = hosp_loc, shape = 3, color = "black", size = 1, lty = 4) +
+    geom_sf(data = hosp_loc, shape = 3, color = "black", size = 1, lty = 1) +
     scale_colour_manual(values = c("#e41a1c","#377eb8","#4daf4a","#984ea3")) +
     coord_sf(datum = NA) + 
     labs(x="") + labs(y="") + 

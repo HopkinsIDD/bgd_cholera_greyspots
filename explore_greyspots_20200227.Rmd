@@ -1,0 +1,258 @@
+---
+title: "Bangladesh surveillance greyspots"
+subtitle: "February 27, 2020"
+author: "Elonia"
+description: "Descriptive analysis of cholera surveillance zones in Bangladesh."
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+  
+knit: (function(inputFile, encoding) { 
+          rmarkdown::render(inputFile,
+                        encoding=encoding, 
+                output_file='explore_greyspots_20200227.html') })
+---
+
+```{r setup, include=FALSE, eval=TRUE}
+options(tinytex.verbose = TRUE, scipen = 999)
+knitr::opts_chunk$set(echo = FALSE, cache = FALSE, warning=FALSE, message=FALSE, fig.align="center")
+library(kableExtra)
+
+```
+
+```{r captioner, include=FALSE, eval=TRUE}
+library(captioner)
+tab_nums <- captioner(prefix = "Table ", auto_space = FALSE)
+fig_nums <- captioner(prefix = "Figure ", auto_space = FALSE)
+```
+
+```{r, settings}
+source("source/util.R")
+reload_source()
+code_str <- "_20200227"
+
+```
+
+## Introduction
+The goal of this study is to identify how well the Bangladesh national cholera surveillance system captures:
+
+1. the Bangladeshi population
+1. the Bangladeshi population living in high, medium, and low risk cholera areas
+
+Hospitals in the national cholera surveillance system and icddr,b Dhaka hospital are the only healthcare facilities that regularly perform laboratory confirmation of _V. cholerae_ in Bangladesh. Consequently it is important to understand how well areas with high cholera risk are captured by the surveillance system.
+
+MOVE THIS:
+The values we want to estimate include:
+1. percentage of the population living in cholera surveillance zones
+1. number and percentage of implied infections in cholera surveillance zones within the last year
+1. number and percentage of implied infections in cholera surveillance zones that are in high, medium, and low infection risk areas
+1. number and percentage of people living in high, medium, and low infection risk areas that would be captured by cholera surveillance zones
+
+
+```{r, import-data, include = FALSE}
+## Import data on hospitals in Bangladesh that test for V. cholerae
+
+std_crs_txt <- "+proj=tmerc +lat_0=0 +lon_0=90 +k=0.9996 +x_0=500000 +y_0=0 +a=6377276.345 +b=6356075.41314024 +towgs84=283.7,735.9,261.1,0,0,0,0 +units=km +no_defs" ## BGD UTM projection
+gadm_crs_txt <- "+proj=longlat +datum=WGS84 +no_defs"
+
+## sentinel hospital location data
+hosp_dat <- read_csv("data/hosp_GPS_wicddrb.csv")
+hosp_dat_gadmcrs <- sf::st_as_sf(hosp_dat, coords = c("LON","LAT"), crs = gadm_crs_txt) ## lat/lon coords on different crs
+
+## transform hospital coords to match standard bgd crs in km
+hosp_dat <- st_transform(hosp_dat_gadmcrs, std_crs_txt)
+
+## shapefiles for Bangladesh
+adm0_shp_gadmcrs <- readRDS("data/BGD_adm0.rds") %>% st_as_sf()
+adm2_shp_gadmcrs <- readRDS("data/BGD_adm2.rds") %>% st_as_sf()
+adm0_shp <- st_transform(adm0_shp_gadmcrs, std_crs_txt)
+adm2_shp <- st_transform(adm2_shp_gadmcrs, std_crs_txt)
+
+out_wd <- "generated_data/mixed_wicddrb/"
+fig_wd <- "figures/"
+```
+
+```{r, import-sero, include = FALSE}
+## Import seroincidence estimates in Bangladesh based on a nationally-representative 2015 serosurvey
+
+# if(file.exists(paste0("data/clean_sero_bgdintersect", code_str, ".rds"))){
+#   sero <- readRDS("data/clean_sero_bgdintersect.rds") 
+# } else{
+
+  ## note that this file has duplicate grid cells here for mapping purposes. 
+  ## one set of cols (toPlt) is the original file and ideal for plotting at grid cell level
+  ## one set of cols (toAgg) is best used for summing across number of infections
+  ## data from Steve on 2/25 (submitted to Lancet ID)
+  sero_import <- readRDS("data/grid-cell-data-w-entropy.rds") %>%
+    dplyr::select(grid_id, pop, rr_median, rr_lb, rr_ub, inc_mean, inc_median, inc_lb, inc_ub, rr_med_bound, rr_lb_bound, rr_ub_bound, rr_int_log_diff, inc_interval_width, implied_inf, entropy) %>%
+    dplyr::mutate(prop_inf_toPlt = ifelse(pop>0, implied_inf/pop, 0)) %>%
+    dplyr::mutate(pop_toAgg = pop,
+                  implied_inf_toAgg = implied_inf,
+                  prop_inf_toAgg = prop_inf_toPlt) %>%
+    dplyr::rename(pop_toPlt = pop,
+                  implied_inf_toPlt = implied_inf) 
+  dup_ix <- which(duplicated(sero_import$grid_id))
+  sero_import[dup_ix,]$pop_toAgg <- NA
+  sero_import[dup_ix,]$implied_inf_toAgg <- NA
+  sero_import[dup_ix,]$prop_inf_toAgg <- NA
+
+  ## transform sero data to match standard bgd crs in km
+  sero <- st_transform(sero_import, crs = std_crs_txt)
+
+# }
+
+```
+
+## Methods
+
+### Identifying the cholera surveillance zone
+
+```{r, generate-buffers, include = FALSE}
+
+## SET THIS: radii in km for subdistrict, district, tertiary, and icddr,b (special) hospitals, respectively
+km_vec_ls <- list(B1 = c(10, 20, 30, 30)#, 
+                  #B2 = c(10, 10, 30, 30)
+                  ) 
+
+for(i in 1:length(km_vec_ls)){
+
+  km_vec <- km_vec_ls[[i]]
+
+  hosp_dat2 <- hosp_dat %>%  
+    dplyr::mutate(buff_radius = ifelse(Type == "subdistrict", km_vec[1], ifelse(Type == "district", km_vec[2], ifelse(Type == "tertiary", km_vec[3], ifelse(Type == "icddrb", km_vec[4], NA)))))
+
+  buff_sp <- st_buffer(hosp_dat2, dist=hosp_dat2$buff_radius, nQuadSegs = 30, endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1) %>%
+    dplyr::mutate(hosp_id = hosp_dat2$HOSP,
+                  hosp_name = hosp_dat2$Name,
+                  hosp_division = hosp_dat2$Division,
+                  hosp_type = hosp_dat2$Type)
+  
+  ## single polygon per hospital
+  ## note that this sf dataframe includes duplicate grid cells if a grid cell appeared in the buffer zone of more than one hospital
+  ## this dataframe also includes columns that indicate the hospital associated to a given buffer zone
+  sero_buff_sp <- sf::st_intersection(sero, buff_sp)
+  saveRDS(sero_buff_sp, paste0(out_wd, "sero_buff_sf_singlepoly", code_str, "_", paste(km_vec, collapse = "-"), "km.rds"))
+
+
+  ## multipolygon for all hospitals
+  ## combine buffer polygons per hospital into single multipolygon
+  buff_mp <- st_sf(st_union(buff_sp))
+  sero_buffer_mp <- sf::st_intersection(sero, buff_mp)
+  saveRDS(sero_buffer_mp, paste0(out_wd, "sero_buff_sf_multipoly", code_str, "_", paste(km_vec, collapse = "-"), "km.rds"))
+
+  ## save plot
+  buff_map <- map_buffers(adm0_shp, adm2_shp, hosp_dat2, buff_mp)
+  ggsave(paste0(fig_wd, "buff_", paste(km_vec, collapse = "-"), "km.pdf"), buff_map, width = 4, height = 4)
+}
+
+```
+
+```{r, import-buffers, include = FALSE}
+
+## these files should all be in stdcrs
+## import buffer files (multipolygon versions)
+mp_filenames <- grep(paste0("multipoly", code_str), list.files(out_wd, pattern = "*.rds"), value = TRUE)
+sero_buff_mp_ls <- lapply(mp_filenames, function(fn){
+  readRDS(paste0(out_wd, fn))
+})
+mp_names <- sub(".rds", "", sub(paste0("sero_buff_sf_multipoly", code_str, "_"), "", mp_filenames))
+names(sero_buff_mp_ls) <- mp_names
+
+## import buffer files (single polygon versions)
+sp_filenames <- grep(paste0("singlepoly", code_str), list.files(out_wd, pattern = "*.rds"), value = TRUE)
+sero_buff_sp_ls <- lapply(sp_filenames, function(fn){
+  readRDS(paste0(out_wd, fn))
+})
+sp_names <- sub(".rds", "", sub(paste0("sero_buff_sf_singlepoly", code_str, "_"), "", sp_filenames))
+names(sero_buff_sp_ls) <- sp_names
+
+```
+
+There are 23 hospital sites that perform laboratory confirmation of _V. cholerae_ in Bangladesh (`r tab_nums("tab-hospnames", display = "cite")`).
+
+```{r, proc-tab-hospnames}
+
+display_hospnames_tab <- hosp_dat2 %>% 
+  as.data.frame %>%
+  dplyr::select(HOSP, Name, Division, Type)
+
+tab_nums(name = "tab-hospnames", caption = "**Sentinel hospital IDs and locations.**", display = FALSE)
+```
+
+`r tab_nums("tab-hospnames", display = "full")`
+
+```{r, disp-tab-hospnames}
+knitr::kable(display_hospnames_tab, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("ID", "Hospital", "Division", "Type"))
+
+```
+
+```{r, set-buffer-sizes}
+## Set buffers here for subsequent analyses
+buffer_labels <- mp_names
+
+```
+
+In the absence of better data on health care utilization around the hospital sentinel surveillance sites, we assumed that areas enclosed by circular buffers around subdistrict, district, tertiary care, and icddr,b Dhaka sentinel hospitals with radii of `r buffer_labels`  could serve as proxies for potential hospital catchment areas (`r fig_nums("fig-buffers", display = "cite")`). We refer to the joint set of buffers around all 23 hospitals as the "cholera surveillance zone" in Bangladesh.
+
+
+```{r, fig-buffers}
+
+buffermaps <- lapply(buffer_labels, function(dist){
+  map_buffers(adm0_shp, adm2_shp, hosp_dat2, sero_buff_mp_ls[[dist]])
+}) 
+
+wrap_plots(buffermaps) 
+fig_nums(name = "fig-buffers", caption = paste("**Map of**", paste(buffer_labels, collapse = ", "), "**buffers around subdistrict-district-tertiary-icddr,b sentinel hospital sites, respectively.**"), display = FALSE)
+
+```
+
+`r fig_nums("fig-buffers", display = "full")`
+
+### Identifying greyspots in the distribution of _V. cholerae_
+
+Previous work modeled the seroincidence risk of infection with _V. cholerae_  within the last year relative to the population-weighted mean seroincidence across a 5 km x 5 km grid of Bangladesh. These estimates were based on a nationally-representative serosurvey of Bangladesh conducted in 70 communities in 2015. We measured uncertainty in seroincidence as *...* We defined high uncertainty as *...*  
+
+Areas both that have large uncertainty in our seroincidence estimates and that are outside of the cholera surveillance zone are "greyspots," locations about which no current cholera-related information is known. [ADD MORE HERE ONCE ENTROPY/UNCERTAINTY MEASURE IS SORTED OUT]
+
+
+### Defining risk of infection with _V. cholerae_
+
+Although we have great uncertainty about the relative seroincidence risk across Bangladesh, our previous modeling efforts represent the best information we have about cholera risk in a given location. We used these modeling outputs to characterize the disease risk of populations living in _V. cholerae_ greyspots.
+
+Using the modeled seroincidence risk of infection with _V. cholerae_, we calculate three quantitative measures at the 5 km x 5 km grid cell level to represent risk of infection:
+
+1. _Relative risk_: Median seroincidence risk at the grid cell level relative to the population-weighted mean seroincidence risk across Bangladesh. Relative risk of 1 indicates that the grid cell seroincidence risk is the same as the mean risk across the country.
+1. _Proportion infected_: Median estimated proportion of the grid cell population that was infected with _V. cholerae_ in the last year. 
+1. _Absolute infections_: Median estimated number of the grid cell population infected with _V. cholerae_ in the last year.
+
+
+```{r, thresholds-sandbox}
+
+print("***** What is the distribution of relative risk estimates? *****")
+rr_sandbox <- sero %>% dplyr::mutate(rr_range = rr_ub-rr_lb)
+hist(rr_sandbox$rr_median, breaks = 50, main = "", xlab = "relative risk")
+print("summary stats on median relative risk: deciles")
+quantile(rr_sandbox$rr_median, probs = seq(0,1,.1), na.rm = TRUE)
+
+print("What is the range of the relative risk estimates, where range is the width of the 95% CI?")
+hist(rr_sandbox$rr_range/2, breaks = 50, main = "", xlab = "1/2 Range of relative risk estimates")
+print("summary stats on 1/2 range of RR: deciles")
+quantile(rr_sandbox$rr_range/2, probs = seq(0,1,.1), na.rm = TRUE) 
+print("Decision: Confidence interval ranges are too large to be useful. Arbitrarily choose relative risks of 0.8 and 1.2 as cutoffs")
+
+print("***** What is the distribution of median proportion (of the population) infected within the last year? *****")
+prop_sandbox <- sero 
+hist(prop_sandbox$prop_inf_toAgg, breaks = 50, main = "", xlab = "median proportion infected by grid cell")
+print("summary stats on median proportion infected: deciles")
+quantile(prop_sandbox$prop_inf_toAgg, probs = seq(0,1,.1), na.rm = TRUE) 
+print("Decision: Use 30th and 70th percentiles as cutoffs")
+
+print("***** What is the distribution of median infections within the last year? *****")
+inf_sandbox <- sero 
+hist(log10(inf_sandbox$implied_inf_toAgg), breaks = 50, main="", xlab = "median infections by grid cell (log10 scale)")
+print("summary stats on median infections: deciles")
+quantile(inf_sandbox$implied_inf_toAgg, probs = seq(0,1,.1), na.rm = TRUE) 
+print("Decision: Use 30th and 70th percentiles as cutoffs")
+
+```

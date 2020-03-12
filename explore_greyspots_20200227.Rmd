@@ -35,12 +35,18 @@ code_str <- "_20200227"
 ```
 
 # Introduction
-The goal of this study is to identify how well the Bangladesh national cholera surveillance system captures:
+Achieving cholera elimination requires adequate, representative data to inform intervention policies. In 2014, IEDCR and icddr,b established a national cholera surveillance system in Bangladesh. However, we do not know whether high-risk cholera areas are captured by this system.
+
+In 1988, the US Centers for Disease Control and Prevention (CDC) published Guidelines for Evaluating Public Health Surveillance Systems (updated in 2001), which aimed to efficiently and effectively standardize evaluations of public-health surveillance systems using a series of broad characteristics, including representativeness and sensitivity. Representativeness is defined as the accurate description of cases over time and their distribution in a population by place and person and sensitivity is defined as the proportion of true cases or outbreaks detected by the surveillance system. Yet, to measure both indicators and validate the data collected by the surveillance system, external data are required to compare and determine the true incidence of disease in the population. Typically, such data includes medical records and registries, which rarely exist or are incomplete in low-resource settings.
+
+Given recent estimates of _V. cholerae_ seroincidence from a nationally-representative cross-sectional serosurvey conducted in 2015, we sought to describe the representativeness and sensitivity of the cholera surveillance system using geographically-resolved infection data. We identify how well the Bangladesh national cholera surveillance system captures
 
 1. the Bangladeshi population
-1. the Bangladeshi population living in high, medium, and low risk cholera areas
+2. the Bangladeshi population living in high, medium, and low risk cholera areas
 
-Hospitals in the national cholera surveillance system and icddr,b Dhaka hospital are the only healthcare facilities that regularly perform laboratory confirmation of _V. cholerae_ in Bangladesh. Consequently it is important to understand how well areas with high cholera risk are captured by the surveillance system.
+to determine which surveillance sites may be most efficiently used to deliver new interventions.
+
+Hospitals in the national cholera surveillance system and the icddr,b Dhaka hospital are the only healthcare facilities that regularly perform laboratory confirmation of _V. cholerae_ in Bangladesh. Consequently, it is important to understand how well areas with high cholera risk are captured by the surveillance system.
 
 <!-- MOVE THIS:
 The values we want to estimate include:
@@ -99,6 +105,14 @@ fig_wd <- "figures/"
 
   ## transform sero data to match standard bgd crs in km
   sero <- st_transform(sero_import, crs = std_crs_txt)
+  
+##loading location of serosurvey sites 
+sero.sites <- readRDS("data/dat_with_raster_covs_sero.rds") %>% 
+  group_by(CommLong,CommLat,villid,adm2name) %>% 
+  dplyr::summarize(prop_pos = mean(pred_365)) %>% 
+  dplyr::rename(LONG=CommLong,LAT=CommLat) 
+sero.sites <- sf::st_as_sf((sero.sites) %>%
+  dplyr::select(LONG,LAT,prop_pos),coords = c("LONG","LAT"),crs="+proj=longlat +datum=WGS84 +no_defs") 
 
 # }
 
@@ -193,7 +207,7 @@ buffer_labels <- mp_names
 
 ```
 
-In the absence of better data on health care utilization around the hospital sentinel surveillance sites, we assumed that areas enclosed by circular buffers around subdistrict, district, tertiary care, and icddr,b Dhaka sentinel hospitals with radii of `r buffer_labels`  could serve as proxies for potential hospital catchment areas (`r fig_nums("fig-buffers", display = "cite")`). We refer to the joint set of buffers around all 23 hospitals as the "cholera surveillance zone" in Bangladesh.
+In the absence of better data on health care utilization of the hospital sentinel surveillance sites, we assumed that the catchment areas of subdistrict, district, tertiary care, and the icddr,b Dhaka hospitals could be defined by a radii of `r buffer_labels` around each hospital (`r fig_nums("fig-buffers", display = "cite")`). We refer to the joint set of buffers around all 23 hospitals as the "cholera surveillance zone" in Bangladesh.
 
 
 ```{r, fig-buffers}
@@ -211,10 +225,33 @@ fig_nums(name = "fig-buffers", caption = paste("**Map of**", paste(buffer_labels
 
 ## Identifying greyspots in the distribution of _V. cholerae_
 
-Previous work modeled the seroincidence risk of infection with _V. cholerae_  within the last year relative to the population-weighted mean seroincidence across a 5 km x 5 km grid of Bangladesh. These estimates were based on a nationally-representative serosurvey of Bangladesh conducted in 70 communities in 2015. We measured uncertainty in seroincidence as *...* We defined high uncertainty as *...*  
+We use modeled _V. cholerae_ estimates of seroincidence which estimate the risk of infection within the previous year relative to the population-weighted mean across a 5 km x 5 km grid of Bangladesh. These estimates were based on a nationally-representative serosurvey of Bangladesh conducted in 70 communities in 2015. We measure uncertainty by entropy which is a measure of how uncertain we are that a seroincidence hotspot (RR > 2) is a true hotspot and that a coldspot (RR < 2) is truly not a hotspot (Shannon entropy adapted by https://www.medrxiv.org/content/10.1101/2020.01.10.20016964v1.full.pdf). Our sensitivity analysis shows... [Reason why we chose RR of 2 as the threshold for entropy]
 
-Areas both that have large uncertainty in our seroincidence estimates and that are outside of the cholera surveillance zone are "greyspots," locations about which no current cholera-related information is known. [ADD MORE HERE ONCE ENTROPY/UNCERTAINTY MEASURE IS SORTED OUT]
+Higher entropy corresponds to high uncertainty that a grid-cell is truly a hotpot or coldspot while lower entropy corresponds to certainty. Areas that have both large uncertainty in our seroincidence estimates and that are outside of the cholera surveillance zone are "greyspots," locations about which no current cholera-related information is known. 
 
+[Edit entropy figure to highlight sero sites that are high in seroincidence and high in entropy]
+
+```{r, fig-sero-entropy-map, fig.dim = c(6,6)}
+
+sero.entropy.map <- sero 
+sero.entropy.map$entropy[sero.entropy.map$entropy < 0.2] <- 0.2
+sero.entropy.map$entropy[sero.entropy.map$entropy > 0.8] <- 0.8
+
+plt <- ggplot() + 
+  geom_sf(data = adm0_shp, fill=NA, lwd=0.1, alpha=.1) + 
+  geom_sf(data = sero.entropy.map, aes(fill=entropy), color=NA, lwd=0) +
+  geom_sf(data = sero.sites, shape=3, color="black", size=1, lty=1) +
+  scale_fill_continuous_sequential(palette="Magenta", limits=c(0.2, 0.8), breaks=c(0.3, 0.5, 0.7)) +
+  coord_sf(datum=NA) + 
+  labs(x="") + labs(y="") + labs(fill="Entropy") +
+  theme_void() 
+
+print(plt)
+ggsave(filename = paste0(fig_wd, "sero-entropy", code_str, ".pdf"), plt, width = 6, height = 6, units = "in")
+
+fig_nums(name = paste0("fig-sero-entropy-map"), caption = paste("**Map of the uncertainty of the seroincidence estimates measured by entropy by 5 km x 5 km grid cell.** The black marks indicate the serosurvey sites from the cross-sectional survey conducted in 2015."), display = "false")
+
+```
 
 ## Defining risk of infection with _V. cholerae_
 
@@ -230,7 +267,7 @@ For each of these measures, we identified thresholds by which we could partition
 
 ### Relative risk
 
-We examined the distribution of relative risk and the width of the relative risk confidence interval estimates to determine if whether it might be possible to use this range to identify appropriate cutoffs. 
+We examined the distribution of relative risk and the width of the relative risk confidence interval estimates to determine the range for identifying appropriate cutoffs. 
 
 ```{r, rr-thresholds-sandbox}
 
@@ -288,9 +325,14 @@ inf_thresh <- round(quantile(sero$implied_inf_toAgg, probs = c(0.3, 0.7), na.rm 
 sero2 <- sero %>% 
   dplyr::mutate(rr_risk_cat = ifelse(rr_median < 0.8, "Low", ifelse(rr_median >= 0.8 & rr_median < 1.2, "Moderate", "High")),
                 prop_risk_cat = ifelse(prop_inf_toAgg < prop_thresh[1], "Low", ifelse(prop_inf_toAgg >= prop_thresh[1] & prop_inf_toAgg < prop_thresh[2], "Moderate", "High")),
-                inf_risk_cat = ifelse(implied_inf_toAgg < inf_thresh[1], "Low", ifelse(implied_inf_toAgg >= inf_thresh[1] & implied_inf_toAgg < inf_thresh[2], "Moderate", "High"))) %>% 
+                inf_risk_cat = ifelse(implied_inf_toAgg < inf_thresh[1], "Low", ifelse(implied_inf_toAgg >= inf_thresh[1] & implied_inf_toAgg < inf_thresh[2], "Moderate", "High")),
+                prop_risk_cat_toPlt = ifelse(prop_inf_toPlt < prop_thresh[1], "Low", ifelse(prop_inf_toPlt >= prop_thresh[1] & prop_inf_toPlt < prop_thresh[2], "Moderate", "High")),
+                inf_risk_cat_toPlt = ifelse(implied_inf_toPlt < inf_thresh[1], "Low", ifelse(implied_inf_toPlt >= inf_thresh[1] & implied_inf_toPlt < inf_thresh[2], "Moderate", "High"))) %>% 
   dplyr::mutate(rr_risk_cat = factor(rr_risk_cat, levels = c("High","Moderate","Low")),
-                inf_risk_cat = factor(inf_risk_cat, levels = c("High","Moderate","Low")))
+                prop_risk_cat = factor(prop_risk_cat, levels = c("High","Moderate","Low")),
+                inf_risk_cat = factor(inf_risk_cat, levels = c("High","Moderate","Low")),
+                prop_risk_cat_toPlt = factor(prop_risk_cat_toPlt, levels = c("High","Moderate","Low")),
+                inf_risk_cat_toPlt = factor(inf_risk_cat_toPlt, levels = c("High","Moderate","Low"))) 
 
 
 saveRDS(sero2, paste0("data/clean_sero_bgdintersect", code_str, ".rds"))
@@ -407,38 +449,59 @@ knitr::kable(display_survzone_tab, format = "pandoc", booktabs = T, align = "c",
 
 ## Identifying greyspots outside the cholera surveillance zone
 
-Areas both that have large uncertainty in our seroincidence estimates and that are outside of the cholera surveillance zone are "greyspots," locations about which no cholera-related information is known (`r fig_nums("fig-greyspots-map", display = "cite")`).
+Areas both that have large uncertainty in our seroincidence estimates and that are outside of the cholera surveillance zone are "greyspots," locations about which no cholera-related information is known (`r fig_nums("fig-greyspots-map", display = "cite")`). Here we show high uncertainty defined as having an entropy greater than 0.2, 0.3, and 0.4 to illustrate how the distribution of greyspots change as our understanding of uncertainty changes.
 
 
 ```{r, fig-greyspots-map, fig.dim = c(6,6)}
 
-entropy_thresh <- 0.3
-sero2_grey_dummy <- sero2 %>%
-  dplyr::mutate(is.uncertain = ifelse(entropy > entropy_thresh, TRUE, FALSE)) %>%
+entropy_thresh <- c(0.2,0.3,0.4)
+sero2_grey_dummy_1 <- sero2 %>%
+  dplyr::mutate(is.uncertain = ifelse(entropy > entropy_thresh[1], TRUE, FALSE)) %>%
+  dplyr::filter(is.uncertain)
+sero2_grey_dummy_2 <- sero2 %>%
+  dplyr::mutate(is.uncertain = ifelse(entropy > entropy_thresh[2], TRUE, FALSE)) %>%
+  dplyr::filter(is.uncertain)
+sero2_grey_dummy_3 <- sero2 %>%
+  dplyr::mutate(is.uncertain = ifelse(entropy > entropy_thresh[3], TRUE, FALSE)) %>%
   dplyr::filter(is.uncertain)
 # sero2_grey_mp <- st_union(sero2_grey_dummy)
 # total_grey_mp <- st_union(sero2_grey_dummy, intersect_sero) THIS LINE TAKES TOO LONG
 
-plt <- ggplot() + 
-  geom_sf(data = adm0_shp, fill="#ffc0cb", lwd=0.1) + 
-  geom_sf(data = sero2_grey_dummy, fill="grey30", color=NA, lwd=0) +
-  geom_sf(data = intersect_sero, fill = "#ffc0cb", color="#ffc0cb", lwd=0) +
+plt1 <- ggplot() + 
+  geom_sf(data = adm0_shp, fill="#c0c2ff", lwd=0.1) + 
+  geom_sf(data = sero2_grey_dummy_1, fill="grey30", color=NA, lwd=0) +
+  geom_sf(data = intersect_sero, fill = "#c0c2ff", color="#c0c2ff", lwd=0, alpha=.7) +
+  coord_sf(datum=NA) + 
+  labs(x="") + labs(y="") + 
+  theme_void() 
+plt2 <- ggplot() + 
+  geom_sf(data = adm0_shp, fill="#c0c2ff", lwd=0.1) + 
+  geom_sf(data = sero2_grey_dummy_2, fill="grey30", color=NA, lwd=0) +
+  geom_sf(data = intersect_sero, fill = "#c0c2ff", color="#c0c2ff", lwd=0, alpha=.7) +
+  coord_sf(datum=NA) + 
+  labs(x="") + labs(y="") + 
+  theme_void() 
+plt3 <- ggplot() + 
+  geom_sf(data = adm0_shp, fill="#c0c2ff", lwd=0.1) + 
+  geom_sf(data = sero2_grey_dummy_3, fill="grey30", color=NA, lwd=0) +
+  geom_sf(data = intersect_sero, fill = "#c0c2ff", color="#c0c2ff", lwd=0, alpha=.7) +
   coord_sf(datum=NA) + 
   labs(x="") + labs(y="") + 
   theme_void() 
 
+plt <- cowplot::plot_grid(plt1, plt2, plt3, labels=c('A', 'B','C'), align = "h")
 print(plt)
 ggsave(filename = paste0(fig_wd, "total-greyspots", code_str, ".pdf"), plt, width = 6, height = 6, units = "in")
 
-fig_nums(name = paste0("fig-greyspots-map"), caption = paste("**Cholera greyspots.** The 5 km x 5 km grid cells that are colored in pink are cells where we have reasonably confidence seroincidence estimates (entropy < 0.3) or that are in the cholera surveillance zone. Grid cells in grey are greyspots, locations about which we have almost no cholera information."), display = "false")
+fig_nums(name = paste0("fig-greyspots-map"), caption = paste("**Cholera greyspots.** The 5 km x 5 km grid cells that are colored are cells where we have reasonably confident seroincidence estimates (A. entropy < 0.2, B. entropy < 0.3, C. entropy < 0.4) or that are in the cholera surveillance zone. Grid cells in grey are greyspots, locations where we have almost no cholera information."), display = "false")
 
 ```
 
 `r fig_nums("fig-greyspots-map", display = "full")`
 
-## Relative seroincidence risk
+## 1. Relative seroincidence risk
 
-Using data from a nationally-representative survey across Bangladesh, we developed maps of infection across 5 km x 5km cells in Bangladesh. This map estimates that, from the 2015 serosurvey data collection, there were `r tot_inf` infections in Bangladesh over the past year out of an estimated population of `r tot_pop`. We standardized the seroincidence estimates in each cell by the population-weighted mean of the Bangladesh infection rate in that cell. This yielded a relative risk of infection for each grid cell (`r fig_nums("fig-sero-rr-map", display = "cite")`). 
+Using data from a nationally-representative survey across Bangladesh, we developed maps of infection across 5 km x 5km grid cells in Bangladesh. This map estimates that from the 2015 serosurvey data collection there were `r tot_inf` infections in Bangladesh over the past year out of an estimated population of `r tot_pop`. We standardized the seroincidence estimates in each cell by the population-weighted mean of the Bangladesh infection risk in that cell. This yielded a relative risk of infection for each grid cell (`r fig_nums("fig-sero-rr-map", display = "cite")`). 
 
 
 ```{r, fig-sero-rr-map, fig.dim = c(6,6)}
@@ -515,7 +578,7 @@ fig_nums(name = paste0("fig-sero-rrcat"), caption = paste("**Cholera risk map as
 
 ### Relative risk in the cholera surveillance zone 
 
-We overlaid the cholera surveillance zone with the binned relative seroincidence risk maps to examine the distribution of risks in the surveilled and non-surveilled areas (`r fig_nums(paste0("sero-buffers-rr-", km_label, "-plt"), display = "cite")` - `r fig_nums(paste0("sero-nonbuffers-rr-", km_label, "-plt"), display = "cite")`).
+We overlaid the cholera surveillance zone with the binned relative seroincidence risk maps to examine the distribution of risks in the surveilled areas (`r fig_nums(paste0("sero-buffers-rr-", km_label, "-plt"), display = "cite")` - `r fig_nums(paste0("sero-nonbuffers-rr-", km_label, "-plt"), display = "cite")`).
 
 ```{r, fig-sero-buffers-rr, fig.dim = c(6,6), results = "asis"}
 
@@ -621,7 +684,7 @@ tab_nums(name = "rrcatIntersect-in-bang-tab", caption = "**Number and percent in
 
 ```
 
-We summarized the percentage of high, moderate, and low infection risk populations in Bangladesh that would be captured by cholera surveillance zones at different buffer sizes when risk was categorized both by relative risk (`r tab_nums("rrcatIntersect-in-bang-tab", display = "cite")`).
+We summarized the percentage of high, moderate, and low infection risk populations in Bangladesh that would be captured by cholera surveillance zones at different buffer sizes when risk was categorized by relative risk (`r tab_nums("rrcatIntersect-in-bang-tab", display = "cite")`).
 
 `r tab_nums("rrcatIntersect-in-bang-tab", display = "full")`
 
@@ -645,6 +708,419 @@ knitr::kable(display_rrcatIntersect_in_bang, format = "pandoc", booktabs = T, al
 
 ```
 
+## 2. Estimated proportion of infections 
+
+The second measure of risk we examine to evaluate the surveillance system is the estimated proportion of the grid cell population that was infected with _V. cholerae_ in the year prior to data collection. This yielded the median estimated proportion of infections for each grid cell (`r fig_nums("fig-sero-prop-map", display = "cite")`). 
+
+
+```{r, fig-sero-prop-map, fig.dim = c(6,6)}
+
+plt <- ggplot() + 
+  geom_sf(data = adm0_shp, fill=NA, lwd=0.1, alpha=.1) + 
+  geom_sf(data = sero2, aes(fill=prop_inf_toPlt), color=NA, lwd=0) +
+  geom_sf(data = hosp_dat2, shape=3, color="black", size=1, lty=1) +
+  scale_fill_distiller(palette="Spectral", trans="log",labels=c("0","0.05", "0.15", "0.30","1")) +
+  # breaks=seq(0.3,0.6,0.9)
+  coord_sf(datum=NA) + 
+  labs(x="") + labs(y="") + labs(fill = "Infection proportion") +
+  theme_void() 
+
+print(plt)
+ggsave(filename = paste0(fig_wd, "sero-prop", code_str, ".pdf"), plt, width = 6, height = 6, units = "in")
+
+fig_nums(name = paste0("fig-sero-prop-map"), caption = paste("**Median estimated proportion of grid cell population infected with _V. cholerae_ in the previous year.** The black marks indicate sentinel hospital locations."), display = "false")
+
+```
+
+`r fig_nums("fig-sero-prop-map", display = "full")`
+
+We describe the population living in each risk category defined by the 30th and 70th percentiles of the estimated proportion of infections in each grid cell (`r tab_nums("tab-seropop-prop", display = "cite")`.) 
+
+```{r, caption-tab-seropop-prop}
+
+## caption for table in next chunk
+tab_nums(name = "tab-seropop-prop", caption = "**Population living in each risk category.** The population living in high, moderate, and low risk areas according to the estimated proportion of infections across Bangladesh.", display = FALSE)
+
+```
+
+`r tab_nums("tab-seropop-prop", display = "full")`
+
+```{r, tab-seropop-prop}
+display_prop_riskpops <- sero2 %>%
+  group_by(prop_risk_cat_toPlt) %>%
+  summarise(pop1 = sum(pop_toAgg, na.rm = TRUE)) %>% data.frame %>%
+  dplyr::select(prop_risk_cat_toPlt, pop1) 
+
+knitr::kable(display_prop_riskpops, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Risk Level", "Population"))
+
+```
+
+We redrew the estimated proportion of infections risk map after binning grid cells into high, moderate, and low risk categories (`r fig_nums("fig-sero-propcat", display = "cite")`).
+
+```{r, fig-sero-propcat, fig.dim = c(6,6)}
+
+plt <- ggplot() + 
+  geom_sf(data = adm0_shp, fill = NA, lwd = 0.1, alpha = .1) + 
+  geom_sf(data = sero2, aes(fill = prop_risk_cat_toPlt), color = NA, lwd = 0) +
+  geom_sf(data = intersect_sero, lwd = 0.3, alpha = 0.1) +
+  geom_sf(data = hosp_dat2, shape = 3, color = "black", size = 1, lty = 1) +
+  scale_fill_manual("Risk Category", values = category_cols) +
+  # scale_fill_gradient2(low ="#4191e1", mid = "white", high = "#b20000", midpoint=1.0) +
+  coord_sf(datum = NA) + 
+  labs(x="") + labs(y="") + 
+  theme_void() 
+
+print(plt)
+ggsave(filename = paste0(fig_wd, "sero-propcat", code_str, ".pdf"), plt, width = 6, height = 6, units = "in")
+
+fig_nums(name = paste0("fig-sero-propcat"), caption = paste("**Cholera risk map as categorized by the estimated proportion of _V. cholerae_ infections by 5 km x 5 km grid cell.**"), display = "false")
+
+```
+
+`r fig_nums("fig-sero-propcat", display = "full")`
+
+### Risk categories by proportion infected in the cholera surveillance zone 
+
+We overlaid the cholera surveillance zone with the binned infection proportion risk maps to examine the distribution of risks in the surveilled areas (`r fig_nums(paste0("sero-buffers-prop-", km_label, "-plt"), display = "cite")` - `r fig_nums(paste0("sero-nonbuffers-prop-", km_label, "-plt"), display = "cite")`).
+
+```{r, fig-sero-buffers-prop, fig.dim = c(6,6), results = "asis"}
+
+plt <- ggplot() + 
+  geom_sf(data = adm0_shp, fill = NA, lwd = 0.1, alpha = .1) + 
+  geom_sf(data = intersect_sero, aes(fill = prop_risk_cat_toPlt), color = NA, lwd = 0) +
+  geom_sf(data = hosp_dat, shape = 3, color = "black", size = 1, lty = 4) +
+  scale_fill_manual("Risk Category", values = category_cols) +
+  coord_sf(datum = NA) + 
+  labs(x="") + labs(y="") + 
+  theme_void() 
+
+print(plt)
+ggsave(filename = paste0(fig_wd, "sero-buffers-prop-", km_label, code_str, ".pdf"), plt, width = 6.5, height = 4, units = "in")
+
+cat(fig_nums(name = paste0("sero-buffers-prop-", km_label, "-plt"), caption = paste0("**Infection proportion risk categories within cholera surveillance zones (", km_label, " for subdistrict, district, and tertiary care, and icddr,b hospitals).**"), display = "full"))
+
+```
+
+```{r, fig-sero-nonbuffers-prop, fig.dim = c(6,6), results = "asis"}
+  
+plt <- ggplot() + 
+  geom_sf(data = adm0_shp, fill = NA, lwd = 0.1, alpha = .1) + 
+  geom_sf(data = sero2, aes(fill = prop_risk_cat_toPlt), color = NA, lwd = 0) +
+  geom_sf(data = intersect_sero, fill = "white", color = NA, lwd = 0) +
+  geom_sf(data = hosp_dat, shape = 3, color = "black", size = 1, lty = 4) +
+  scale_fill_manual("Risk Category", values = category_cols) +
+  coord_sf(datum = NA) + 
+  labs(x="") + labs(y="") + 
+  theme_void() 
+
+print(plt)
+ggsave(filename = paste0(fig_wd, "sero-nonbuffers-prop-", km_label, ".pdf"), plt, width = 6.5, height = 4, units = "in")
+
+cat(fig_nums(name = paste0("sero-nonbuffers-prop-", km_label, "-plt"), caption = paste0("**Infection proportion risk categories outside of cholera surveillance zones (", km_label, " for subdistrict, district, tertiary care, and icddr,b hospitals).**"), display = "full"))
+
+```
+
+### Populations in the cholera surveillance zone
+
+```{r caption-tab-intersect-sero-buffers-prop}
+
+## caption for table in next chunk
+tab_nums(name = "intersect-sero-buffers-prop-tab", caption = "**Number and percent infections that may be captured in cholera surveillance zones.** The percent infected represents the percentage of infected individuals captured within the cholera surveillance zone out of all infected individuals in Bangladesh.", display = FALSE)
+
+```
+
+We examined the estimated number of infections, the percent infected in the cholera surveillance zone, and the percent of Bangladesh infections captured in the cholera surveillance zone (`r tab_nums("intersect-sero-buffers-prop-tab", display = "cite")`).
+
+`r tab_nums("intersect-sero-buffers-prop-tab", display = "full")`
+
+```{r, tab-intersect-sero-buffers-prop}
+
+#calculate number and percent of total infections
+display_intersect_sero_buffers_tab <- sero_buff_df %>% 
+  group_by(buff) %>%
+  dplyr::summarise(num_inf = sum(implied_inf_toAgg, na.rm = TRUE)) %>%
+  ungroup %>%
+  left_join(display_survzone_tab %>% dplyr::select(buffer, pop_buffer), by = c("buff"="buffer")) %>%
+  dplyr::mutate(perc_inf_buffpop = round(num_inf/pop_buffer*100, 2)) %>%
+  dplyr::mutate(perc_inf_tot = round(num_inf/tot_inf*100, 2)) %>% 
+  dplyr::select(buff, pop_buffer, num_inf, perc_inf_buffpop, perc_inf_tot)
+
+knitr::kable(display_intersect_sero_buffers_tab, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Surv. zone pop", "Number infected", "% infected in surv. zone pop", "% of all BGD infections"))
+
+```
+
+```{r caption-tab-propcat-in-buffers}
+
+## caption for table in next chunks
+tab_nums(name = "propcat-in-buffers-tab", caption = "**Number and percent infections that may be captured in cholera surveillance zones, categorized by the proportion infected.** The infections in surveillance zone represents the percentage of infected people in high/moderate/low risk grid cells among all infections within the cholera surveillance zone. The population in surveillance zone represents the percentage of people living in high/moderate/low risk grid cells among all people within the cholera surveillance zone. The distribution should across risk categories should sum to 100% for each set of buffer sizes.", display = FALSE)
+```
+
+We then examined the distribution of categories (`r tab_nums("propcat-in-buffers-tab", display = "cite")`) based on the proportion of infections.
+
+`r tab_nums("propcat-in-buffers-tab", display = "full")`
+
+```{r, tab-propcat-in-buffers}
+
+tot_inf_propcat <- sero_buff_df %>% 
+  group_by(buff) %>%
+  dplyr::summarise(tot_infcat=sum(implied_inf_toAgg, na.rm = TRUE), tot_popcat=sum(pop_toAgg, na.rm = TRUE)) 
+
+display_propcat_in_buffers <- sero_buff_df %>% 
+  group_by(buff, prop_risk_cat_toPlt) %>% 
+  dplyr::summarise(num_inf = round(sum(implied_inf_toAgg, na.rm = TRUE)), num_pop = round(sum(pop_toAgg, na.rm = TRUE))) %>%
+  left_join(tot_inf_propcat, by = c("buff")) %>%
+  dplyr::mutate(perc_inf = round(num_inf/tot_infcat*100, 2),
+                perc_pop = round(num_pop/tot_popcat*100, 2)) %>% 
+  dplyr::select(buff, prop_risk_cat_toPlt, num_inf, perc_inf, num_pop, perc_pop) 
+
+knitr::kable(display_propcat_in_buffers, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Risk category", "Number infected", "% surv. zone infections", "Surv. zone pop", "% BGD pop in surv. zone"))
+
+```
+
+### Populations by proportion infected across Bangladesh
+
+We sought to describe how well the cholera surveillance zones capture `r sort(unique(sero2$rr_risk_cat))` populations across Bangladesh. 
+
+```{r, caption-tab-propcatIntersect-in-bang}
+
+## caption for table in next chunks
+tab_nums(name = "propcatIntersect-in-bang-tab", caption = "**Number and percent infections that may be captured in Bangladesh, categorized by the proportion of individuals infected with _V. cholerae_ .** The captured at-risk population represents the percentage of high/moderate/low risk populations captured by the cholera surveillance zone out of all high/moderate/low risk populations in Bangladesh. The captured infections represents the percentage of infections in high/moderate/low risk grid cells among all infections in high/moderate/low risk grid cells across Bangladesh.", display = FALSE)
+
+```
+
+We summarized the percentage of high, moderate, and low infection risk populations in Bangladesh that would be captured by cholera surveillance zones at different buffer sizes when risk was categorized by the infection proportion (`r tab_nums("propcatIntersect-in-bang-tab", display = "cite")`).
+
+`r tab_nums("propcatIntersect-in-bang-tab", display = "full")`
+
+```{r, tab-propcatIntersect-in-bang}
+
+propcat <- sero2 %>% 
+  group_by(prop_risk_cat_toPlt) %>%
+  summarise(popcat = sum(pop_toAgg, na.rm = TRUE), infcat = sum(implied_inf_toAgg, na.rm = TRUE)) %>%
+  data.frame %>%
+  dplyr::select(prop_risk_cat_toPlt, popcat, infcat)
+
+display_propcatIntersect_in_bang <- sero_buff_df %>%
+  group_by(buff, prop_risk_cat_toPlt) %>%
+  dplyr::summarise(num_inf = sum(implied_inf_toAgg, na.rm = TRUE), pop = sum(pop_toAgg, na.rm = TRUE)) %>%
+  left_join(propcat, by = c("prop_risk_cat_toPlt")) %>%
+  dplyr::mutate(perc_pop = round(pop/popcat*100, 2)) %>%
+  dplyr::mutate(perc_inf = round(num_inf/infcat*100, 2)) %>%
+  dplyr::select(buff, prop_risk_cat_toPlt, pop, num_inf, perc_pop, perc_inf)
+
+knitr::kable(display_propcatIntersect_in_bang, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Risk category", "Surv. zone pop", "Surv. zone infections", "Captured At-Risk Pop (%)", "Captured Infections (%)"))
+
+```
+
+
+## 3. Number of _V.cholerae_ infections
+
+The third measure of risk we examine to evaluate the surveillance system is the median estimated number of _V. cholerae_ infections in each grid cell. (`r fig_nums("fig-sero-inf-map", display = "cite")`). 
+
+
+```{r, fig-sero-inf-map, fig.dim = c(6,6)}
+
+plt <- ggplot() + 
+  geom_sf(data = adm0_shp, fill=NA, lwd=0.1, alpha=.1) + 
+  geom_sf(data = sero2, aes(fill=implied_inf_toPlt), color=NA, lwd=0) +
+  geom_sf(data = hosp_dat2, shape=3, color="black", size=1, lty=1) +
+  scale_fill_distiller(palette="Spectral", trans="log", labels=c("min","50", "1,000", "22,000","max")) +
+  # breaks=seq(0.3,0.6,0.9) 
+  coord_sf(datum=NA) + 
+  labs(x="") + labs(y="") + labs(fill = "Number of infections") +
+  theme_void() 
+
+print(plt)
+ggsave(filename = paste0(fig_wd, "sero-inf", code_str, ".pdf"), plt, width = 6, height = 6, units = "in")
+
+fig_nums(name = paste0("fig-sero-inf-map"), caption = paste("**Median number of estimated _V. cholerae_ infections per grid cell in the previous year.** The black marks indicate sentinel hospital locations."), display = "false")
+
+```
+
+`r fig_nums("fig-sero-inf-map", display = "full")`
+
+We describe the population living in each risk category defined by the 30th and 70th percentiles of the number of infections in each grid cell (`r tab_nums("tab-seropop-inf", display = "cite")`.) 
+
+```{r, caption-tab-seropop-inf}
+
+## caption for table in next chunk
+tab_nums(name = "tab-seropop-inf", caption = "**Population living in each risk category.** The population living in high, moderate, and low risk areas according to the number of infections across Bangladesh.", display = FALSE)
+
+```
+
+`r tab_nums("tab-seropop-prop", display = "full")`
+
+```{r, tab-seropop-inf}
+display_inf_riskpops <- sero2 %>%
+  group_by(inf_risk_cat_toPlt) %>%
+  summarise(pop1 = sum(pop_toAgg, na.rm = TRUE)) %>% data.frame %>%
+  dplyr::select(inf_risk_cat_toPlt, pop1) 
+
+knitr::kable(display_inf_riskpops, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Risk Level", "Population"))
+
+```
+
+We redrew the estimated number of infections risk map after binning grid cells into high, moderate, and low risk categories (`r fig_nums("fig-sero-infcat", display = "cite")`).
+
+```{r, fig-sero-infcat, fig.dim = c(6,6)}
+
+plt <- ggplot() + 
+  geom_sf(data = adm0_shp, fill = NA, lwd = 0.1, alpha = .1) + 
+  geom_sf(data = sero2, aes(fill = inf_risk_cat_toPlt), color = NA, lwd = 0) +
+  geom_sf(data = intersect_sero, lwd = 0.3, alpha = 0.1) +
+  geom_sf(data = hosp_dat2, shape = 3, color = "black", size = 1, lty = 1) +
+  scale_fill_manual("Risk Category", values = category_cols) +
+  # scale_fill_gradient2(low ="#4191e1", mid = "white", high = "#b20000", midpoint=1.0) +
+  coord_sf(datum = NA) + 
+  labs(x="") + labs(y="") + 
+  theme_void() 
+
+print(plt)
+ggsave(filename = paste0(fig_wd, "sero-infcat", code_str, ".pdf"), plt, width = 6, height = 6, units = "in")
+
+fig_nums(name = paste0("fig-sero-infcat"), caption = paste("**Cholera risk map as categorized by the estimated number of _V. cholerae_ infections by 5 km x 5 km grid cell.**"), display = "false")
+
+```
+
+`r fig_nums("fig-sero-infcat", display = "full")`
+
+### Risk categories by number of infections in the cholera surveillance zone 
+
+We overlaid the cholera surveillance zone with the binned number of infections risk map to examine the distribution of risk in the surveilled areas (`r fig_nums(paste0("sero-buffers-inf-", km_label, "-plt"), display = "cite")` - `r fig_nums(paste0("sero-nonbuffers-inf-", km_label, "-plt"), display = "cite")`).
+
+```{r, fig-sero-buffers-inf, fig.dim = c(6,6), results = "asis"}
+
+plt <- ggplot() + 
+  geom_sf(data = adm0_shp, fill = NA, lwd = 0.1, alpha = .1) + 
+  geom_sf(data = intersect_sero, aes(fill = inf_risk_cat_toPlt), color = NA, lwd = 0) +
+  geom_sf(data = hosp_dat, shape = 3, color = "black", size = 1, lty = 4) +
+  scale_fill_manual("Risk Category", values = category_cols) +
+  coord_sf(datum = NA) + 
+  labs(x="") + labs(y="") + 
+  theme_void() 
+
+print(plt)
+ggsave(filename = paste0(fig_wd, "sero-buffers-inf-", km_label, code_str, ".pdf"), plt, width = 6.5, height = 4, units = "in")
+
+cat(fig_nums(name = paste0("sero-buffers-inf-", km_label, "-plt"), caption = paste0("**Number of infections risk categories within cholera surveillance zones (", km_label, " for subdistrict, district, and tertiary care, and icddr,b hospitals).**"), display = "full"))
+
+```
+
+```{r, fig-sero-nonbuffers-inf, fig.dim = c(6,6), results = "asis"}
+  
+plt <- ggplot() + 
+  geom_sf(data = adm0_shp, fill = NA, lwd = 0.1, alpha = .1) + 
+  geom_sf(data = sero2, aes(fill = inf_risk_cat_toPlt), color = NA, lwd = 0) +
+  geom_sf(data = intersect_sero, fill = "white", color = NA, lwd = 0) +
+  geom_sf(data = hosp_dat, shape = 3, color = "black", size = 1, lty = 4) +
+  scale_fill_manual("Risk Category", values = category_cols) +
+  coord_sf(datum = NA) + 
+  labs(x="") + labs(y="") + 
+  theme_void() 
+
+print(plt)
+ggsave(filename = paste0(fig_wd, "sero-nonbuffers-inf-", km_label, ".pdf"), plt, width = 6.5, height = 4, units = "in")
+
+cat(fig_nums(name = paste0("sero-nonbuffers-inf-", km_label, "-plt"), caption = paste0("**Number of infections risk categories outside of cholera surveillance zones (", km_label, " for subdistrict, district, tertiary care, and icddr,b hospitals).**"), display = "full"))
+
+```
+
+### Populations in the cholera surveillance zone
+
+```{r caption-tab-intersect-sero-buffers-inf}
+
+## caption for table in next chunk
+tab_nums(name = "intersect-sero-buffers-inf-tab", caption = "**Number and percent infections that may be captured in cholera surveillance zones.** The percent infected represents the percentage of infected individuals captured within the cholera surveillance zone out of all infected individuals in Bangladesh.", display = FALSE)
+
+```
+
+We examined the estimated number of infections, the percent infected in the cholera surveillance zone, and the percent of Bangladesh infections captured in the cholera surveillance zone (`r tab_nums("intersect-sero-buffers-inf-tab", display = "cite")`).
+
+`r tab_nums("intersect-sero-buffers-inf-tab", display = "full")`
+
+```{r, tab-intersect-sero-buffers-inf}
+
+#calculate number and percent of total infections
+display_intersect_sero_buffers_tab <- sero_buff_df %>% 
+  group_by(buff) %>%
+  dplyr::summarise(num_inf = sum(implied_inf_toAgg, na.rm = TRUE)) %>%
+  ungroup %>%
+  left_join(display_survzone_tab %>% dplyr::select(buffer, pop_buffer), by = c("buff"="buffer")) %>%
+  dplyr::mutate(perc_inf_buffpop = round(num_inf/pop_buffer*100, 2)) %>%
+  dplyr::mutate(perc_inf_tot = round(num_inf/tot_inf*100, 2)) %>% 
+  dplyr::select(buff, pop_buffer, num_inf, perc_inf_buffpop, perc_inf_tot)
+
+knitr::kable(display_intersect_sero_buffers_tab, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Surv. zone pop", "Number infected", "% infected in surv. zone pop", "% of all BGD infections"))
+
+```
+
+```{r caption-tab-infcat-in-buffers}
+
+## caption for table in next chunks
+tab_nums(name = "infcat-in-buffers-tab", caption = "**Number and percent infections that may be captured in cholera surveillance zones, categorized by the number of infections.** The infections in surveillance zone represents the percentage of infected people in high/moderate/low risk grid cells among all infections within the cholera surveillance zone. The population in surveillance zone represents the percentage of people living in high/moderate/low risk grid cells among all people within the cholera surveillance zone. The distribution should across risk categories should sum to 100% for each set of buffer sizes.", display = FALSE)
+```
+
+We then examined the distribution of risk categories (`r tab_nums("infcat-in-buffers-tab", display = "cite")`) based on the number of infections.
+
+`r tab_nums("infcat-in-buffers-tab", display = "full")`
+
+```{r, tab-infcat-in-buffers}
+
+tot_inf_infcat <- sero_buff_df %>% 
+  group_by(buff) %>%
+  dplyr::summarise(tot_infcat=sum(implied_inf_toAgg, na.rm = TRUE), tot_popcat=sum(pop_toAgg, na.rm = TRUE)) 
+
+display_infcat_in_buffers <- sero_buff_df %>% 
+  group_by(buff, inf_risk_cat_toPlt) %>% 
+  dplyr::summarise(num_inf = round(sum(implied_inf_toAgg, na.rm = TRUE)), num_pop = round(sum(pop_toAgg, na.rm = TRUE))) %>%
+  left_join(tot_inf_infcat, by = c("buff")) %>%
+  dplyr::mutate(perc_inf = round(num_inf/tot_infcat*100, 2),
+                perc_pop = round(num_pop/tot_popcat*100, 2)) %>% 
+  dplyr::select(buff, inf_risk_cat_toPlt, num_inf, perc_inf, num_pop, perc_pop) 
+
+knitr::kable(display_infcat_in_buffers, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Risk category", "Number infected", "% surv. zone infections", "Surv. zone pop", "% BGD pop in surv. zone"))
+
+```
+
+### Populations by number of infections across Bangladesh
+
+We sought to describe how well the cholera surveillance zones capture `r sort(unique(sero2$rr_risk_cat))` populations across Bangladesh. 
+
+```{r, caption-tab-infcatIntersect-in-bang}
+
+## caption for table in next chunks
+tab_nums(name = "infcatIntersect-in-bang-tab", caption = "**Number and percent infections that may be captured in Bangladesh, categorized by the number of individuals infected with _V. cholerae_ .** The captured at-risk population represents the percentage of high/moderate/low risk populations captured by the cholera surveillance zone out of all high/moderate/low risk populations in Bangladesh. The captured infections represents the percentage of infections in high/moderate/low risk grid cells among all infections in high/moderate/low risk grid cells across Bangladesh.", display = FALSE)
+
+```
+
+We summarized the percentage of high, moderate, and low infection risk populations in Bangladesh that would be captured by cholera surveillance zones at different buffer sizes when risk was categorized by the number of _V. cholerae_ infections (`r tab_nums("infcatIntersect-in-bang-tab", display = "cite")`).
+
+`r tab_nums("infcatIntersect-in-bang-tab", display = "full")`
+
+```{r, tab-infcatIntersect-in-bang}
+
+infcat <- sero2 %>% 
+  group_by(inf_risk_cat_toPlt) %>%
+  summarise(popcat = sum(pop_toAgg, na.rm = TRUE), infcat = sum(implied_inf_toAgg, na.rm = TRUE)) %>%
+  data.frame %>%
+  dplyr::select(inf_risk_cat_toPlt, popcat, infcat)
+
+display_infcatIntersect_in_bang <- sero_buff_df %>%
+  group_by(buff, inf_risk_cat_toPlt) %>%
+  dplyr::summarise(num_inf = sum(implied_inf_toAgg, na.rm = TRUE), pop = sum(pop_toAgg, na.rm = TRUE)) %>%
+  left_join(infcat, by = c("inf_risk_cat_toPlt")) %>%
+  dplyr::mutate(perc_pop = round(pop/popcat*100, 2)) %>%
+  dplyr::mutate(perc_inf = round(num_inf/infcat*100, 2)) %>%
+  dplyr::select(buff, inf_risk_cat_toPlt, pop, num_inf, perc_pop, perc_inf)
+
+knitr::kable(display_infcatIntersect_in_bang, format = "pandoc", booktabs = T, align = "c", row.names = FALSE, col.names = c("Buffer size", "Risk category", "Surv. zone pop", "Surv. zone infections", "Captured At-Risk Pop (%)", "Captured Infections (%)"))
+
+```
+
 # Discussion
 
-* Can we use this method to evaluate how representative and sensitive is the system to capturing a proportion of cases?
+* Can we use this method to evaluate how representative and sensitive is the system to capturing a proportion of cases? 
+* Individuals living in Rajshahi, Kurigram, and Khulna have high relative risk of infection with _V. cholerae_ but are not captured in surveillance
+* Many regions have high absolute numbers of cholera infections but are unlikely to be captured in the current surveillance system
+* Do we also show Hep E surveillance evaluation and demonstrate how to do combined surveillance?
+

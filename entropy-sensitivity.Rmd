@@ -1,0 +1,215 @@
+---
+title: "Entropy map"
+author: "Stephen A Lauer  + Elonia"
+date: "3/9/2020"
+output: html_document
+
+knit: (function(inputFile, encoding) { 
+          rmarkdown::render(inputFile,
+                        encoding=encoding, 
+                output_file='entropy-sensitivity.html') })
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = here::here())
+knitr::opts_chunk$set(echo=T, message=F, warning=F, eval=T, fig.align='center', fig.pos='ht')
+```
+
+```{r library, include=FALSE, eval=TRUE}
+library(tidyverse)
+library(doMC)
+library(sf)
+source("source/util.R")
+```
+
+```{r load, include=FALSE, eval=TRUE}
+bgd0 <- readRDS("data/BGD_adm0.rds") %>% 
+    st_as_sf() %>%
+    transform_to_btm()
+
+bgd2 <- readRDS("data/BGD_adm2.rds") %>% 
+    st_as_sf() %>%
+    mutate(adm2name = NAME_2) %>%
+    transform_to_btm()
+my_grid <- readRDS("data/grid_with_covs.rds")
+
+##loading location of serosurvey sites 
+sero.sites <- readRDS("data/dat_with_raster_covs_sero.rds") %>% 
+  group_by(CommLong,CommLat,villid,adm2name) %>% 
+  dplyr::summarize(prop_pos = mean(pred_365)) %>% 
+  dplyr::rename(LONG=CommLong,LAT=CommLat) 
+sero.sites <- sf::st_as_sf((sero.sites) %>%
+  dplyr::select(LONG,LAT,prop_pos),coords = c("LONG","LAT"),crs="+proj=longlat +datum=WGS84 +no_defs") 
+
+```
+
+
+## Entropy
+
+Here we show how our measure of uncertainty changes around the serosurvey sites as we change the relative risk cutoff used to determine whether a grid cell is a hotspot or not. We consider RR cutoffs in increments of 0.5 from 0.5 to 2.5.
+
+```{r make-map-data, include=F, cache=T, eval=F}
+registerDoMC(detectCores()-2)
+
+## remove all grid cells not within the boundaries of BGD
+## (i.e. in India or the ocean)
+bgd_grid <- my_grid %>% 
+    st_intersection(bgd2)
+
+## read in all of the map data and combine them
+file_list <- list.files(path="data/boot-maps/", pattern="boot_map_*")
+
+all_boots <- foreach(i=seq(length(file_list)),.combine=rbind) %dopar%{
+    readRDS(paste0("data/boot-maps/",file_list[i])) %>%
+        filter(grid_id %in% bgd_grid$grid_id) %>% 
+        mutate(rep=i)
+}
+
+## recalculate the sample_rr for all cells
+all_boots_rr <- all_boots %>%
+    left_join(my_grid %>% 
+                  as_tibble() %>% 
+                  select(grid_id, pop) %>% 
+                  distinct()) %>% 
+    group_by(rep) %>% 
+    mutate(sample_rr=sample_rate/weighted.mean(sample_rate, pop)) %>% 
+    ungroup()
+
+## summarize each grid cell by a bunch of metrics
+map_dat <- all_boots_rr %>% 
+    group_by(grid_id, pop) %>%
+    summarise(rr_median=median(sample_rr),
+              ## this is the part to edit for different entropy measures
+              rr_gt1=mean(sample_rr>1),
+              rr_gt1_5=mean(sample_rr>1.5),
+              rr_gt2=mean(sample_rr>2),
+              rr_gt2_5=mean(sample_rr>2.5),
+              rr_lthalf=mean(sample_rr<0.5),
+              rr_lb=quantile(sample_rr, probs=.025),
+              rr_ub=quantile(sample_rr, probs=.975),
+              inc_mean=mean(sample_rate),
+              inc_median=median(sample_rate),
+              inc_lb=quantile(sample_rate, probs=.025),
+              inc_ub=quantile(sample_rate, probs=.975)) %>%
+    mutate(rr_med_bound=ifelse(abs(log2(rr_median))>2,
+                               2*log2(rr_median)/abs(log2(rr_median)),
+                               log2(rr_median)),
+           rr_lb_bound=ifelse(abs(log2(rr_lb))>2,
+                              2*log2(rr_lb)/abs(log2(rr_lb)),
+                              log2(rr_lb)),
+           rr_ub_bound=ifelse(abs(log2(rr_ub))>2,
+                              2*log2(rr_ub)/abs(log2(rr_ub)),
+                              log2(rr_ub)),
+           rr_int_log_diff=rr_ub_bound-rr_lb_bound,
+           inc_interval_width=inc_ub-inc_lb,
+           implied_inf=inc_median*pop) %>% 
+    left_join(bgd_grid)
+
+saveRDS(map_dat, "generated_data/grid-cell-data_sensitivity.rds")
+
+rm(all_boots)
+rm(all_boots_rr)
+```
+
+```{r map, include=F}
+map_dat <- readRDS("generated_data/grid-cell-data_sensitivity.rds") %>%
+    mutate(entropy1=ifelse(rr_gt1==1 | rr_gt1==0,0,
+                           -rr_gt1*log2(rr_gt1)-(1-rr_gt1)*log2(1-rr_gt1)),
+           entropy1_5=ifelse(rr_gt1_5==1 | rr_gt1_5==0,0,
+                           -rr_gt1_5*log2(rr_gt1_5)-(1-rr_gt1_5)*log2(1-rr_gt1_5)),
+           entropy2=ifelse(rr_gt2==1 | rr_gt2==0,0,
+                           -rr_gt2*log2(rr_gt2)-(1-rr_gt2)*log2(1-rr_gt2)),
+           entropy2_5=ifelse(rr_gt2_5==1 | rr_gt2_5==0,0,
+                           -rr_gt2_5*log2(rr_gt2_5)-(1-rr_gt2_5)*log2(1-rr_gt2_5)),
+           entropy_half=ifelse(rr_lthalf==1 | rr_lthalf==0,0,
+                           -rr_lthalf*log2(rr_lthalf)-(1-rr_lthalf)*log2(1-rr_lthalf))) %>% 
+    st_as_sf()
+
+g_half <- ggplot() +
+    geom_sf(data = map_dat,
+            aes(fill = entropy_half), color=NA,lwd = 0) +
+    geom_sf(data = bgd0, fill = NA, lwd = 0.5) +
+    geom_sf(data = sero.sites, shape=3, color="black", size=1, lty=1) +
+    # geom_sf(data = sampling_locs, color = 'black', pch=3,size = 1.2) +
+    scale_fill_gradient("Entropy\n(cutoff=0.5)",
+                        high="red", low="white",
+                        limits=c(0,1), breaks=seq(0,1,.25)) +
+    coord_sf(datum = NA)  +
+    labs(x = "") +
+    labs(y = "") +
+    theme_void() +
+    theme(legend.position="bottom", legend.title = element_text(size = 9))
+
+g1 <- ggplot() +
+    geom_sf(data = map_dat,
+            aes(fill = entropy1), color=NA,lwd = 0) +
+    geom_sf(data = bgd0, fill = NA, lwd = 0.5) +
+    geom_sf(data = sero.sites, shape=3, color="black", size=1, lty=1) +
+    # geom_sf(data = sampling_locs, color = 'black', pch=3,size = 1.2) +
+    scale_fill_gradient("Entropy\n(cutoff=1)",
+                        high="red", low="white",
+                        limits=c(0,1), breaks=seq(0,1,.25)) +
+    coord_sf(datum = NA)  +
+    labs(x = "") +
+    labs(y = "") +
+    theme_void() +
+    theme(legend.position="bottom", legend.title = element_text(size = 9))
+
+g1_5 <- ggplot() +
+    geom_sf(data = map_dat,
+            aes(fill = entropy1_5), color=NA,lwd = 0) +
+    geom_sf(data = bgd0, fill = NA, lwd = 0.5) +
+    geom_sf(data = sero.sites, shape=3, color="black", size=1, lty=1) +
+    # geom_sf(data = sampling_locs, color = 'black', pch=3,size = 1.2) +
+    scale_fill_gradient("Entropy\n(cutoff=1.5)",
+                        high="red", low="white",
+                        limits=c(0,1), breaks=seq(0,1,.25)) +
+    coord_sf(datum = NA)  +
+    labs(x = "") +
+    labs(y = "") +
+    theme_void() +
+    theme(legend.position="bottom", legend.title = element_text(size = 9))
+
+g2 <- ggplot() +
+    geom_sf(data = map_dat,
+            aes(fill = entropy2), color=NA,lwd = 0) +
+    geom_sf(data = bgd0, fill = NA, lwd = 0.5) +
+    geom_sf(data = sero.sites, shape=3, color="black", size=1, lty=1) +
+    # geom_sf(data = sampling_locs, color = 'black', pch=3,size = 1.2) +
+    scale_fill_gradient("Entropy\n(cutoff=2)",
+                        high="red", low="white",
+                        limits=c(0,1), breaks=seq(0,1,.25)) +
+    coord_sf(datum = NA)  +
+    labs(x = "") +
+    labs(y = "") +
+    theme_void() +
+    theme(legend.position="bottom", legend.title = element_text(size = 9))
+
+g2_5 <- ggplot() +
+    geom_sf(data = map_dat,
+            aes(fill = entropy2_5), color=NA,lwd = 0) +
+    geom_sf(data = bgd0, fill = NA, lwd = 0.5) +
+    geom_sf(data = sero.sites, shape=3, color="black", size=1, lty=1) +
+    # geom_sf(data = sampling_locs, color = 'black', pch=3,size = 1.2) +
+    scale_fill_gradient("Entropy\n(cutoff=2.5)",
+                        high="red", low="white",
+                        limits=c(0,1), breaks=seq(0,1,.25)) +
+    coord_sf(datum = NA)  +
+    labs(x = "") +
+    labs(y = "") +
+    theme_void() +
+    theme(legend.position="bottom", legend.title = element_text(size = 9))
+
+g  <- cowplot::plot_grid(g_half,g1,g1_5,g2,g2_5, labels="AUTO", align = "h")
+ggsave("entropy_sensitivity.pdf",g,height=6,width=6,units="in")
+
+```
+
+
+```{r print, fig.dim = c(6,6)}
+
+print(g)
+
+```
+
+From this, it seems choosing a RR of 2 as a cutoff for the entropy measure provides more heterogenity of uncertainty. 

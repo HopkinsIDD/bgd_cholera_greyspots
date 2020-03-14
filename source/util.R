@@ -14,6 +14,7 @@ reload_source <- function(){
   library(data.table)
   library(fasterize)
   library(lwgeom)
+  library(colorspace)
   
   source("source/util.R")
   

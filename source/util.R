@@ -1,7 +1,7 @@
 reload_source <- function(){
   library(sf)
   library(dplyr)
-  library(velox)
+  library(exactextractr)
   library(raster)
   library(tidyr)
   library(ggplot2)
@@ -14,6 +14,8 @@ reload_source <- function(){
   library(data.table)
   library(fasterize)
   library(lwgeom)
+  library(cowplot)
+  library(colorspace)
   
   source("source/util.R")
   

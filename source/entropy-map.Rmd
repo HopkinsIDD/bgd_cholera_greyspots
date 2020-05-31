@@ -1,6 +1,6 @@
 ---
 title: "Entropy map"
-author: "Stephen A Lauer"
+author: "Stephen A Lauer  + Elonia"
 date: "3/9/2020"
 output: html_document
 ---
@@ -32,8 +32,7 @@ my_grid <- readRDS("data/grid_with_covs.rds")
 
 ## Entropy
 
-Edit around lines 69-70 below to change RR cutoffs.
-This can take a while to run.
+Here we show how our measure of uncertainty changes around the serosurvey sites as we change the relative risk cutoff used to determine whether a grid cell is a hotspot or not. We consider RR cutoffs in increments of 0.5 from 0.5 to 2.5.
 
 ```{r make-map-data, cache=T, eval=F}
 registerDoMC(detectCores()-2)
@@ -67,7 +66,10 @@ map_dat <- all_boots_rr %>%
     group_by(grid_id, pop) %>%
     summarise(rr_median=median(sample_rr),
               ## this is the part to edit for different entropy measures
+              rr_gt1=mean(sample_rr>1),
+              rr_gt1_5=mean(sample_rr>1.5),
               rr_gt2=mean(sample_rr>2),
+              rr_gt2_5=mean(sample_rr>2.5),
               rr_lthalf=mean(sample_rr<0.5),
               rr_lb=quantile(sample_rr, probs=.025),
               rr_ub=quantile(sample_rr, probs=.975),
@@ -89,37 +91,25 @@ map_dat <- all_boots_rr %>%
            implied_inf=inc_median*pop) %>% 
     left_join(bgd_grid)
 
-saveRDS(map_dat, "generated_data/grid-cell-data.rds")
+saveRDS(map_dat, "generated_data/grid-cell-data_sensitivity.rds")
 
 rm(all_boots)
 rm(all_boots_rr)
 ```
 
-```{r map}
-map_dat <- readRDS("generated_data/grid-cell-data.rds") %>%
-    mutate(entropy2=ifelse(rr_gt2==1 | rr_gt2==0,
-                          0,-rr_gt2*log2(rr_gt2)-(1-rr_gt2)*log2(1-rr_gt2)),
+```{r map, fig.dim = c(6,6)}
+map_dat <- readRDS("generated_data/grid-cell-data_sensitivity.rds") %>%
+    mutate(entropy1=ifelse(rr_gt1==1 | rr_gt1==0,0,
+                           -rr_gt1*log2(rr_gt1)-(1-rr_gt1)*log2(1-rr_gt1)),
+           entropy1_5=ifelse(rr_gt1_5==1 | rr_gt1_5==0,0,
+                           -rr_gt1_5*log2(rr_gt1_5)-(1-rr_gt1_5)*log2(1-rr_gt1_5)),
+           entropy2=ifelse(rr_gt2==1 | rr_gt2==0,0,
+                           -rr_gt2*log2(rr_gt2)-(1-rr_gt2)*log2(1-rr_gt2)),
+           entropy2_5=ifelse(rr_gt2_5==1 | rr_gt2_5==0,0,
+                           -rr_gt2_5*log2(rr_gt2_5)-(1-rr_gt2_5)*log2(1-rr_gt2_5)),
            entropy_half=ifelse(rr_lthalf==1 | rr_lthalf==0,0,
-                               -rr_lthalf*log2(rr_lthalf)-(1-rr_lthalf)*log2(1-rr_lthalf))) %>% 
+                           -rr_lthalf*log2(rr_lthalf)-(1-rr_lthalf)*log2(1-rr_lthalf))) %>% 
     st_as_sf()
-
-g2 <- ggplot() +
-    geom_sf(data = map_dat,
-            aes(fill = entropy2), color=NA,lwd = 0) +
-    geom_sf(data = bgd0, fill = NA, lwd = 0.5) +
-    # geom_sf(data = sampling_locs, color = 'black', pch=3,size = 1.2) +
-    scale_fill_gradient("Entropy (cutoff=2)",
-                        high="red", low="white",
-                        limits=c(0,1), breaks=seq(0,1,.25)) +
-    coord_sf(datum = NA)  +
-    labs(x = "") +
-    labs(y = "") +
-    theme_void() +
-    theme(legend.position="bottom")
-
-g2
-
-ggsave("entropy2.pdf",g2,height=6,width=6)
 
 g_half <- ggplot() +
     geom_sf(data = map_dat,
@@ -135,7 +125,65 @@ g_half <- ggplot() +
     theme_void() +
     theme(legend.position="bottom")
 
-g_half
+g1 <- ggplot() +
+    geom_sf(data = map_dat,
+            aes(fill = entropy1), color=NA,lwd = 0) +
+    geom_sf(data = bgd0, fill = NA, lwd = 0.5) +
+    # geom_sf(data = sampling_locs, color = 'black', pch=3,size = 1.2) +
+    scale_fill_gradient("Entropy (cutoff=1)",
+                        high="red", low="white",
+                        limits=c(0,1), breaks=seq(0,1,.25)) +
+    coord_sf(datum = NA)  +
+    labs(x = "") +
+    labs(y = "") +
+    theme_void() +
+    theme(legend.position="bottom")
 
-ggsave("entropy_half.pdf",g_half,height=6,width=6)
+g1_5 <- ggplot() +
+    geom_sf(data = map_dat,
+            aes(fill = entropy1_5), color=NA,lwd = 0) +
+    geom_sf(data = bgd0, fill = NA, lwd = 0.5) +
+    # geom_sf(data = sampling_locs, color = 'black', pch=3,size = 1.2) +
+    scale_fill_gradient("Entropy (cutoff=1.5)",
+                        high="red", low="white",
+                        limits=c(0,1), breaks=seq(0,1,.25)) +
+    coord_sf(datum = NA)  +
+    labs(x = "") +
+    labs(y = "") +
+    theme_void() +
+    theme(legend.position="bottom")
+
+g2 <- ggplot() +
+    geom_sf(data = map_dat,
+            aes(fill = entropy2), color=NA,lwd = 0) +
+    geom_sf(data = bgd0, fill = NA, lwd = 0.5) +
+    # geom_sf(data = sampling_locs, color = 'black', pch=3,size = 1.2) +
+    scale_fill_gradient("Entropy (cutoff=2)",
+                        high="red", low="white",
+                        limits=c(0,1), breaks=seq(0,1,.25)) +
+    coord_sf(datum = NA)  +
+    labs(x = "") +
+    labs(y = "") +
+    theme_void() +
+    theme(legend.position="bottom")
+
+g2_5 <- ggplot() +
+    geom_sf(data = map_dat,
+            aes(fill = entropy2_5), color=NA,lwd = 0) +
+    geom_sf(data = bgd0, fill = NA, lwd = 0.5) +
+    # geom_sf(data = sampling_locs, color = 'black', pch=3,size = 1.2) +
+    scale_fill_gradient("Entropy (cutoff=2.5)",
+                        high="red", low="white",
+                        limits=c(0,1), breaks=seq(0,1,.25)) +
+    coord_sf(datum = NA)  +
+    labs(x = "") +
+    labs(y = "") +
+    theme_void() +
+    theme(legend.position="bottom")
+
+g  <- cowplot::plot_grid(g_half,g1,g1_5,g2,g2_5, labels="AUTO", align = "h")
+print(g)
+ggsave("entropy_sensitivity.pdf",g,height=6,width=6,units="in")
+
+
 ```

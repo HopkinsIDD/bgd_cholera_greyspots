@@ -1,6 +1,6 @@
 ---
 title: "Bangladesh surveillance greyspots"
-subtitle: "February 27, 2020"
+subtitle: "March 13, 2020"
 author: "Elonia"
 description: "Developing a data-driven approach to improve sentinel surveillance design with a case study of cholera in Bangladesh."
 output: 
@@ -11,7 +11,7 @@ output:
 knit: (function(inputFile, encoding) { 
           rmarkdown::render(inputFile,
                         encoding=encoding, 
-                output_file='explore_greyspots_20200227.html') })
+                output_file='explore_greyspots_20200313.html') })
 ---
 
 ```{r setup, include=FALSE, eval=TRUE}
@@ -30,7 +30,7 @@ fig_nums <- captioner(prefix = "Figure ", auto_space = FALSE)
 ```{r, settings}
 source("source/util.R")
 reload_source()
-code_str <- "_20200227"
+code_str <- "_20200313"
 
 ```
 
@@ -111,9 +111,10 @@ sero.sites <- readRDS("data/dat_with_raster_covs_sero.rds") %>%
   group_by(CommLong,CommLat,villid,adm2name) %>% 
   dplyr::summarize(prop_pos = mean(pred_365)) %>% 
   dplyr::rename(LONG=CommLong,LAT=CommLat) 
-sero.sites <- sf::st_as_sf((sero.sites) %>%
-  dplyr::select(LONG,LAT,prop_pos),coords = c("LONG","LAT"),crs="+proj=longlat +datum=WGS84 +no_defs") 
 
+sero.sites_gadmcrs <- sf::st_as_sf((sero.sites) %>%
+  dplyr::select(LONG,LAT,prop_pos), coords = c("LONG","LAT"), crs = gadm_crs_txt) 
+sero.sites <- st_transform(sero.sites_gadmcrs, crs = std_crs_txt)
 # }
 
 ```
@@ -225,11 +226,15 @@ fig_nums(name = "fig-buffers", caption = paste("**Map of**", paste(buffer_labels
 
 ## Identifying greyspots in the distribution of _V. cholerae_
 
-We use modeled _V. cholerae_ estimates of seroincidence which estimate the risk of infection within the previous year relative to the population-weighted mean across a 5 km x 5 km grid of Bangladesh. These estimates were based on a nationally-representative serosurvey of Bangladesh conducted in 70 communities in 2015. We measure uncertainty by entropy which is a measure of how uncertain we are that a seroincidence hotspot (RR > 2) is a true hotspot and that a coldspot (RR < 2) is truly not a hotspot (Shannon entropy adapted by https://www.medrxiv.org/content/10.1101/2020.01.10.20016964v1.full.pdf). Our sensitivity analysis shows... [Reason why we chose RR of 2 as the threshold for entropy]
+We use modeled _V. cholerae_ estimates of seroincidence which estimate the risk of infection within the previous year relative to the population-weighted mean across a 5 km x 5 km grid of Bangladesh. These estimates were based on a nationally-representative serosurvey of Bangladesh conducted in 70 communities in 2015. 
 
-Higher entropy corresponds to high uncertainty that a grid-cell is truly a hotpot or coldspot while lower entropy corresponds to certainty. Areas that have both large uncertainty in our seroincidence estimates and that are outside of the cholera surveillance zone are "greyspots," locations about which no current cholera-related information is known. 
+Despite the nationally-representative nature of the serosurvey data, the modeled 5 km x 5km seroincidence estimates had great uncertainty and the confidence intervals for the relative risk (RR)estimates spanned one for most grid cells. We sought to identify areas that had both high relative risk of infection and relatively low uncertainty in their seroincidence estimates.
 
-[Edit entropy figure to highlight sero sites that are high in seroincidence and high in entropy]
+We measure uncertainty using a modified version of Shannon entropy that indicates how uncertain we are that a seroincidence hotspot is a true hotspot (metric described in https://www.medrxiv.org/content/10.1101/2020.01.10.20016964v1.full.pdf). For this entropy measure, we arbitrarily define seroincidence hotspots as grid cells with RR > 2. Sensitivity analyses with different RR thresholds showed visually that a threshold of 2 had high heterogeneity in uncertainty while maintaining the same low-entropy-areas as entropy threshold with higher and lower cutoffs.
+
+In this context, a higher entropy value corresponds to higher uncertainty that a grid-cell is truly a hotpot, while lower entropy corresponds to greater certainty. Areas that have both large uncertainty in our seroincidence estimates and that are outside of the cholera surveillance zone are "greyspots," locations about which no current cholera-related information is known. 
+
+[Edit entropy figure to highlight sero sites that are high in seroincidence]
 
 ```{r, fig-sero-entropy-map, fig.dim = c(6,6)}
 
@@ -879,7 +884,7 @@ knitr::kable(display_propcat_in_buffers, format = "pandoc", booktabs = T, align 
 
 ### Populations by proportion infected across Bangladesh
 
-We sought to describe how well the cholera surveillance zones capture `r sort(unique(sero2$rr_risk_cat))` populations across Bangladesh. 
+We sought to describe how well the cholera surveillance zones capture `r sort(unique(sero2$prop_risk_cat))` populations across Bangladesh. 
 
 ```{r, caption-tab-propcatIntersect-in-bang}
 
@@ -1084,7 +1089,7 @@ knitr::kable(display_infcat_in_buffers, format = "pandoc", booktabs = T, align =
 
 ### Populations by number of infections across Bangladesh
 
-We sought to describe how well the cholera surveillance zones capture `r sort(unique(sero2$rr_risk_cat))` populations across Bangladesh. 
+We sought to describe how well the cholera surveillance zones capture `r sort(unique(sero2$inf_risk_cat))` populations across Bangladesh. 
 
 ```{r, caption-tab-infcatIntersect-in-bang}
 

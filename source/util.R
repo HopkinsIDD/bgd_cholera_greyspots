@@ -16,6 +16,7 @@ reload_source <- function(){
   library(lwgeom)
   library(cowplot)
   library(colorspace)
+  library(scales)
   
   source("source/util.R")
   

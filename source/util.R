@@ -5,6 +5,7 @@ reload_source <- function(){
   library(raster)
   library(tidyr)
   library(ggplot2)
+  library(ggpubr)
   library(ggsn)
   library(mapview)
   library(readr)
@@ -17,6 +18,8 @@ reload_source <- function(){
   library(cowplot)
   library(colorspace)
   library(scales)
+  library(magrittr)
+  library(ggpol)
   
   source("source/util.R")
   

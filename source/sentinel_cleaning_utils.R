@@ -84,7 +84,7 @@ load_shapefile <- function(dir = "data/", admin = 0, crs = "standard"){
 load_pop_raster <- function(fn = "data/BGD_ppp_2015_adj_v2_UTM.tif"){
 
   pop <- raster::raster(fn)
-  if(as.character(crs(pop)) != get_crs("standard")){
+  if(as.character(raster::crs(pop)) != get_crs("standard")){
     pop <- raster::projectRaster(from = pop, crs = get_crs("standard"), method = "bilinear")
   }
 

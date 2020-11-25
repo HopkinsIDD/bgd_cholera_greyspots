@@ -137,9 +137,30 @@ get_facilities_weights <- function(weights_grid, df_buff, weight_var, summary_fu
   } else if ("data.frame" %in% class(weights_grid) & weight_var == "pop"){
 
     wts_df <- sf::st_intersection(weights_grid, df_buff) %>%
+      sf::st_drop_geometry() %>%
       dplyr::group_by(org_name, org_code, division, district, upazila, org_lvl) %>%
-      dplyr::summarise(wt = sum(pop_toAgg, na.rm = TRUE)) %>% 
-      ungroup
+      dplyr::summarise(pop = sum(pop_toAgg, na.rm = TRUE), ncells = n()) %>% 
+      dplyr::ungroup() %>%
+      dplyr::mutate(wt = pop/ncells) %>% ## pop density
+      dplyr::select(-pop, -ncells)
+  
+  } else if ("data.frame" %in% class(weights_grid) & weight_var == "rr"){
+
+    wts_df <- sf::st_intersection(weights_grid, df_buff) %>%
+      sf::st_drop_geometry() %>%
+      dplyr::group_by(org_name, org_code, division, district, upazila, org_lvl) %>%
+      dplyr::summarise(wt = mean(rr_median, na.rm = TRUE)) %>% 
+      dplyr::ungroup() 
+
+  } else if ("data.frame" %in% class(weights_grid) & weight_var == "implied_inf"){
+
+    wts_df <- sf::st_intersection(weights_grid, df_buff) %>%
+      sf::st_drop_geometry() %>%
+      dplyr::group_by(org_name, org_code, division, district, upazila, org_lvl) %>%
+      dplyr::summarise(implied_inf = sum(implied_inf_toAgg, na.rm = TRUE), ncells = n()) %>% 
+      dplyr::ungroup() %>%
+      dplyr::mutate(wt = implied_inf/ncells) %>% ## infections per area
+      dplyr::select(-implied_inf, -ncells)
   }
   
   return(wts_df)

@@ -1,4 +1,5 @@
 ## This function will generate a dataframe that is the same size and with the same stratification as orig_sample, according to the column weights specified in weight_column 
+## This is an old version of this function -- obsolete
 generate_weighted <- function(orig_sample, allhosp, weight_column){
   num_hosp_types <- get_orglvl_counts(orig_sample)
 
@@ -51,15 +52,7 @@ generate_random <- function(orig_sample, full_df){
 #' @param orig_sample dataframe with original set of sentinel locations. Must have org_lvl column
 #' @param full_df dataframe with all potential sentinel locations. Must have org_lvl column
 generate_division <- function(orig_sample, full_df){
-  num_hosp_types <- get_orglvl_counts(orig_sample) %>%
-    tidyr::uncount(n) %>%
-    dplyr::arrange(rnorm(nrow(orig_sample)))
-  num_div_types <- get_division_counts(orig_sample) %>%
-    tidyr::uncount(n) 
-  strata <- tibble::as_tibble(cbind(num_div_types, num_hosp_types)) %>%
-    group_by(division, org_lvl) %>% 
-    count 
-
+  strata <- get_strata(orig_sample)
   new_sample <- full_df %>%
     group_by(division, org_lvl) %>%
     dplyr::group_modify(function(x, y) {
@@ -71,6 +64,37 @@ generate_division <- function(orig_sample, full_df){
   dummy <- dplyr::group_by(new_sample, division, org_lvl) %>% count
   if(!all(strata == dummy)){
     warning("The generate_division procedure failed")
+    print(strata)
+    print(dummy)
+  }
+
+  return(new_sample)
+}
+
+#' @description Generate a dataframe with the same number of facilities and org_lvl and division stratification as the orig_sample. Weighted-division selection
+#' @param orig_sample dataframe with original set of sentinel locations. Must have org_lvl column
+#' @param full_df dataframe with all potential sentinel locations. Must have org_lvl and wt columns
+generate_division_weighted <- function(orig_sample, full_df){
+
+  if(!wt %in% names(full_df)){
+    stop(glue::glue("The wt column is missing from the full_df dataframe."))
+  }
+
+  strata <- get_strata(orig_sample)
+  new_sample <- full_df %>%
+    group_by(division, org_lvl) %>%
+    dplyr::group_modify(function(x, y) {
+      dplyr::slice_sample(x,
+        n = max(c(strata[which(strata$division == y$division & strata$org_lvl == y$org_lvl),]$n, 0)),
+        weight_by = x$wt) 
+    }) %>%
+    ungroup
+
+  dummy <- dplyr::group_by(new_sample, division, org_lvl) %>% count
+  if(!all(strata == dummy)){
+    warning("The generate_division_weighted procedure failed")
+    print(strata)
+    print(dummy)
   }
 
   return(new_sample)
@@ -96,4 +120,27 @@ get_division_counts <- function(orig_sample){
     stop("The column division is missing from orig_sample.")
   } 
   orig_sample %>% group_by(division) %>% count
+}
+
+#' @description Return dataframe with the number of facilities by division and org_lvl that matches the orig_sample distribution of facilities by division and distribution of facilities by org_lvl
+#' @param orig_sample dataframe with original set of sentinel locations. Must have division column
+#' @param match_joint should the joint distribution of facilities by division and org_lvl match that of the orig_sample (default = FALSE)
+get_strata <- function(orig_sample, match_joint = FALSE){
+  if(!match_joint){
+    num_hosp_types <- get_orglvl_counts(orig_sample) %>%
+      tidyr::uncount(n) %>%
+      dplyr::arrange(rnorm(nrow(orig_sample))) ## swap org_lvls across districts
+    num_div_types <- get_division_counts(orig_sample) %>%
+      tidyr::uncount(n) 
+    strata <- tibble::as_tibble(cbind(num_div_types, num_hosp_types)) %>%
+      group_by(division, org_lvl) %>% 
+      count %>% 
+      ungroup()
+  } else{
+    strata <- orig_sample %>%
+      group_by(division, org_lvl) %>%
+      count %>%
+      ungroup()
+  }
+  return(strata)
 }

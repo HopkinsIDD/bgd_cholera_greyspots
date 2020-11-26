@@ -17,6 +17,7 @@ clean_allhosp_data <- function(df){
                       District = "district",
                       Regional = "tertiary",
                       National = "tertiary")) %>%
+    dplyr::rename(LAT = lat, LON = lon) %>%
     dplyr::select(-agency, -org_func, -org_type)
 }
 
@@ -35,12 +36,12 @@ get_crs <- function(crs = "standard"){
 }
 
 #' @description Get potential sentinels with buffers
-#' @param df dataframe with healthcare facilities, lat & lon coordinates, and org_lvl
+#' @param df dataframe with healthcare facilities, LAT & LON coordinates, and org_lvl
 #' @param radii numeric vector with radius in km for subdistrict, district, and tertiary care facilities
 get_facilities_buffers <- function(df, radii){
 
-  if(!("lon" %in% names(df)) | !("lat" %in% names(df))){
-    stop("The dataframe object df does not have the required columns lon and lat.")
+  if(!("LON" %in% names(df)) | !("LAT" %in% names(df))){
+    stop("The dataframe object df does not have the required columns LON and LAT.")
   } else if (!("org_lvl" %in% names(df))){
     stop("The df object does not have the required column org_lvl.")
   } else if(!is.numeric(radii) | length(radii) != 3){
@@ -51,7 +52,7 @@ get_facilities_buffers <- function(df, radii){
   gadm_crs_txt <- get_crs("gadm")
 
   buffer_radii <- data.frame(org_lvl = c("subdistrict", "district", "tertiary"), buff_radius = radii)
-  df_sf_gadm <- sf::st_as_sf(df, coords = c("lon", "lat"), crs = gadm_crs_txt) %>%
+  df_sf_gadm <- sf::st_as_sf(df, coords = c("LON", "LAT"), crs = gadm_crs_txt, remove = FALSE) %>%
     left_join(buffer_radii, by = c("org_lvl"))
   df_sf <- sf::st_transform(df_sf_gadm, std_crs_txt)
 
@@ -107,13 +108,15 @@ load_sero_grid <- function(fn = "data/entropy-map.rds"){
     dplyr::mutate(prop_inf_toPlt = ifelse(pop>0, implied_inf/pop, 0)) %>%
     dplyr::mutate(pop_toAgg = pop,
                   implied_inf_toAgg = implied_inf,
-                  prop_inf_toAgg = prop_inf_toPlt) %>%
+                  prop_inf_toAgg = prop_inf_toPlt,
+                  rr_median_toAgg = rr_median) %>%
     dplyr::rename(pop_toPlt = pop,
                   implied_inf_toPlt = implied_inf) 
   dup_ix <- which(duplicated(sero_import$grid_id))
   sero_import[dup_ix,]$pop_toAgg <- NA
   sero_import[dup_ix,]$implied_inf_toAgg <- NA
   sero_import[dup_ix,]$prop_inf_toAgg <- NA
+  sero_import[dup_ix,]$rr_median_toAgg <- NA ## even when taking the mean, we don't want some cells to be double weighted
 
   std_crs_txt <- get_crs("standard")
   sero <- sf::st_transform(sero_import, crs = std_crs_txt)
@@ -125,12 +128,12 @@ load_sero_grid <- function(fn = "data/entropy-map.rds"){
 #' @param weights_grid raster or sf dataframe with data for weights
 #' @param df_buff facilities dataframe with buffer geometries
 #' @param weight_var string with weight variable name (pop, rel_risk, abs_risk)
-#' @param summary_fun summary function (mean or sum)
-get_facilities_weights <- function(weights_grid, df_buff, weight_var, summary_fun){
+#' @param weight_transform transform to apply to weights (default = none)
+get_facilities_weights <- function(weights_grid, df_buff, weight_var, weight_transform = "none"){
   if (any(grepl("raster", class(weights_grid), ignore.case = TRUE)) & weight_var == "pop"){
 
     ## This method is not preferred because extract seems to pull different data than the st_intersection code (e.g., there are discrepancies in the population within a buffer even though the data and buffers are the same)
-    wts <- terra::extract(weights_grid, df_buff, fun=summary_fun, na.rm = TRUE, touches = TRUE)
+    wts <- terra::extract(weights_grid, df_buff, fun=sum, na.rm = TRUE, touches = TRUE)
     wts_df <- df_buff %>%  
       dplyr::mutate(wt = wts[,1])
 
@@ -139,7 +142,7 @@ get_facilities_weights <- function(weights_grid, df_buff, weight_var, summary_fu
     wts_df <- sf::st_intersection(weights_grid, df_buff) %>%
       sf::st_drop_geometry() %>%
       dplyr::group_by(org_name, org_code, division, district, upazila, org_lvl) %>%
-      dplyr::summarise(pop = sum(pop_toAgg, na.rm = TRUE), ncells = n()) %>% 
+      dplyr::summarise(pop = sum(pop_toAgg, na.rm = TRUE), ncells = n(), LAT = first(LAT), LON = first(LON)) %>% 
       dplyr::ungroup() %>%
       dplyr::mutate(wt = pop/ncells) %>% ## pop density
       dplyr::select(-pop, -ncells)
@@ -149,7 +152,7 @@ get_facilities_weights <- function(weights_grid, df_buff, weight_var, summary_fu
     wts_df <- sf::st_intersection(weights_grid, df_buff) %>%
       sf::st_drop_geometry() %>%
       dplyr::group_by(org_name, org_code, division, district, upazila, org_lvl) %>%
-      dplyr::summarise(wt = mean(rr_median, na.rm = TRUE)) %>% 
+      dplyr::summarise(wt = mean(rr_median_toAgg, na.rm = TRUE), LAT = first(LAT), LON = first(LON)) %>% 
       dplyr::ungroup() 
 
   } else if ("data.frame" %in% class(weights_grid) & weight_var == "implied_inf"){
@@ -157,10 +160,15 @@ get_facilities_weights <- function(weights_grid, df_buff, weight_var, summary_fu
     wts_df <- sf::st_intersection(weights_grid, df_buff) %>%
       sf::st_drop_geometry() %>%
       dplyr::group_by(org_name, org_code, division, district, upazila, org_lvl) %>%
-      dplyr::summarise(implied_inf = sum(implied_inf_toAgg, na.rm = TRUE), ncells = n()) %>% 
+      dplyr::summarise(implied_inf = sum(implied_inf_toAgg, na.rm = TRUE), ncells = n(), LAT = first(LAT), LON = first(LON)) %>% 
       dplyr::ungroup() %>%
       dplyr::mutate(wt = implied_inf/ncells) %>% ## infections per area
       dplyr::select(-implied_inf, -ncells)
+  }
+
+  if (weight_transform == "sq"){
+    wts_df <- wts_df %>%
+      dplyr::mutate(wt = wt^2)
   }
   
   return(wts_df)

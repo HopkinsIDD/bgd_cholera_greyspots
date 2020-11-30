@@ -102,6 +102,46 @@ generate_division <- function(orig_sample, full_df){
   return(new_sample)
 }
 
+#' @description Generate a dataframe with the same number of facilities and org_lvl. Optimized selection
+#' @param orig_sample dataframe with original set of sentinel locations. Must have org_lvl column
+#' @param full_df dataframe with all potential sentinel locations. Must have org_lvl and wt columns
+generate_optimized <- function(orig_sample, full_df){
+
+  if(!"wt" %in% names(full_df)){
+    stop(glue::glue("The wt column is missing from the full_df dataframe."))
+  }
+
+  strata <- get_orglvl_counts(orig_sample)
+  dummy <- data.frame()
+  nfails = 0
+  max_counter = 1
+
+  while(!isTRUE(dplyr::all_equal(strata, dummy, convert = TRUE))){
+    if(nrow(dummy)>0){
+      nfails = nfails+1
+      warning(glue::glue("****Try {nfails} of generate_optimized procedure failed****"))
+      print(strata)
+      print(dummy)
+    }
+
+    new_sample <- full_df %>%
+      group_by(org_lvl) %>%
+      dplyr::group_modify(function(x, y) {
+        dplyr::slice_max(x,
+          order_by = wt, 
+          n = max(c(strata[which(strata$org_lvl == y$org_lvl),]$n, 0)), 
+          with_ties = FALSE)
+      }) %>%
+      ungroup %>%
+      dplyr::select(division, org_lvl, org_name, org_code, district, upazila, wt, LAT, LON) %>%
+      dplyr::arrange(division, org_lvl)
+
+    dummy <- dplyr::group_by(new_sample, org_lvl) %>% count %>% ungroup
+  }
+
+  return(new_sample)
+}
+
 #' @description Generate a dataframe with the same number of facilities and org_lvl and division stratification as the orig_sample. Optimized-division selection
 #' @param orig_sample dataframe with original set of sentinel locations. Must have org_lvl column
 #' @param full_df dataframe with all potential sentinel locations. Must have org_lvl and wt columns

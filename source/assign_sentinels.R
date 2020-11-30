@@ -99,3 +99,26 @@ div_list <- lapply(seq.int(nsims), function(i){
 })
 div <- data.table::rbindlist(div_list, idcol = "sim")
 write_csv(rdm, glue::glue("{out_dir}sentinelSamples_division_buff{buffstring}_seed{seednum}_nsims{nsims}.csv"))
+
+######### Positive controls (deterministic) ##############
+
+#### population-optimized selection ####
+popopt_list <- lapply(seq.int(nsims), function(i){
+  generate_optimized(sentinels, pop_wts) 
+})
+popopt <- data.table::rbindlist(popopt_list, idcol = "sim")
+write_csv(popopt, glue::glue("{out_dir}sentinelSamples_popOpt_{core_str}_nsims{nsims}.csv"))
+
+#### relative risk-optimized selection ####
+rropt_list <- lapply(seq.int(nsims), function(i){
+  generate_optimized(sentinels, rr_wts) 
+})
+rropt <- data.table::rbindlist(rropt_list, idcol = "sim")
+write_csv(rropt, glue::glue("{out_dir}sentinelSamples_rrOpt_{core_str}_nsims{nsims}.csv"))
+
+#### absolute risk-optimized selection ####
+absopt_list <- lapply(seq.int(nsims), function(i){
+  generate_optimized(sentinels, abs_wts) 
+})
+absopt <- data.table::rbindlist(absopt_list, idcol = "sim")
+write_csv(absopt, glue::glue("{out_dir}sentinelSamples_absOpt_{core_str}_nsims{nsims}.csv"))

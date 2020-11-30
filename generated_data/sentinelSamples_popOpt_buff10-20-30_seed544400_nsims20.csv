@@ -1,0 +1,441 @@
+sim,division,org_lvl,org_name,org_code,district,upazila,wt,LAT,LON
+1,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,81887.03082501447,22.3406339,91.8377319
+1,Chattogram,district,Comilla General Hospital,10000864,Cumilla,Cumilla Adarsha Sadar,46633.376990685094,23.4499746,91.1782827
+1,Chattogram,district,Lakshmipur District Hospital,10001001,Lakshmipur,Lakshmipur Sadar,41195.24420797414,22.9445334,90.98853679999999
+1,Chattogram,district,Noakhali 250 Bed General Hospital,10001049,Noakhali,Noakhali Sadar,38583.8786410108,22.8725498,91.08850179999999
+1,Chattogram,district,Chandpur 250 Bed General Hospital,10000700,Chandpur,Chandpur Sadar,35953.00087768555,23.2231817,90.6530009
+1,Chattogram,district,Brahmanbaria 250 Bed District Sadar Hospital,10000672,Brahmanbaria,Brahmanbaria Sadar,35704.329840012535,23.9762236,91.11117180000001
+1,Chattogram,subdistrict,Boalkhali Upazila Health Complex,10000740,Chattogram,Boalkhali,143725.00498046874,22.3744591,91.9192144
+1,Dhaka,district,Narayanganj General (Victoria) Hospital,10000427,Narayanganj,Narayanganj Sadar,117485.49512685643,23.6084011,90.50326590000002
+1,Dhaka,district,Munshiganj 250 bed District Hospital,10000328,Munshiganj,Munshiganj Sadar,38994.124995727536,23.4980931,90.41266209999999
+1,Dhaka,district,Narsingdi District Hospital,10000452,Narsingdi,Narsingdi Sadar,38471.0188869201,23.9299304,90.7026636
+1,Dhaka,district,Tangail 250 Bed District Hospital,10000647,Tangail,Tangail Sadar,30787.519788587415,24.263342,89.9255878
+1,Dhaka,subdistrict,Keraniganj Upazila Health Complex,10000074,Dhaka,Keraniganj,341818.5564385776,23.7064049,90.34714760000001
+1,Dhaka,subdistrict,Bandar Upazila Health Complex,10000420,Narayanganj,Bandar,121150.38113064236,23.6290652,90.52533919999999
+1,Dhaka,subdistrict,Rupganj Upazila Health Complex,10000430,Narayanganj,Rupganj,118448.4263200431,23.7993877,90.52711149999999
+1,Dhaka,subdistrict,Savar Upazila Health Complex,10000083,Dhaka,Savar,94804.7767578125,23.8385698,90.24762989999999
+1,Dhaka,tertiary,Shaheed Suhrawardy Medical College Hospital,10000051,Dhaka,Sher-e-bangla Nagar,98282.41268665332,23.7692146,90.3713616
+1,Dhaka,tertiary,Shaheed Ahsan Ullah Master General Hospital,10000129,Gazipur,Gazipur Sadar,98099.16303783098,23.8933902,90.4022109
+1,Dhaka,tertiary,"Mugda 500 Bed General Hospital, Dhaka",10013720,Dhaka,Mugda Para,95301.31799958882,23.7315171,90.42946200000002
+1,Dhaka,tertiary,Dhaka Medical College Hospital,10000033,Dhaka,Shahbagh,94822.73205861262,23.7256553,90.3970882
+1,Khulna,subdistrict,Rupsha Upazila Health Complex,10001826,Khulna,Rupsa,76388.44446910512,22.8223637,89.550115
+1,Mymensingh,district,Jamalpur 250 Beded General Hospital,10000208,Jamalpur,Jamalpur Sadar,30323.721741495254,24.9407085,89.93395799999999
+1,Rajshahi,district,Sirajganj 250 Bed  Bongamata Sheikh Fazilatunnesa Mujib General Hospital,10001648,Sirajganj,Sirajganj Sadar,29519.197206009267,24.4584857,89.7111754
+2,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,81887.03082501447,22.3406339,91.8377319
+2,Chattogram,district,Comilla General Hospital,10000864,Cumilla,Cumilla Adarsha Sadar,46633.376990685094,23.4499746,91.1782827
+2,Chattogram,district,Lakshmipur District Hospital,10001001,Lakshmipur,Lakshmipur Sadar,41195.24420797414,22.9445334,90.98853679999999
+2,Chattogram,district,Noakhali 250 Bed General Hospital,10001049,Noakhali,Noakhali Sadar,38583.8786410108,22.8725498,91.08850179999999
+2,Chattogram,district,Chandpur 250 Bed General Hospital,10000700,Chandpur,Chandpur Sadar,35953.00087768555,23.2231817,90.6530009
+2,Chattogram,district,Brahmanbaria 250 Bed District Sadar Hospital,10000672,Brahmanbaria,Brahmanbaria Sadar,35704.329840012535,23.9762236,91.11117180000001
+2,Chattogram,subdistrict,Boalkhali Upazila Health Complex,10000740,Chattogram,Boalkhali,143725.00498046874,22.3744591,91.9192144
+2,Dhaka,district,Narayanganj General (Victoria) Hospital,10000427,Narayanganj,Narayanganj Sadar,117485.49512685643,23.6084011,90.50326590000002
+2,Dhaka,district,Munshiganj 250 bed District Hospital,10000328,Munshiganj,Munshiganj Sadar,38994.124995727536,23.4980931,90.41266209999999
+2,Dhaka,district,Narsingdi District Hospital,10000452,Narsingdi,Narsingdi Sadar,38471.0188869201,23.9299304,90.7026636
+2,Dhaka,district,Tangail 250 Bed District Hospital,10000647,Tangail,Tangail Sadar,30787.519788587415,24.263342,89.9255878
+2,Dhaka,subdistrict,Keraniganj Upazila Health Complex,10000074,Dhaka,Keraniganj,341818.5564385776,23.7064049,90.34714760000001
+2,Dhaka,subdistrict,Bandar Upazila Health Complex,10000420,Narayanganj,Bandar,121150.38113064236,23.6290652,90.52533919999999
+2,Dhaka,subdistrict,Rupganj Upazila Health Complex,10000430,Narayanganj,Rupganj,118448.4263200431,23.7993877,90.52711149999999
+2,Dhaka,subdistrict,Savar Upazila Health Complex,10000083,Dhaka,Savar,94804.7767578125,23.8385698,90.24762989999999
+2,Dhaka,tertiary,Shaheed Suhrawardy Medical College Hospital,10000051,Dhaka,Sher-e-bangla Nagar,98282.41268665332,23.7692146,90.3713616
+2,Dhaka,tertiary,Shaheed Ahsan Ullah Master General Hospital,10000129,Gazipur,Gazipur Sadar,98099.16303783098,23.8933902,90.4022109
+2,Dhaka,tertiary,"Mugda 500 Bed General Hospital, Dhaka",10013720,Dhaka,Mugda Para,95301.31799958882,23.7315171,90.42946200000002
+2,Dhaka,tertiary,Dhaka Medical College Hospital,10000033,Dhaka,Shahbagh,94822.73205861262,23.7256553,90.3970882
+2,Khulna,subdistrict,Rupsha Upazila Health Complex,10001826,Khulna,Rupsa,76388.44446910512,22.8223637,89.550115
+2,Mymensingh,district,Jamalpur 250 Beded General Hospital,10000208,Jamalpur,Jamalpur Sadar,30323.721741495254,24.9407085,89.93395799999999
+2,Rajshahi,district,Sirajganj 250 Bed  Bongamata Sheikh Fazilatunnesa Mujib General Hospital,10001648,Sirajganj,Sirajganj Sadar,29519.197206009267,24.4584857,89.7111754
+3,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,81887.03082501447,22.3406339,91.8377319
+3,Chattogram,district,Comilla General Hospital,10000864,Cumilla,Cumilla Adarsha Sadar,46633.376990685094,23.4499746,91.1782827
+3,Chattogram,district,Lakshmipur District Hospital,10001001,Lakshmipur,Lakshmipur Sadar,41195.24420797414,22.9445334,90.98853679999999
+3,Chattogram,district,Noakhali 250 Bed General Hospital,10001049,Noakhali,Noakhali Sadar,38583.8786410108,22.8725498,91.08850179999999
+3,Chattogram,district,Chandpur 250 Bed General Hospital,10000700,Chandpur,Chandpur Sadar,35953.00087768555,23.2231817,90.6530009
+3,Chattogram,district,Brahmanbaria 250 Bed District Sadar Hospital,10000672,Brahmanbaria,Brahmanbaria Sadar,35704.329840012535,23.9762236,91.11117180000001
+3,Chattogram,subdistrict,Boalkhali Upazila Health Complex,10000740,Chattogram,Boalkhali,143725.00498046874,22.3744591,91.9192144
+3,Dhaka,district,Narayanganj General (Victoria) Hospital,10000427,Narayanganj,Narayanganj Sadar,117485.49512685643,23.6084011,90.50326590000002
+3,Dhaka,district,Munshiganj 250 bed District Hospital,10000328,Munshiganj,Munshiganj Sadar,38994.124995727536,23.4980931,90.41266209999999
+3,Dhaka,district,Narsingdi District Hospital,10000452,Narsingdi,Narsingdi Sadar,38471.0188869201,23.9299304,90.7026636
+3,Dhaka,district,Tangail 250 Bed District Hospital,10000647,Tangail,Tangail Sadar,30787.519788587415,24.263342,89.9255878
+3,Dhaka,subdistrict,Keraniganj Upazila Health Complex,10000074,Dhaka,Keraniganj,341818.5564385776,23.7064049,90.34714760000001
+3,Dhaka,subdistrict,Bandar Upazila Health Complex,10000420,Narayanganj,Bandar,121150.38113064236,23.6290652,90.52533919999999
+3,Dhaka,subdistrict,Rupganj Upazila Health Complex,10000430,Narayanganj,Rupganj,118448.4263200431,23.7993877,90.52711149999999
+3,Dhaka,subdistrict,Savar Upazila Health Complex,10000083,Dhaka,Savar,94804.7767578125,23.8385698,90.24762989999999
+3,Dhaka,tertiary,Shaheed Suhrawardy Medical College Hospital,10000051,Dhaka,Sher-e-bangla Nagar,98282.41268665332,23.7692146,90.3713616
+3,Dhaka,tertiary,Shaheed Ahsan Ullah Master General Hospital,10000129,Gazipur,Gazipur Sadar,98099.16303783098,23.8933902,90.4022109
+3,Dhaka,tertiary,"Mugda 500 Bed General Hospital, Dhaka",10013720,Dhaka,Mugda Para,95301.31799958882,23.7315171,90.42946200000002
+3,Dhaka,tertiary,Dhaka Medical College Hospital,10000033,Dhaka,Shahbagh,94822.73205861262,23.7256553,90.3970882
+3,Khulna,subdistrict,Rupsha Upazila Health Complex,10001826,Khulna,Rupsa,76388.44446910512,22.8223637,89.550115
+3,Mymensingh,district,Jamalpur 250 Beded General Hospital,10000208,Jamalpur,Jamalpur Sadar,30323.721741495254,24.9407085,89.93395799999999
+3,Rajshahi,district,Sirajganj 250 Bed  Bongamata Sheikh Fazilatunnesa Mujib General Hospital,10001648,Sirajganj,Sirajganj Sadar,29519.197206009267,24.4584857,89.7111754
+4,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,81887.03082501447,22.3406339,91.8377319
+4,Chattogram,district,Comilla General Hospital,10000864,Cumilla,Cumilla Adarsha Sadar,46633.376990685094,23.4499746,91.1782827
+4,Chattogram,district,Lakshmipur District Hospital,10001001,Lakshmipur,Lakshmipur Sadar,41195.24420797414,22.9445334,90.98853679999999
+4,Chattogram,district,Noakhali 250 Bed General Hospital,10001049,Noakhali,Noakhali Sadar,38583.8786410108,22.8725498,91.08850179999999
+4,Chattogram,district,Chandpur 250 Bed General Hospital,10000700,Chandpur,Chandpur Sadar,35953.00087768555,23.2231817,90.6530009
+4,Chattogram,district,Brahmanbaria 250 Bed District Sadar Hospital,10000672,Brahmanbaria,Brahmanbaria Sadar,35704.329840012535,23.9762236,91.11117180000001
+4,Chattogram,subdistrict,Boalkhali Upazila Health Complex,10000740,Chattogram,Boalkhali,143725.00498046874,22.3744591,91.9192144
+4,Dhaka,district,Narayanganj General (Victoria) Hospital,10000427,Narayanganj,Narayanganj Sadar,117485.49512685643,23.6084011,90.50326590000002
+4,Dhaka,district,Munshiganj 250 bed District Hospital,10000328,Munshiganj,Munshiganj Sadar,38994.124995727536,23.4980931,90.41266209999999
+4,Dhaka,district,Narsingdi District Hospital,10000452,Narsingdi,Narsingdi Sadar,38471.0188869201,23.9299304,90.7026636
+4,Dhaka,district,Tangail 250 Bed District Hospital,10000647,Tangail,Tangail Sadar,30787.519788587415,24.263342,89.9255878
+4,Dhaka,subdistrict,Keraniganj Upazila Health Complex,10000074,Dhaka,Keraniganj,341818.5564385776,23.7064049,90.34714760000001
+4,Dhaka,subdistrict,Bandar Upazila Health Complex,10000420,Narayanganj,Bandar,121150.38113064236,23.6290652,90.52533919999999
+4,Dhaka,subdistrict,Rupganj Upazila Health Complex,10000430,Narayanganj,Rupganj,118448.4263200431,23.7993877,90.52711149999999
+4,Dhaka,subdistrict,Savar Upazila Health Complex,10000083,Dhaka,Savar,94804.7767578125,23.8385698,90.24762989999999
+4,Dhaka,tertiary,Shaheed Suhrawardy Medical College Hospital,10000051,Dhaka,Sher-e-bangla Nagar,98282.41268665332,23.7692146,90.3713616
+4,Dhaka,tertiary,Shaheed Ahsan Ullah Master General Hospital,10000129,Gazipur,Gazipur Sadar,98099.16303783098,23.8933902,90.4022109
+4,Dhaka,tertiary,"Mugda 500 Bed General Hospital, Dhaka",10013720,Dhaka,Mugda Para,95301.31799958882,23.7315171,90.42946200000002
+4,Dhaka,tertiary,Dhaka Medical College Hospital,10000033,Dhaka,Shahbagh,94822.73205861262,23.7256553,90.3970882
+4,Khulna,subdistrict,Rupsha Upazila Health Complex,10001826,Khulna,Rupsa,76388.44446910512,22.8223637,89.550115
+4,Mymensingh,district,Jamalpur 250 Beded General Hospital,10000208,Jamalpur,Jamalpur Sadar,30323.721741495254,24.9407085,89.93395799999999
+4,Rajshahi,district,Sirajganj 250 Bed  Bongamata Sheikh Fazilatunnesa Mujib General Hospital,10001648,Sirajganj,Sirajganj Sadar,29519.197206009267,24.4584857,89.7111754
+5,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,81887.03082501447,22.3406339,91.8377319
+5,Chattogram,district,Comilla General Hospital,10000864,Cumilla,Cumilla Adarsha Sadar,46633.376990685094,23.4499746,91.1782827
+5,Chattogram,district,Lakshmipur District Hospital,10001001,Lakshmipur,Lakshmipur Sadar,41195.24420797414,22.9445334,90.98853679999999
+5,Chattogram,district,Noakhali 250 Bed General Hospital,10001049,Noakhali,Noakhali Sadar,38583.8786410108,22.8725498,91.08850179999999
+5,Chattogram,district,Chandpur 250 Bed General Hospital,10000700,Chandpur,Chandpur Sadar,35953.00087768555,23.2231817,90.6530009
+5,Chattogram,district,Brahmanbaria 250 Bed District Sadar Hospital,10000672,Brahmanbaria,Brahmanbaria Sadar,35704.329840012535,23.9762236,91.11117180000001
+5,Chattogram,subdistrict,Boalkhali Upazila Health Complex,10000740,Chattogram,Boalkhali,143725.00498046874,22.3744591,91.9192144
+5,Dhaka,district,Narayanganj General (Victoria) Hospital,10000427,Narayanganj,Narayanganj Sadar,117485.49512685643,23.6084011,90.50326590000002
+5,Dhaka,district,Munshiganj 250 bed District Hospital,10000328,Munshiganj,Munshiganj Sadar,38994.124995727536,23.4980931,90.41266209999999
+5,Dhaka,district,Narsingdi District Hospital,10000452,Narsingdi,Narsingdi Sadar,38471.0188869201,23.9299304,90.7026636
+5,Dhaka,district,Tangail 250 Bed District Hospital,10000647,Tangail,Tangail Sadar,30787.519788587415,24.263342,89.9255878
+5,Dhaka,subdistrict,Keraniganj Upazila Health Complex,10000074,Dhaka,Keraniganj,341818.5564385776,23.7064049,90.34714760000001
+5,Dhaka,subdistrict,Bandar Upazila Health Complex,10000420,Narayanganj,Bandar,121150.38113064236,23.6290652,90.52533919999999
+5,Dhaka,subdistrict,Rupganj Upazila Health Complex,10000430,Narayanganj,Rupganj,118448.4263200431,23.7993877,90.52711149999999
+5,Dhaka,subdistrict,Savar Upazila Health Complex,10000083,Dhaka,Savar,94804.7767578125,23.8385698,90.24762989999999
+5,Dhaka,tertiary,Shaheed Suhrawardy Medical College Hospital,10000051,Dhaka,Sher-e-bangla Nagar,98282.41268665332,23.7692146,90.3713616
+5,Dhaka,tertiary,Shaheed Ahsan Ullah Master General Hospital,10000129,Gazipur,Gazipur Sadar,98099.16303783098,23.8933902,90.4022109
+5,Dhaka,tertiary,"Mugda 500 Bed General Hospital, Dhaka",10013720,Dhaka,Mugda Para,95301.31799958882,23.7315171,90.42946200000002
+5,Dhaka,tertiary,Dhaka Medical College Hospital,10000033,Dhaka,Shahbagh,94822.73205861262,23.7256553,90.3970882
+5,Khulna,subdistrict,Rupsha Upazila Health Complex,10001826,Khulna,Rupsa,76388.44446910512,22.8223637,89.550115
+5,Mymensingh,district,Jamalpur 250 Beded General Hospital,10000208,Jamalpur,Jamalpur Sadar,30323.721741495254,24.9407085,89.93395799999999
+5,Rajshahi,district,Sirajganj 250 Bed  Bongamata Sheikh Fazilatunnesa Mujib General Hospital,10001648,Sirajganj,Sirajganj Sadar,29519.197206009267,24.4584857,89.7111754
+6,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,81887.03082501447,22.3406339,91.8377319
+6,Chattogram,district,Comilla General Hospital,10000864,Cumilla,Cumilla Adarsha Sadar,46633.376990685094,23.4499746,91.1782827
+6,Chattogram,district,Lakshmipur District Hospital,10001001,Lakshmipur,Lakshmipur Sadar,41195.24420797414,22.9445334,90.98853679999999
+6,Chattogram,district,Noakhali 250 Bed General Hospital,10001049,Noakhali,Noakhali Sadar,38583.8786410108,22.8725498,91.08850179999999
+6,Chattogram,district,Chandpur 250 Bed General Hospital,10000700,Chandpur,Chandpur Sadar,35953.00087768555,23.2231817,90.6530009
+6,Chattogram,district,Brahmanbaria 250 Bed District Sadar Hospital,10000672,Brahmanbaria,Brahmanbaria Sadar,35704.329840012535,23.9762236,91.11117180000001
+6,Chattogram,subdistrict,Boalkhali Upazila Health Complex,10000740,Chattogram,Boalkhali,143725.00498046874,22.3744591,91.9192144
+6,Dhaka,district,Narayanganj General (Victoria) Hospital,10000427,Narayanganj,Narayanganj Sadar,117485.49512685643,23.6084011,90.50326590000002
+6,Dhaka,district,Munshiganj 250 bed District Hospital,10000328,Munshiganj,Munshiganj Sadar,38994.124995727536,23.4980931,90.41266209999999
+6,Dhaka,district,Narsingdi District Hospital,10000452,Narsingdi,Narsingdi Sadar,38471.0188869201,23.9299304,90.7026636
+6,Dhaka,district,Tangail 250 Bed District Hospital,10000647,Tangail,Tangail Sadar,30787.519788587415,24.263342,89.9255878
+6,Dhaka,subdistrict,Keraniganj Upazila Health Complex,10000074,Dhaka,Keraniganj,341818.5564385776,23.7064049,90.34714760000001
+6,Dhaka,subdistrict,Bandar Upazila Health Complex,10000420,Narayanganj,Bandar,121150.38113064236,23.6290652,90.52533919999999
+6,Dhaka,subdistrict,Rupganj Upazila Health Complex,10000430,Narayanganj,Rupganj,118448.4263200431,23.7993877,90.52711149999999
+6,Dhaka,subdistrict,Savar Upazila Health Complex,10000083,Dhaka,Savar,94804.7767578125,23.8385698,90.24762989999999
+6,Dhaka,tertiary,Shaheed Suhrawardy Medical College Hospital,10000051,Dhaka,Sher-e-bangla Nagar,98282.41268665332,23.7692146,90.3713616
+6,Dhaka,tertiary,Shaheed Ahsan Ullah Master General Hospital,10000129,Gazipur,Gazipur Sadar,98099.16303783098,23.8933902,90.4022109
+6,Dhaka,tertiary,"Mugda 500 Bed General Hospital, Dhaka",10013720,Dhaka,Mugda Para,95301.31799958882,23.7315171,90.42946200000002
+6,Dhaka,tertiary,Dhaka Medical College Hospital,10000033,Dhaka,Shahbagh,94822.73205861262,23.7256553,90.3970882
+6,Khulna,subdistrict,Rupsha Upazila Health Complex,10001826,Khulna,Rupsa,76388.44446910512,22.8223637,89.550115
+6,Mymensingh,district,Jamalpur 250 Beded General Hospital,10000208,Jamalpur,Jamalpur Sadar,30323.721741495254,24.9407085,89.93395799999999
+6,Rajshahi,district,Sirajganj 250 Bed  Bongamata Sheikh Fazilatunnesa Mujib General Hospital,10001648,Sirajganj,Sirajganj Sadar,29519.197206009267,24.4584857,89.7111754
+7,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,81887.03082501447,22.3406339,91.8377319
+7,Chattogram,district,Comilla General Hospital,10000864,Cumilla,Cumilla Adarsha Sadar,46633.376990685094,23.4499746,91.1782827
+7,Chattogram,district,Lakshmipur District Hospital,10001001,Lakshmipur,Lakshmipur Sadar,41195.24420797414,22.9445334,90.98853679999999
+7,Chattogram,district,Noakhali 250 Bed General Hospital,10001049,Noakhali,Noakhali Sadar,38583.8786410108,22.8725498,91.08850179999999
+7,Chattogram,district,Chandpur 250 Bed General Hospital,10000700,Chandpur,Chandpur Sadar,35953.00087768555,23.2231817,90.6530009
+7,Chattogram,district,Brahmanbaria 250 Bed District Sadar Hospital,10000672,Brahmanbaria,Brahmanbaria Sadar,35704.329840012535,23.9762236,91.11117180000001
+7,Chattogram,subdistrict,Boalkhali Upazila Health Complex,10000740,Chattogram,Boalkhali,143725.00498046874,22.3744591,91.9192144
+7,Dhaka,district,Narayanganj General (Victoria) Hospital,10000427,Narayanganj,Narayanganj Sadar,117485.49512685643,23.6084011,90.50326590000002
+7,Dhaka,district,Munshiganj 250 bed District Hospital,10000328,Munshiganj,Munshiganj Sadar,38994.124995727536,23.4980931,90.41266209999999
+7,Dhaka,district,Narsingdi District Hospital,10000452,Narsingdi,Narsingdi Sadar,38471.0188869201,23.9299304,90.7026636
+7,Dhaka,district,Tangail 250 Bed District Hospital,10000647,Tangail,Tangail Sadar,30787.519788587415,24.263342,89.9255878
+7,Dhaka,subdistrict,Keraniganj Upazila Health Complex,10000074,Dhaka,Keraniganj,341818.5564385776,23.7064049,90.34714760000001
+7,Dhaka,subdistrict,Bandar Upazila Health Complex,10000420,Narayanganj,Bandar,121150.38113064236,23.6290652,90.52533919999999
+7,Dhaka,subdistrict,Rupganj Upazila Health Complex,10000430,Narayanganj,Rupganj,118448.4263200431,23.7993877,90.52711149999999
+7,Dhaka,subdistrict,Savar Upazila Health Complex,10000083,Dhaka,Savar,94804.7767578125,23.8385698,90.24762989999999
+7,Dhaka,tertiary,Shaheed Suhrawardy Medical College Hospital,10000051,Dhaka,Sher-e-bangla Nagar,98282.41268665332,23.7692146,90.3713616
+7,Dhaka,tertiary,Shaheed Ahsan Ullah Master General Hospital,10000129,Gazipur,Gazipur Sadar,98099.16303783098,23.8933902,90.4022109
+7,Dhaka,tertiary,"Mugda 500 Bed General Hospital, Dhaka",10013720,Dhaka,Mugda Para,95301.31799958882,23.7315171,90.42946200000002
+7,Dhaka,tertiary,Dhaka Medical College Hospital,10000033,Dhaka,Shahbagh,94822.73205861262,23.7256553,90.3970882
+7,Khulna,subdistrict,Rupsha Upazila Health Complex,10001826,Khulna,Rupsa,76388.44446910512,22.8223637,89.550115
+7,Mymensingh,district,Jamalpur 250 Beded General Hospital,10000208,Jamalpur,Jamalpur Sadar,30323.721741495254,24.9407085,89.93395799999999
+7,Rajshahi,district,Sirajganj 250 Bed  Bongamata Sheikh Fazilatunnesa Mujib General Hospital,10001648,Sirajganj,Sirajganj Sadar,29519.197206009267,24.4584857,89.7111754
+8,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,81887.03082501447,22.3406339,91.8377319
+8,Chattogram,district,Comilla General Hospital,10000864,Cumilla,Cumilla Adarsha Sadar,46633.376990685094,23.4499746,91.1782827
+8,Chattogram,district,Lakshmipur District Hospital,10001001,Lakshmipur,Lakshmipur Sadar,41195.24420797414,22.9445334,90.98853679999999
+8,Chattogram,district,Noakhali 250 Bed General Hospital,10001049,Noakhali,Noakhali Sadar,38583.8786410108,22.8725498,91.08850179999999
+8,Chattogram,district,Chandpur 250 Bed General Hospital,10000700,Chandpur,Chandpur Sadar,35953.00087768555,23.2231817,90.6530009
+8,Chattogram,district,Brahmanbaria 250 Bed District Sadar Hospital,10000672,Brahmanbaria,Brahmanbaria Sadar,35704.329840012535,23.9762236,91.11117180000001
+8,Chattogram,subdistrict,Boalkhali Upazila Health Complex,10000740,Chattogram,Boalkhali,143725.00498046874,22.3744591,91.9192144
+8,Dhaka,district,Narayanganj General (Victoria) Hospital,10000427,Narayanganj,Narayanganj Sadar,117485.49512685643,23.6084011,90.50326590000002
+8,Dhaka,district,Munshiganj 250 bed District Hospital,10000328,Munshiganj,Munshiganj Sadar,38994.124995727536,23.4980931,90.41266209999999
+8,Dhaka,district,Narsingdi District Hospital,10000452,Narsingdi,Narsingdi Sadar,38471.0188869201,23.9299304,90.7026636
+8,Dhaka,district,Tangail 250 Bed District Hospital,10000647,Tangail,Tangail Sadar,30787.519788587415,24.263342,89.9255878
+8,Dhaka,subdistrict,Keraniganj Upazila Health Complex,10000074,Dhaka,Keraniganj,341818.5564385776,23.7064049,90.34714760000001
+8,Dhaka,subdistrict,Bandar Upazila Health Complex,10000420,Narayanganj,Bandar,121150.38113064236,23.6290652,90.52533919999999
+8,Dhaka,subdistrict,Rupganj Upazila Health Complex,10000430,Narayanganj,Rupganj,118448.4263200431,23.7993877,90.52711149999999
+8,Dhaka,subdistrict,Savar Upazila Health Complex,10000083,Dhaka,Savar,94804.7767578125,23.8385698,90.24762989999999
+8,Dhaka,tertiary,Shaheed Suhrawardy Medical College Hospital,10000051,Dhaka,Sher-e-bangla Nagar,98282.41268665332,23.7692146,90.3713616
+8,Dhaka,tertiary,Shaheed Ahsan Ullah Master General Hospital,10000129,Gazipur,Gazipur Sadar,98099.16303783098,23.8933902,90.4022109
+8,Dhaka,tertiary,"Mugda 500 Bed General Hospital, Dhaka",10013720,Dhaka,Mugda Para,95301.31799958882,23.7315171,90.42946200000002
+8,Dhaka,tertiary,Dhaka Medical College Hospital,10000033,Dhaka,Shahbagh,94822.73205861262,23.7256553,90.3970882
+8,Khulna,subdistrict,Rupsha Upazila Health Complex,10001826,Khulna,Rupsa,76388.44446910512,22.8223637,89.550115
+8,Mymensingh,district,Jamalpur 250 Beded General Hospital,10000208,Jamalpur,Jamalpur Sadar,30323.721741495254,24.9407085,89.93395799999999
+8,Rajshahi,district,Sirajganj 250 Bed  Bongamata Sheikh Fazilatunnesa Mujib General Hospital,10001648,Sirajganj,Sirajganj Sadar,29519.197206009267,24.4584857,89.7111754
+9,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,81887.03082501447,22.3406339,91.8377319
+9,Chattogram,district,Comilla General Hospital,10000864,Cumilla,Cumilla Adarsha Sadar,46633.376990685094,23.4499746,91.1782827
+9,Chattogram,district,Lakshmipur District Hospital,10001001,Lakshmipur,Lakshmipur Sadar,41195.24420797414,22.9445334,90.98853679999999
+9,Chattogram,district,Noakhali 250 Bed General Hospital,10001049,Noakhali,Noakhali Sadar,38583.8786410108,22.8725498,91.08850179999999
+9,Chattogram,district,Chandpur 250 Bed General Hospital,10000700,Chandpur,Chandpur Sadar,35953.00087768555,23.2231817,90.6530009
+9,Chattogram,district,Brahmanbaria 250 Bed District Sadar Hospital,10000672,Brahmanbaria,Brahmanbaria Sadar,35704.329840012535,23.9762236,91.11117180000001
+9,Chattogram,subdistrict,Boalkhali Upazila Health Complex,10000740,Chattogram,Boalkhali,143725.00498046874,22.3744591,91.9192144
+9,Dhaka,district,Narayanganj General (Victoria) Hospital,10000427,Narayanganj,Narayanganj Sadar,117485.49512685643,23.6084011,90.50326590000002
+9,Dhaka,district,Munshiganj 250 bed District Hospital,10000328,Munshiganj,Munshiganj Sadar,38994.124995727536,23.4980931,90.41266209999999
+9,Dhaka,district,Narsingdi District Hospital,10000452,Narsingdi,Narsingdi Sadar,38471.0188869201,23.9299304,90.7026636
+9,Dhaka,district,Tangail 250 Bed District Hospital,10000647,Tangail,Tangail Sadar,30787.519788587415,24.263342,89.9255878
+9,Dhaka,subdistrict,Keraniganj Upazila Health Complex,10000074,Dhaka,Keraniganj,341818.5564385776,23.7064049,90.34714760000001
+9,Dhaka,subdistrict,Bandar Upazila Health Complex,10000420,Narayanganj,Bandar,121150.38113064236,23.6290652,90.52533919999999
+9,Dhaka,subdistrict,Rupganj Upazila Health Complex,10000430,Narayanganj,Rupganj,118448.4263200431,23.7993877,90.52711149999999
+9,Dhaka,subdistrict,Savar Upazila Health Complex,10000083,Dhaka,Savar,94804.7767578125,23.8385698,90.24762989999999
+9,Dhaka,tertiary,Shaheed Suhrawardy Medical College Hospital,10000051,Dhaka,Sher-e-bangla Nagar,98282.41268665332,23.7692146,90.3713616
+9,Dhaka,tertiary,Shaheed Ahsan Ullah Master General Hospital,10000129,Gazipur,Gazipur Sadar,98099.16303783098,23.8933902,90.4022109
+9,Dhaka,tertiary,"Mugda 500 Bed General Hospital, Dhaka",10013720,Dhaka,Mugda Para,95301.31799958882,23.7315171,90.42946200000002
+9,Dhaka,tertiary,Dhaka Medical College Hospital,10000033,Dhaka,Shahbagh,94822.73205861262,23.7256553,90.3970882
+9,Khulna,subdistrict,Rupsha Upazila Health Complex,10001826,Khulna,Rupsa,76388.44446910512,22.8223637,89.550115
+9,Mymensingh,district,Jamalpur 250 Beded General Hospital,10000208,Jamalpur,Jamalpur Sadar,30323.721741495254,24.9407085,89.93395799999999
+9,Rajshahi,district,Sirajganj 250 Bed  Bongamata Sheikh Fazilatunnesa Mujib General Hospital,10001648,Sirajganj,Sirajganj Sadar,29519.197206009267,24.4584857,89.7111754
+10,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,81887.03082501447,22.3406339,91.8377319
+10,Chattogram,district,Comilla General Hospital,10000864,Cumilla,Cumilla Adarsha Sadar,46633.376990685094,23.4499746,91.1782827
+10,Chattogram,district,Lakshmipur District Hospital,10001001,Lakshmipur,Lakshmipur Sadar,41195.24420797414,22.9445334,90.98853679999999
+10,Chattogram,district,Noakhali 250 Bed General Hospital,10001049,Noakhali,Noakhali Sadar,38583.8786410108,22.8725498,91.08850179999999
+10,Chattogram,district,Chandpur 250 Bed General Hospital,10000700,Chandpur,Chandpur Sadar,35953.00087768555,23.2231817,90.6530009
+10,Chattogram,district,Brahmanbaria 250 Bed District Sadar Hospital,10000672,Brahmanbaria,Brahmanbaria Sadar,35704.329840012535,23.9762236,91.11117180000001
+10,Chattogram,subdistrict,Boalkhali Upazila Health Complex,10000740,Chattogram,Boalkhali,143725.00498046874,22.3744591,91.9192144
+10,Dhaka,district,Narayanganj General (Victoria) Hospital,10000427,Narayanganj,Narayanganj Sadar,117485.49512685643,23.6084011,90.50326590000002
+10,Dhaka,district,Munshiganj 250 bed District Hospital,10000328,Munshiganj,Munshiganj Sadar,38994.124995727536,23.4980931,90.41266209999999
+10,Dhaka,district,Narsingdi District Hospital,10000452,Narsingdi,Narsingdi Sadar,38471.0188869201,23.9299304,90.7026636
+10,Dhaka,district,Tangail 250 Bed District Hospital,10000647,Tangail,Tangail Sadar,30787.519788587415,24.263342,89.9255878
+10,Dhaka,subdistrict,Keraniganj Upazila Health Complex,10000074,Dhaka,Keraniganj,341818.5564385776,23.7064049,90.34714760000001
+10,Dhaka,subdistrict,Bandar Upazila Health Complex,10000420,Narayanganj,Bandar,121150.38113064236,23.6290652,90.52533919999999
+10,Dhaka,subdistrict,Rupganj Upazila Health Complex,10000430,Narayanganj,Rupganj,118448.4263200431,23.7993877,90.52711149999999
+10,Dhaka,subdistrict,Savar Upazila Health Complex,10000083,Dhaka,Savar,94804.7767578125,23.8385698,90.24762989999999
+10,Dhaka,tertiary,Shaheed Suhrawardy Medical College Hospital,10000051,Dhaka,Sher-e-bangla Nagar,98282.41268665332,23.7692146,90.3713616
+10,Dhaka,tertiary,Shaheed Ahsan Ullah Master General Hospital,10000129,Gazipur,Gazipur Sadar,98099.16303783098,23.8933902,90.4022109
+10,Dhaka,tertiary,"Mugda 500 Bed General Hospital, Dhaka",10013720,Dhaka,Mugda Para,95301.31799958882,23.7315171,90.42946200000002
+10,Dhaka,tertiary,Dhaka Medical College Hospital,10000033,Dhaka,Shahbagh,94822.73205861262,23.7256553,90.3970882
+10,Khulna,subdistrict,Rupsha Upazila Health Complex,10001826,Khulna,Rupsa,76388.44446910512,22.8223637,89.550115
+10,Mymensingh,district,Jamalpur 250 Beded General Hospital,10000208,Jamalpur,Jamalpur Sadar,30323.721741495254,24.9407085,89.93395799999999
+10,Rajshahi,district,Sirajganj 250 Bed  Bongamata Sheikh Fazilatunnesa Mujib General Hospital,10001648,Sirajganj,Sirajganj Sadar,29519.197206009267,24.4584857,89.7111754
+11,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,81887.03082501447,22.3406339,91.8377319
+11,Chattogram,district,Comilla General Hospital,10000864,Cumilla,Cumilla Adarsha Sadar,46633.376990685094,23.4499746,91.1782827
+11,Chattogram,district,Lakshmipur District Hospital,10001001,Lakshmipur,Lakshmipur Sadar,41195.24420797414,22.9445334,90.98853679999999
+11,Chattogram,district,Noakhali 250 Bed General Hospital,10001049,Noakhali,Noakhali Sadar,38583.8786410108,22.8725498,91.08850179999999
+11,Chattogram,district,Chandpur 250 Bed General Hospital,10000700,Chandpur,Chandpur Sadar,35953.00087768555,23.2231817,90.6530009
+11,Chattogram,district,Brahmanbaria 250 Bed District Sadar Hospital,10000672,Brahmanbaria,Brahmanbaria Sadar,35704.329840012535,23.9762236,91.11117180000001
+11,Chattogram,subdistrict,Boalkhali Upazila Health Complex,10000740,Chattogram,Boalkhali,143725.00498046874,22.3744591,91.9192144
+11,Dhaka,district,Narayanganj General (Victoria) Hospital,10000427,Narayanganj,Narayanganj Sadar,117485.49512685643,23.6084011,90.50326590000002
+11,Dhaka,district,Munshiganj 250 bed District Hospital,10000328,Munshiganj,Munshiganj Sadar,38994.124995727536,23.4980931,90.41266209999999
+11,Dhaka,district,Narsingdi District Hospital,10000452,Narsingdi,Narsingdi Sadar,38471.0188869201,23.9299304,90.7026636
+11,Dhaka,district,Tangail 250 Bed District Hospital,10000647,Tangail,Tangail Sadar,30787.519788587415,24.263342,89.9255878
+11,Dhaka,subdistrict,Keraniganj Upazila Health Complex,10000074,Dhaka,Keraniganj,341818.5564385776,23.7064049,90.34714760000001
+11,Dhaka,subdistrict,Bandar Upazila Health Complex,10000420,Narayanganj,Bandar,121150.38113064236,23.6290652,90.52533919999999
+11,Dhaka,subdistrict,Rupganj Upazila Health Complex,10000430,Narayanganj,Rupganj,118448.4263200431,23.7993877,90.52711149999999
+11,Dhaka,subdistrict,Savar Upazila Health Complex,10000083,Dhaka,Savar,94804.7767578125,23.8385698,90.24762989999999
+11,Dhaka,tertiary,Shaheed Suhrawardy Medical College Hospital,10000051,Dhaka,Sher-e-bangla Nagar,98282.41268665332,23.7692146,90.3713616
+11,Dhaka,tertiary,Shaheed Ahsan Ullah Master General Hospital,10000129,Gazipur,Gazipur Sadar,98099.16303783098,23.8933902,90.4022109
+11,Dhaka,tertiary,"Mugda 500 Bed General Hospital, Dhaka",10013720,Dhaka,Mugda Para,95301.31799958882,23.7315171,90.42946200000002
+11,Dhaka,tertiary,Dhaka Medical College Hospital,10000033,Dhaka,Shahbagh,94822.73205861262,23.7256553,90.3970882
+11,Khulna,subdistrict,Rupsha Upazila Health Complex,10001826,Khulna,Rupsa,76388.44446910512,22.8223637,89.550115
+11,Mymensingh,district,Jamalpur 250 Beded General Hospital,10000208,Jamalpur,Jamalpur Sadar,30323.721741495254,24.9407085,89.93395799999999
+11,Rajshahi,district,Sirajganj 250 Bed  Bongamata Sheikh Fazilatunnesa Mujib General Hospital,10001648,Sirajganj,Sirajganj Sadar,29519.197206009267,24.4584857,89.7111754
+12,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,81887.03082501447,22.3406339,91.8377319
+12,Chattogram,district,Comilla General Hospital,10000864,Cumilla,Cumilla Adarsha Sadar,46633.376990685094,23.4499746,91.1782827
+12,Chattogram,district,Lakshmipur District Hospital,10001001,Lakshmipur,Lakshmipur Sadar,41195.24420797414,22.9445334,90.98853679999999
+12,Chattogram,district,Noakhali 250 Bed General Hospital,10001049,Noakhali,Noakhali Sadar,38583.8786410108,22.8725498,91.08850179999999
+12,Chattogram,district,Chandpur 250 Bed General Hospital,10000700,Chandpur,Chandpur Sadar,35953.00087768555,23.2231817,90.6530009
+12,Chattogram,district,Brahmanbaria 250 Bed District Sadar Hospital,10000672,Brahmanbaria,Brahmanbaria Sadar,35704.329840012535,23.9762236,91.11117180000001
+12,Chattogram,subdistrict,Boalkhali Upazila Health Complex,10000740,Chattogram,Boalkhali,143725.00498046874,22.3744591,91.9192144
+12,Dhaka,district,Narayanganj General (Victoria) Hospital,10000427,Narayanganj,Narayanganj Sadar,117485.49512685643,23.6084011,90.50326590000002
+12,Dhaka,district,Munshiganj 250 bed District Hospital,10000328,Munshiganj,Munshiganj Sadar,38994.124995727536,23.4980931,90.41266209999999
+12,Dhaka,district,Narsingdi District Hospital,10000452,Narsingdi,Narsingdi Sadar,38471.0188869201,23.9299304,90.7026636
+12,Dhaka,district,Tangail 250 Bed District Hospital,10000647,Tangail,Tangail Sadar,30787.519788587415,24.263342,89.9255878
+12,Dhaka,subdistrict,Keraniganj Upazila Health Complex,10000074,Dhaka,Keraniganj,341818.5564385776,23.7064049,90.34714760000001
+12,Dhaka,subdistrict,Bandar Upazila Health Complex,10000420,Narayanganj,Bandar,121150.38113064236,23.6290652,90.52533919999999
+12,Dhaka,subdistrict,Rupganj Upazila Health Complex,10000430,Narayanganj,Rupganj,118448.4263200431,23.7993877,90.52711149999999
+12,Dhaka,subdistrict,Savar Upazila Health Complex,10000083,Dhaka,Savar,94804.7767578125,23.8385698,90.24762989999999
+12,Dhaka,tertiary,Shaheed Suhrawardy Medical College Hospital,10000051,Dhaka,Sher-e-bangla Nagar,98282.41268665332,23.7692146,90.3713616
+12,Dhaka,tertiary,Shaheed Ahsan Ullah Master General Hospital,10000129,Gazipur,Gazipur Sadar,98099.16303783098,23.8933902,90.4022109
+12,Dhaka,tertiary,"Mugda 500 Bed General Hospital, Dhaka",10013720,Dhaka,Mugda Para,95301.31799958882,23.7315171,90.42946200000002
+12,Dhaka,tertiary,Dhaka Medical College Hospital,10000033,Dhaka,Shahbagh,94822.73205861262,23.7256553,90.3970882
+12,Khulna,subdistrict,Rupsha Upazila Health Complex,10001826,Khulna,Rupsa,76388.44446910512,22.8223637,89.550115
+12,Mymensingh,district,Jamalpur 250 Beded General Hospital,10000208,Jamalpur,Jamalpur Sadar,30323.721741495254,24.9407085,89.93395799999999
+12,Rajshahi,district,Sirajganj 250 Bed  Bongamata Sheikh Fazilatunnesa Mujib General Hospital,10001648,Sirajganj,Sirajganj Sadar,29519.197206009267,24.4584857,89.7111754
+13,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,81887.03082501447,22.3406339,91.8377319
+13,Chattogram,district,Comilla General Hospital,10000864,Cumilla,Cumilla Adarsha Sadar,46633.376990685094,23.4499746,91.1782827
+13,Chattogram,district,Lakshmipur District Hospital,10001001,Lakshmipur,Lakshmipur Sadar,41195.24420797414,22.9445334,90.98853679999999
+13,Chattogram,district,Noakhali 250 Bed General Hospital,10001049,Noakhali,Noakhali Sadar,38583.8786410108,22.8725498,91.08850179999999
+13,Chattogram,district,Chandpur 250 Bed General Hospital,10000700,Chandpur,Chandpur Sadar,35953.00087768555,23.2231817,90.6530009
+13,Chattogram,district,Brahmanbaria 250 Bed District Sadar Hospital,10000672,Brahmanbaria,Brahmanbaria Sadar,35704.329840012535,23.9762236,91.11117180000001
+13,Chattogram,subdistrict,Boalkhali Upazila Health Complex,10000740,Chattogram,Boalkhali,143725.00498046874,22.3744591,91.9192144
+13,Dhaka,district,Narayanganj General (Victoria) Hospital,10000427,Narayanganj,Narayanganj Sadar,117485.49512685643,23.6084011,90.50326590000002
+13,Dhaka,district,Munshiganj 250 bed District Hospital,10000328,Munshiganj,Munshiganj Sadar,38994.124995727536,23.4980931,90.41266209999999
+13,Dhaka,district,Narsingdi District Hospital,10000452,Narsingdi,Narsingdi Sadar,38471.0188869201,23.9299304,90.7026636
+13,Dhaka,district,Tangail 250 Bed District Hospital,10000647,Tangail,Tangail Sadar,30787.519788587415,24.263342,89.9255878
+13,Dhaka,subdistrict,Keraniganj Upazila Health Complex,10000074,Dhaka,Keraniganj,341818.5564385776,23.7064049,90.34714760000001
+13,Dhaka,subdistrict,Bandar Upazila Health Complex,10000420,Narayanganj,Bandar,121150.38113064236,23.6290652,90.52533919999999
+13,Dhaka,subdistrict,Rupganj Upazila Health Complex,10000430,Narayanganj,Rupganj,118448.4263200431,23.7993877,90.52711149999999
+13,Dhaka,subdistrict,Savar Upazila Health Complex,10000083,Dhaka,Savar,94804.7767578125,23.8385698,90.24762989999999
+13,Dhaka,tertiary,Shaheed Suhrawardy Medical College Hospital,10000051,Dhaka,Sher-e-bangla Nagar,98282.41268665332,23.7692146,90.3713616
+13,Dhaka,tertiary,Shaheed Ahsan Ullah Master General Hospital,10000129,Gazipur,Gazipur Sadar,98099.16303783098,23.8933902,90.4022109
+13,Dhaka,tertiary,"Mugda 500 Bed General Hospital, Dhaka",10013720,Dhaka,Mugda Para,95301.31799958882,23.7315171,90.42946200000002
+13,Dhaka,tertiary,Dhaka Medical College Hospital,10000033,Dhaka,Shahbagh,94822.73205861262,23.7256553,90.3970882
+13,Khulna,subdistrict,Rupsha Upazila Health Complex,10001826,Khulna,Rupsa,76388.44446910512,22.8223637,89.550115
+13,Mymensingh,district,Jamalpur 250 Beded General Hospital,10000208,Jamalpur,Jamalpur Sadar,30323.721741495254,24.9407085,89.93395799999999
+13,Rajshahi,district,Sirajganj 250 Bed  Bongamata Sheikh Fazilatunnesa Mujib General Hospital,10001648,Sirajganj,Sirajganj Sadar,29519.197206009267,24.4584857,89.7111754
+14,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,81887.03082501447,22.3406339,91.8377319
+14,Chattogram,district,Comilla General Hospital,10000864,Cumilla,Cumilla Adarsha Sadar,46633.376990685094,23.4499746,91.1782827
+14,Chattogram,district,Lakshmipur District Hospital,10001001,Lakshmipur,Lakshmipur Sadar,41195.24420797414,22.9445334,90.98853679999999
+14,Chattogram,district,Noakhali 250 Bed General Hospital,10001049,Noakhali,Noakhali Sadar,38583.8786410108,22.8725498,91.08850179999999
+14,Chattogram,district,Chandpur 250 Bed General Hospital,10000700,Chandpur,Chandpur Sadar,35953.00087768555,23.2231817,90.6530009
+14,Chattogram,district,Brahmanbaria 250 Bed District Sadar Hospital,10000672,Brahmanbaria,Brahmanbaria Sadar,35704.329840012535,23.9762236,91.11117180000001
+14,Chattogram,subdistrict,Boalkhali Upazila Health Complex,10000740,Chattogram,Boalkhali,143725.00498046874,22.3744591,91.9192144
+14,Dhaka,district,Narayanganj General (Victoria) Hospital,10000427,Narayanganj,Narayanganj Sadar,117485.49512685643,23.6084011,90.50326590000002
+14,Dhaka,district,Munshiganj 250 bed District Hospital,10000328,Munshiganj,Munshiganj Sadar,38994.124995727536,23.4980931,90.41266209999999
+14,Dhaka,district,Narsingdi District Hospital,10000452,Narsingdi,Narsingdi Sadar,38471.0188869201,23.9299304,90.7026636
+14,Dhaka,district,Tangail 250 Bed District Hospital,10000647,Tangail,Tangail Sadar,30787.519788587415,24.263342,89.9255878
+14,Dhaka,subdistrict,Keraniganj Upazila Health Complex,10000074,Dhaka,Keraniganj,341818.5564385776,23.7064049,90.34714760000001
+14,Dhaka,subdistrict,Bandar Upazila Health Complex,10000420,Narayanganj,Bandar,121150.38113064236,23.6290652,90.52533919999999
+14,Dhaka,subdistrict,Rupganj Upazila Health Complex,10000430,Narayanganj,Rupganj,118448.4263200431,23.7993877,90.52711149999999
+14,Dhaka,subdistrict,Savar Upazila Health Complex,10000083,Dhaka,Savar,94804.7767578125,23.8385698,90.24762989999999
+14,Dhaka,tertiary,Shaheed Suhrawardy Medical College Hospital,10000051,Dhaka,Sher-e-bangla Nagar,98282.41268665332,23.7692146,90.3713616
+14,Dhaka,tertiary,Shaheed Ahsan Ullah Master General Hospital,10000129,Gazipur,Gazipur Sadar,98099.16303783098,23.8933902,90.4022109
+14,Dhaka,tertiary,"Mugda 500 Bed General Hospital, Dhaka",10013720,Dhaka,Mugda Para,95301.31799958882,23.7315171,90.42946200000002
+14,Dhaka,tertiary,Dhaka Medical College Hospital,10000033,Dhaka,Shahbagh,94822.73205861262,23.7256553,90.3970882
+14,Khulna,subdistrict,Rupsha Upazila Health Complex,10001826,Khulna,Rupsa,76388.44446910512,22.8223637,89.550115
+14,Mymensingh,district,Jamalpur 250 Beded General Hospital,10000208,Jamalpur,Jamalpur Sadar,30323.721741495254,24.9407085,89.93395799999999
+14,Rajshahi,district,Sirajganj 250 Bed  Bongamata Sheikh Fazilatunnesa Mujib General Hospital,10001648,Sirajganj,Sirajganj Sadar,29519.197206009267,24.4584857,89.7111754
+15,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,81887.03082501447,22.3406339,91.8377319
+15,Chattogram,district,Comilla General Hospital,10000864,Cumilla,Cumilla Adarsha Sadar,46633.376990685094,23.4499746,91.1782827
+15,Chattogram,district,Lakshmipur District Hospital,10001001,Lakshmipur,Lakshmipur Sadar,41195.24420797414,22.9445334,90.98853679999999
+15,Chattogram,district,Noakhali 250 Bed General Hospital,10001049,Noakhali,Noakhali Sadar,38583.8786410108,22.8725498,91.08850179999999
+15,Chattogram,district,Chandpur 250 Bed General Hospital,10000700,Chandpur,Chandpur Sadar,35953.00087768555,23.2231817,90.6530009
+15,Chattogram,district,Brahmanbaria 250 Bed District Sadar Hospital,10000672,Brahmanbaria,Brahmanbaria Sadar,35704.329840012535,23.9762236,91.11117180000001
+15,Chattogram,subdistrict,Boalkhali Upazila Health Complex,10000740,Chattogram,Boalkhali,143725.00498046874,22.3744591,91.9192144
+15,Dhaka,district,Narayanganj General (Victoria) Hospital,10000427,Narayanganj,Narayanganj Sadar,117485.49512685643,23.6084011,90.50326590000002
+15,Dhaka,district,Munshiganj 250 bed District Hospital,10000328,Munshiganj,Munshiganj Sadar,38994.124995727536,23.4980931,90.41266209999999
+15,Dhaka,district,Narsingdi District Hospital,10000452,Narsingdi,Narsingdi Sadar,38471.0188869201,23.9299304,90.7026636
+15,Dhaka,district,Tangail 250 Bed District Hospital,10000647,Tangail,Tangail Sadar,30787.519788587415,24.263342,89.9255878
+15,Dhaka,subdistrict,Keraniganj Upazila Health Complex,10000074,Dhaka,Keraniganj,341818.5564385776,23.7064049,90.34714760000001
+15,Dhaka,subdistrict,Bandar Upazila Health Complex,10000420,Narayanganj,Bandar,121150.38113064236,23.6290652,90.52533919999999
+15,Dhaka,subdistrict,Rupganj Upazila Health Complex,10000430,Narayanganj,Rupganj,118448.4263200431,23.7993877,90.52711149999999
+15,Dhaka,subdistrict,Savar Upazila Health Complex,10000083,Dhaka,Savar,94804.7767578125,23.8385698,90.24762989999999
+15,Dhaka,tertiary,Shaheed Suhrawardy Medical College Hospital,10000051,Dhaka,Sher-e-bangla Nagar,98282.41268665332,23.7692146,90.3713616
+15,Dhaka,tertiary,Shaheed Ahsan Ullah Master General Hospital,10000129,Gazipur,Gazipur Sadar,98099.16303783098,23.8933902,90.4022109
+15,Dhaka,tertiary,"Mugda 500 Bed General Hospital, Dhaka",10013720,Dhaka,Mugda Para,95301.31799958882,23.7315171,90.42946200000002
+15,Dhaka,tertiary,Dhaka Medical College Hospital,10000033,Dhaka,Shahbagh,94822.73205861262,23.7256553,90.3970882
+15,Khulna,subdistrict,Rupsha Upazila Health Complex,10001826,Khulna,Rupsa,76388.44446910512,22.8223637,89.550115
+15,Mymensingh,district,Jamalpur 250 Beded General Hospital,10000208,Jamalpur,Jamalpur Sadar,30323.721741495254,24.9407085,89.93395799999999
+15,Rajshahi,district,Sirajganj 250 Bed  Bongamata Sheikh Fazilatunnesa Mujib General Hospital,10001648,Sirajganj,Sirajganj Sadar,29519.197206009267,24.4584857,89.7111754
+16,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,81887.03082501447,22.3406339,91.8377319
+16,Chattogram,district,Comilla General Hospital,10000864,Cumilla,Cumilla Adarsha Sadar,46633.376990685094,23.4499746,91.1782827
+16,Chattogram,district,Lakshmipur District Hospital,10001001,Lakshmipur,Lakshmipur Sadar,41195.24420797414,22.9445334,90.98853679999999
+16,Chattogram,district,Noakhali 250 Bed General Hospital,10001049,Noakhali,Noakhali Sadar,38583.8786410108,22.8725498,91.08850179999999
+16,Chattogram,district,Chandpur 250 Bed General Hospital,10000700,Chandpur,Chandpur Sadar,35953.00087768555,23.2231817,90.6530009
+16,Chattogram,district,Brahmanbaria 250 Bed District Sadar Hospital,10000672,Brahmanbaria,Brahmanbaria Sadar,35704.329840012535,23.9762236,91.11117180000001
+16,Chattogram,subdistrict,Boalkhali Upazila Health Complex,10000740,Chattogram,Boalkhali,143725.00498046874,22.3744591,91.9192144
+16,Dhaka,district,Narayanganj General (Victoria) Hospital,10000427,Narayanganj,Narayanganj Sadar,117485.49512685643,23.6084011,90.50326590000002
+16,Dhaka,district,Munshiganj 250 bed District Hospital,10000328,Munshiganj,Munshiganj Sadar,38994.124995727536,23.4980931,90.41266209999999
+16,Dhaka,district,Narsingdi District Hospital,10000452,Narsingdi,Narsingdi Sadar,38471.0188869201,23.9299304,90.7026636
+16,Dhaka,district,Tangail 250 Bed District Hospital,10000647,Tangail,Tangail Sadar,30787.519788587415,24.263342,89.9255878
+16,Dhaka,subdistrict,Keraniganj Upazila Health Complex,10000074,Dhaka,Keraniganj,341818.5564385776,23.7064049,90.34714760000001
+16,Dhaka,subdistrict,Bandar Upazila Health Complex,10000420,Narayanganj,Bandar,121150.38113064236,23.6290652,90.52533919999999
+16,Dhaka,subdistrict,Rupganj Upazila Health Complex,10000430,Narayanganj,Rupganj,118448.4263200431,23.7993877,90.52711149999999
+16,Dhaka,subdistrict,Savar Upazila Health Complex,10000083,Dhaka,Savar,94804.7767578125,23.8385698,90.24762989999999
+16,Dhaka,tertiary,Shaheed Suhrawardy Medical College Hospital,10000051,Dhaka,Sher-e-bangla Nagar,98282.41268665332,23.7692146,90.3713616
+16,Dhaka,tertiary,Shaheed Ahsan Ullah Master General Hospital,10000129,Gazipur,Gazipur Sadar,98099.16303783098,23.8933902,90.4022109
+16,Dhaka,tertiary,"Mugda 500 Bed General Hospital, Dhaka",10013720,Dhaka,Mugda Para,95301.31799958882,23.7315171,90.42946200000002
+16,Dhaka,tertiary,Dhaka Medical College Hospital,10000033,Dhaka,Shahbagh,94822.73205861262,23.7256553,90.3970882
+16,Khulna,subdistrict,Rupsha Upazila Health Complex,10001826,Khulna,Rupsa,76388.44446910512,22.8223637,89.550115
+16,Mymensingh,district,Jamalpur 250 Beded General Hospital,10000208,Jamalpur,Jamalpur Sadar,30323.721741495254,24.9407085,89.93395799999999
+16,Rajshahi,district,Sirajganj 250 Bed  Bongamata Sheikh Fazilatunnesa Mujib General Hospital,10001648,Sirajganj,Sirajganj Sadar,29519.197206009267,24.4584857,89.7111754
+17,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,81887.03082501447,22.3406339,91.8377319
+17,Chattogram,district,Comilla General Hospital,10000864,Cumilla,Cumilla Adarsha Sadar,46633.376990685094,23.4499746,91.1782827
+17,Chattogram,district,Lakshmipur District Hospital,10001001,Lakshmipur,Lakshmipur Sadar,41195.24420797414,22.9445334,90.98853679999999
+17,Chattogram,district,Noakhali 250 Bed General Hospital,10001049,Noakhali,Noakhali Sadar,38583.8786410108,22.8725498,91.08850179999999
+17,Chattogram,district,Chandpur 250 Bed General Hospital,10000700,Chandpur,Chandpur Sadar,35953.00087768555,23.2231817,90.6530009
+17,Chattogram,district,Brahmanbaria 250 Bed District Sadar Hospital,10000672,Brahmanbaria,Brahmanbaria Sadar,35704.329840012535,23.9762236,91.11117180000001
+17,Chattogram,subdistrict,Boalkhali Upazila Health Complex,10000740,Chattogram,Boalkhali,143725.00498046874,22.3744591,91.9192144
+17,Dhaka,district,Narayanganj General (Victoria) Hospital,10000427,Narayanganj,Narayanganj Sadar,117485.49512685643,23.6084011,90.50326590000002
+17,Dhaka,district,Munshiganj 250 bed District Hospital,10000328,Munshiganj,Munshiganj Sadar,38994.124995727536,23.4980931,90.41266209999999
+17,Dhaka,district,Narsingdi District Hospital,10000452,Narsingdi,Narsingdi Sadar,38471.0188869201,23.9299304,90.7026636
+17,Dhaka,district,Tangail 250 Bed District Hospital,10000647,Tangail,Tangail Sadar,30787.519788587415,24.263342,89.9255878
+17,Dhaka,subdistrict,Keraniganj Upazila Health Complex,10000074,Dhaka,Keraniganj,341818.5564385776,23.7064049,90.34714760000001
+17,Dhaka,subdistrict,Bandar Upazila Health Complex,10000420,Narayanganj,Bandar,121150.38113064236,23.6290652,90.52533919999999
+17,Dhaka,subdistrict,Rupganj Upazila Health Complex,10000430,Narayanganj,Rupganj,118448.4263200431,23.7993877,90.52711149999999
+17,Dhaka,subdistrict,Savar Upazila Health Complex,10000083,Dhaka,Savar,94804.7767578125,23.8385698,90.24762989999999
+17,Dhaka,tertiary,Shaheed Suhrawardy Medical College Hospital,10000051,Dhaka,Sher-e-bangla Nagar,98282.41268665332,23.7692146,90.3713616
+17,Dhaka,tertiary,Shaheed Ahsan Ullah Master General Hospital,10000129,Gazipur,Gazipur Sadar,98099.16303783098,23.8933902,90.4022109
+17,Dhaka,tertiary,"Mugda 500 Bed General Hospital, Dhaka",10013720,Dhaka,Mugda Para,95301.31799958882,23.7315171,90.42946200000002
+17,Dhaka,tertiary,Dhaka Medical College Hospital,10000033,Dhaka,Shahbagh,94822.73205861262,23.7256553,90.3970882
+17,Khulna,subdistrict,Rupsha Upazila Health Complex,10001826,Khulna,Rupsa,76388.44446910512,22.8223637,89.550115
+17,Mymensingh,district,Jamalpur 250 Beded General Hospital,10000208,Jamalpur,Jamalpur Sadar,30323.721741495254,24.9407085,89.93395799999999
+17,Rajshahi,district,Sirajganj 250 Bed  Bongamata Sheikh Fazilatunnesa Mujib General Hospital,10001648,Sirajganj,Sirajganj Sadar,29519.197206009267,24.4584857,89.7111754
+18,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,81887.03082501447,22.3406339,91.8377319
+18,Chattogram,district,Comilla General Hospital,10000864,Cumilla,Cumilla Adarsha Sadar,46633.376990685094,23.4499746,91.1782827
+18,Chattogram,district,Lakshmipur District Hospital,10001001,Lakshmipur,Lakshmipur Sadar,41195.24420797414,22.9445334,90.98853679999999
+18,Chattogram,district,Noakhali 250 Bed General Hospital,10001049,Noakhali,Noakhali Sadar,38583.8786410108,22.8725498,91.08850179999999
+18,Chattogram,district,Chandpur 250 Bed General Hospital,10000700,Chandpur,Chandpur Sadar,35953.00087768555,23.2231817,90.6530009
+18,Chattogram,district,Brahmanbaria 250 Bed District Sadar Hospital,10000672,Brahmanbaria,Brahmanbaria Sadar,35704.329840012535,23.9762236,91.11117180000001
+18,Chattogram,subdistrict,Boalkhali Upazila Health Complex,10000740,Chattogram,Boalkhali,143725.00498046874,22.3744591,91.9192144
+18,Dhaka,district,Narayanganj General (Victoria) Hospital,10000427,Narayanganj,Narayanganj Sadar,117485.49512685643,23.6084011,90.50326590000002
+18,Dhaka,district,Munshiganj 250 bed District Hospital,10000328,Munshiganj,Munshiganj Sadar,38994.124995727536,23.4980931,90.41266209999999
+18,Dhaka,district,Narsingdi District Hospital,10000452,Narsingdi,Narsingdi Sadar,38471.0188869201,23.9299304,90.7026636
+18,Dhaka,district,Tangail 250 Bed District Hospital,10000647,Tangail,Tangail Sadar,30787.519788587415,24.263342,89.9255878
+18,Dhaka,subdistrict,Keraniganj Upazila Health Complex,10000074,Dhaka,Keraniganj,341818.5564385776,23.7064049,90.34714760000001
+18,Dhaka,subdistrict,Bandar Upazila Health Complex,10000420,Narayanganj,Bandar,121150.38113064236,23.6290652,90.52533919999999
+18,Dhaka,subdistrict,Rupganj Upazila Health Complex,10000430,Narayanganj,Rupganj,118448.4263200431,23.7993877,90.52711149999999
+18,Dhaka,subdistrict,Savar Upazila Health Complex,10000083,Dhaka,Savar,94804.7767578125,23.8385698,90.24762989999999
+18,Dhaka,tertiary,Shaheed Suhrawardy Medical College Hospital,10000051,Dhaka,Sher-e-bangla Nagar,98282.41268665332,23.7692146,90.3713616
+18,Dhaka,tertiary,Shaheed Ahsan Ullah Master General Hospital,10000129,Gazipur,Gazipur Sadar,98099.16303783098,23.8933902,90.4022109
+18,Dhaka,tertiary,"Mugda 500 Bed General Hospital, Dhaka",10013720,Dhaka,Mugda Para,95301.31799958882,23.7315171,90.42946200000002
+18,Dhaka,tertiary,Dhaka Medical College Hospital,10000033,Dhaka,Shahbagh,94822.73205861262,23.7256553,90.3970882
+18,Khulna,subdistrict,Rupsha Upazila Health Complex,10001826,Khulna,Rupsa,76388.44446910512,22.8223637,89.550115
+18,Mymensingh,district,Jamalpur 250 Beded General Hospital,10000208,Jamalpur,Jamalpur Sadar,30323.721741495254,24.9407085,89.93395799999999
+18,Rajshahi,district,Sirajganj 250 Bed  Bongamata Sheikh Fazilatunnesa Mujib General Hospital,10001648,Sirajganj,Sirajganj Sadar,29519.197206009267,24.4584857,89.7111754
+19,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,81887.03082501447,22.3406339,91.8377319
+19,Chattogram,district,Comilla General Hospital,10000864,Cumilla,Cumilla Adarsha Sadar,46633.376990685094,23.4499746,91.1782827
+19,Chattogram,district,Lakshmipur District Hospital,10001001,Lakshmipur,Lakshmipur Sadar,41195.24420797414,22.9445334,90.98853679999999
+19,Chattogram,district,Noakhali 250 Bed General Hospital,10001049,Noakhali,Noakhali Sadar,38583.8786410108,22.8725498,91.08850179999999
+19,Chattogram,district,Chandpur 250 Bed General Hospital,10000700,Chandpur,Chandpur Sadar,35953.00087768555,23.2231817,90.6530009
+19,Chattogram,district,Brahmanbaria 250 Bed District Sadar Hospital,10000672,Brahmanbaria,Brahmanbaria Sadar,35704.329840012535,23.9762236,91.11117180000001
+19,Chattogram,subdistrict,Boalkhali Upazila Health Complex,10000740,Chattogram,Boalkhali,143725.00498046874,22.3744591,91.9192144
+19,Dhaka,district,Narayanganj General (Victoria) Hospital,10000427,Narayanganj,Narayanganj Sadar,117485.49512685643,23.6084011,90.50326590000002
+19,Dhaka,district,Munshiganj 250 bed District Hospital,10000328,Munshiganj,Munshiganj Sadar,38994.124995727536,23.4980931,90.41266209999999
+19,Dhaka,district,Narsingdi District Hospital,10000452,Narsingdi,Narsingdi Sadar,38471.0188869201,23.9299304,90.7026636
+19,Dhaka,district,Tangail 250 Bed District Hospital,10000647,Tangail,Tangail Sadar,30787.519788587415,24.263342,89.9255878
+19,Dhaka,subdistrict,Keraniganj Upazila Health Complex,10000074,Dhaka,Keraniganj,341818.5564385776,23.7064049,90.34714760000001
+19,Dhaka,subdistrict,Bandar Upazila Health Complex,10000420,Narayanganj,Bandar,121150.38113064236,23.6290652,90.52533919999999
+19,Dhaka,subdistrict,Rupganj Upazila Health Complex,10000430,Narayanganj,Rupganj,118448.4263200431,23.7993877,90.52711149999999
+19,Dhaka,subdistrict,Savar Upazila Health Complex,10000083,Dhaka,Savar,94804.7767578125,23.8385698,90.24762989999999
+19,Dhaka,tertiary,Shaheed Suhrawardy Medical College Hospital,10000051,Dhaka,Sher-e-bangla Nagar,98282.41268665332,23.7692146,90.3713616
+19,Dhaka,tertiary,Shaheed Ahsan Ullah Master General Hospital,10000129,Gazipur,Gazipur Sadar,98099.16303783098,23.8933902,90.4022109
+19,Dhaka,tertiary,"Mugda 500 Bed General Hospital, Dhaka",10013720,Dhaka,Mugda Para,95301.31799958882,23.7315171,90.42946200000002
+19,Dhaka,tertiary,Dhaka Medical College Hospital,10000033,Dhaka,Shahbagh,94822.73205861262,23.7256553,90.3970882
+19,Khulna,subdistrict,Rupsha Upazila Health Complex,10001826,Khulna,Rupsa,76388.44446910512,22.8223637,89.550115
+19,Mymensingh,district,Jamalpur 250 Beded General Hospital,10000208,Jamalpur,Jamalpur Sadar,30323.721741495254,24.9407085,89.93395799999999
+19,Rajshahi,district,Sirajganj 250 Bed  Bongamata Sheikh Fazilatunnesa Mujib General Hospital,10001648,Sirajganj,Sirajganj Sadar,29519.197206009267,24.4584857,89.7111754
+20,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,81887.03082501447,22.3406339,91.8377319
+20,Chattogram,district,Comilla General Hospital,10000864,Cumilla,Cumilla Adarsha Sadar,46633.376990685094,23.4499746,91.1782827
+20,Chattogram,district,Lakshmipur District Hospital,10001001,Lakshmipur,Lakshmipur Sadar,41195.24420797414,22.9445334,90.98853679999999
+20,Chattogram,district,Noakhali 250 Bed General Hospital,10001049,Noakhali,Noakhali Sadar,38583.8786410108,22.8725498,91.08850179999999
+20,Chattogram,district,Chandpur 250 Bed General Hospital,10000700,Chandpur,Chandpur Sadar,35953.00087768555,23.2231817,90.6530009
+20,Chattogram,district,Brahmanbaria 250 Bed District Sadar Hospital,10000672,Brahmanbaria,Brahmanbaria Sadar,35704.329840012535,23.9762236,91.11117180000001
+20,Chattogram,subdistrict,Boalkhali Upazila Health Complex,10000740,Chattogram,Boalkhali,143725.00498046874,22.3744591,91.9192144
+20,Dhaka,district,Narayanganj General (Victoria) Hospital,10000427,Narayanganj,Narayanganj Sadar,117485.49512685643,23.6084011,90.50326590000002
+20,Dhaka,district,Munshiganj 250 bed District Hospital,10000328,Munshiganj,Munshiganj Sadar,38994.124995727536,23.4980931,90.41266209999999
+20,Dhaka,district,Narsingdi District Hospital,10000452,Narsingdi,Narsingdi Sadar,38471.0188869201,23.9299304,90.7026636
+20,Dhaka,district,Tangail 250 Bed District Hospital,10000647,Tangail,Tangail Sadar,30787.519788587415,24.263342,89.9255878
+20,Dhaka,subdistrict,Keraniganj Upazila Health Complex,10000074,Dhaka,Keraniganj,341818.5564385776,23.7064049,90.34714760000001
+20,Dhaka,subdistrict,Bandar Upazila Health Complex,10000420,Narayanganj,Bandar,121150.38113064236,23.6290652,90.52533919999999
+20,Dhaka,subdistrict,Rupganj Upazila Health Complex,10000430,Narayanganj,Rupganj,118448.4263200431,23.7993877,90.52711149999999
+20,Dhaka,subdistrict,Savar Upazila Health Complex,10000083,Dhaka,Savar,94804.7767578125,23.8385698,90.24762989999999
+20,Dhaka,tertiary,Shaheed Suhrawardy Medical College Hospital,10000051,Dhaka,Sher-e-bangla Nagar,98282.41268665332,23.7692146,90.3713616
+20,Dhaka,tertiary,Shaheed Ahsan Ullah Master General Hospital,10000129,Gazipur,Gazipur Sadar,98099.16303783098,23.8933902,90.4022109
+20,Dhaka,tertiary,"Mugda 500 Bed General Hospital, Dhaka",10013720,Dhaka,Mugda Para,95301.31799958882,23.7315171,90.42946200000002
+20,Dhaka,tertiary,Dhaka Medical College Hospital,10000033,Dhaka,Shahbagh,94822.73205861262,23.7256553,90.3970882
+20,Khulna,subdistrict,Rupsha Upazila Health Complex,10001826,Khulna,Rupsa,76388.44446910512,22.8223637,89.550115
+20,Mymensingh,district,Jamalpur 250 Beded General Hospital,10000208,Jamalpur,Jamalpur Sadar,30323.721741495254,24.9407085,89.93395799999999
+20,Rajshahi,district,Sirajganj 250 Bed  Bongamata Sheikh Fazilatunnesa Mujib General Hospital,10001648,Sirajganj,Sirajganj Sadar,29519.197206009267,24.4584857,89.7111754

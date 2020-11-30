@@ -1,0 +1,441 @@
+sim,division,org_lvl,org_name,org_code,district,upazila,wt,LAT,LON
+1,Barishal,district,Barguna District Hospital,10001943,Barguna,Barguna Sadar,1.4375943868782994,22.156242,90.12789
+1,Barishal,district,Patuakhali 250 bed Sadar Hospital,10002051,Patuakhali,Patuakhali Sadar,1.0377197712546906,22.3622664,90.3269921
+1,Barishal,district,Bhola District Hospital,10002002,Bhola,Bhola Sadar,1.0185481747913925,22.6757402,90.6557361
+1,Barishal,district,Pirojpur District Hospital,10002067,Pirojpur,Pirojpur Sadar,0.9433770909880452,22.5789637,89.97664499999999
+1,Barishal,subdistrict,Amtali Upazila Health Complex,10001933,Barguna,Amtali,1.7397735520813737,22.1303784,90.2301825
+1,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,1.0430738859603583,22.3406339,91.8377319
+1,Chattogram,district,Bandarban District Hospital,10000655,Bandarban,Bandarban Sadar,0.9642305755635857,22.1896135,92.2264957
+1,Chattogram,subdistrict,Sandwip Upazila Health Complex,10000829,Chattogram,Sandwip,1.6249939876195105,22.5438922,91.4705992
+1,Chattogram,tertiary,Chittagong Medical College Hospital,10000756,Chattogram,Panchlaish,1.0168196624568822,22.3592709,91.8308045
+1,Dhaka,district,Gopalganj 250 bed General Hospital,10002233,Gopalganj,Gopalganj Sadar,0.9333923232219113,22.9982121,89.8190072
+1,Khulna,district,"Khulna 250 Bed General Hospital, Khulna",10001805,Khulna,Khulna Sadar,1.1475551900624288,22.8281662,89.5371409
+1,Khulna,district,Bagerhat District Hospital,10001693,Bagerhat,Bagerhat Sadar,0.935281046610111,22.7955887,89.8726916
+1,Khulna,subdistrict,Dacope Upazila Health Complex,10001794,Khulna,Dacope,1.761936360268114,22.5994035,89.5176149
+1,Khulna,subdistrict,Mongla Upazila Health Complex,10001707,Bagerhat,Mongla,1.5878062497926644,22.4942196,89.6016171
+1,Khulna,tertiary,Khulna Medical College Hospital,10001807,Khulna,Sonadanga,1.1097904556377882,22.8281662,89.5371409
+1,Rajshahi,district,Chapai Nababganj District Hospital,10001186,Chapai Nawabganj,Chapai Nababganj Sadar,0.9314489512535001,24.5980828,88.26547479999999
+1,Rajshahi,subdistrict,Paba Upazila Health Complex,10001547,Rajshahi,Paba,1.9188398820910968,24.443884,88.5547879
+1,Rajshahi,tertiary,Rajshahi Medical College Hospital,10001560,Rajshahi,Rajpara,1.3186594354876358,24.372019,88.5864259
+1,Rangpur,district,Gaibandha District Hospital,10001254,Gaibandha,Gaibandha Sadar,1.0009918502150006,25.3259361,89.5493315
+1,Rangpur,subdistrict,Rajibpur Upazila Health Complex,10001330,Kurigram,Rajibpur,1.7162844283757746,25.4443694,89.7909808
+1,Sylhet,district,"Habiganj District Hospital, Habiganj",10002071,Habiganj,Habiganj Sadar,1.0177182423598736,24.373323,91.41763999999999
+1,Sylhet,tertiary,Moulvibazar 250 bed District Sadar Hospital,10002116,Maulvibazar,Maulvibazar Sadar,0.9368613758134406,24.4813033,91.76596169999999
+2,Barishal,district,Barguna District Hospital,10001943,Barguna,Barguna Sadar,1.4375943868782994,22.156242,90.12789
+2,Barishal,district,Patuakhali 250 bed Sadar Hospital,10002051,Patuakhali,Patuakhali Sadar,1.0377197712546906,22.3622664,90.3269921
+2,Barishal,district,Bhola District Hospital,10002002,Bhola,Bhola Sadar,1.0185481747913925,22.6757402,90.6557361
+2,Barishal,district,Pirojpur District Hospital,10002067,Pirojpur,Pirojpur Sadar,0.9433770909880452,22.5789637,89.97664499999999
+2,Barishal,subdistrict,Amtali Upazila Health Complex,10001933,Barguna,Amtali,1.7397735520813737,22.1303784,90.2301825
+2,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,1.0430738859603583,22.3406339,91.8377319
+2,Chattogram,district,Bandarban District Hospital,10000655,Bandarban,Bandarban Sadar,0.9642305755635857,22.1896135,92.2264957
+2,Chattogram,subdistrict,Sandwip Upazila Health Complex,10000829,Chattogram,Sandwip,1.6249939876195105,22.5438922,91.4705992
+2,Chattogram,tertiary,Chittagong Medical College Hospital,10000756,Chattogram,Panchlaish,1.0168196624568822,22.3592709,91.8308045
+2,Dhaka,district,Gopalganj 250 bed General Hospital,10002233,Gopalganj,Gopalganj Sadar,0.9333923232219113,22.9982121,89.8190072
+2,Khulna,district,"Khulna 250 Bed General Hospital, Khulna",10001805,Khulna,Khulna Sadar,1.1475551900624288,22.8281662,89.5371409
+2,Khulna,district,Bagerhat District Hospital,10001693,Bagerhat,Bagerhat Sadar,0.935281046610111,22.7955887,89.8726916
+2,Khulna,subdistrict,Dacope Upazila Health Complex,10001794,Khulna,Dacope,1.761936360268114,22.5994035,89.5176149
+2,Khulna,subdistrict,Mongla Upazila Health Complex,10001707,Bagerhat,Mongla,1.5878062497926644,22.4942196,89.6016171
+2,Khulna,tertiary,Khulna Medical College Hospital,10001807,Khulna,Sonadanga,1.1097904556377882,22.8281662,89.5371409
+2,Rajshahi,district,Chapai Nababganj District Hospital,10001186,Chapai Nawabganj,Chapai Nababganj Sadar,0.9314489512535001,24.5980828,88.26547479999999
+2,Rajshahi,subdistrict,Paba Upazila Health Complex,10001547,Rajshahi,Paba,1.9188398820910968,24.443884,88.5547879
+2,Rajshahi,tertiary,Rajshahi Medical College Hospital,10001560,Rajshahi,Rajpara,1.3186594354876358,24.372019,88.5864259
+2,Rangpur,district,Gaibandha District Hospital,10001254,Gaibandha,Gaibandha Sadar,1.0009918502150006,25.3259361,89.5493315
+2,Rangpur,subdistrict,Rajibpur Upazila Health Complex,10001330,Kurigram,Rajibpur,1.7162844283757746,25.4443694,89.7909808
+2,Sylhet,district,"Habiganj District Hospital, Habiganj",10002071,Habiganj,Habiganj Sadar,1.0177182423598736,24.373323,91.41763999999999
+2,Sylhet,tertiary,Moulvibazar 250 bed District Sadar Hospital,10002116,Maulvibazar,Maulvibazar Sadar,0.9368613758134406,24.4813033,91.76596169999999
+3,Barishal,district,Barguna District Hospital,10001943,Barguna,Barguna Sadar,1.4375943868782994,22.156242,90.12789
+3,Barishal,district,Patuakhali 250 bed Sadar Hospital,10002051,Patuakhali,Patuakhali Sadar,1.0377197712546906,22.3622664,90.3269921
+3,Barishal,district,Bhola District Hospital,10002002,Bhola,Bhola Sadar,1.0185481747913925,22.6757402,90.6557361
+3,Barishal,district,Pirojpur District Hospital,10002067,Pirojpur,Pirojpur Sadar,0.9433770909880452,22.5789637,89.97664499999999
+3,Barishal,subdistrict,Amtali Upazila Health Complex,10001933,Barguna,Amtali,1.7397735520813737,22.1303784,90.2301825
+3,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,1.0430738859603583,22.3406339,91.8377319
+3,Chattogram,district,Bandarban District Hospital,10000655,Bandarban,Bandarban Sadar,0.9642305755635857,22.1896135,92.2264957
+3,Chattogram,subdistrict,Sandwip Upazila Health Complex,10000829,Chattogram,Sandwip,1.6249939876195105,22.5438922,91.4705992
+3,Chattogram,tertiary,Chittagong Medical College Hospital,10000756,Chattogram,Panchlaish,1.0168196624568822,22.3592709,91.8308045
+3,Dhaka,district,Gopalganj 250 bed General Hospital,10002233,Gopalganj,Gopalganj Sadar,0.9333923232219113,22.9982121,89.8190072
+3,Khulna,district,"Khulna 250 Bed General Hospital, Khulna",10001805,Khulna,Khulna Sadar,1.1475551900624288,22.8281662,89.5371409
+3,Khulna,district,Bagerhat District Hospital,10001693,Bagerhat,Bagerhat Sadar,0.935281046610111,22.7955887,89.8726916
+3,Khulna,subdistrict,Dacope Upazila Health Complex,10001794,Khulna,Dacope,1.761936360268114,22.5994035,89.5176149
+3,Khulna,subdistrict,Mongla Upazila Health Complex,10001707,Bagerhat,Mongla,1.5878062497926644,22.4942196,89.6016171
+3,Khulna,tertiary,Khulna Medical College Hospital,10001807,Khulna,Sonadanga,1.1097904556377882,22.8281662,89.5371409
+3,Rajshahi,district,Chapai Nababganj District Hospital,10001186,Chapai Nawabganj,Chapai Nababganj Sadar,0.9314489512535001,24.5980828,88.26547479999999
+3,Rajshahi,subdistrict,Paba Upazila Health Complex,10001547,Rajshahi,Paba,1.9188398820910968,24.443884,88.5547879
+3,Rajshahi,tertiary,Rajshahi Medical College Hospital,10001560,Rajshahi,Rajpara,1.3186594354876358,24.372019,88.5864259
+3,Rangpur,district,Gaibandha District Hospital,10001254,Gaibandha,Gaibandha Sadar,1.0009918502150006,25.3259361,89.5493315
+3,Rangpur,subdistrict,Rajibpur Upazila Health Complex,10001330,Kurigram,Rajibpur,1.7162844283757746,25.4443694,89.7909808
+3,Sylhet,district,"Habiganj District Hospital, Habiganj",10002071,Habiganj,Habiganj Sadar,1.0177182423598736,24.373323,91.41763999999999
+3,Sylhet,tertiary,Moulvibazar 250 bed District Sadar Hospital,10002116,Maulvibazar,Maulvibazar Sadar,0.9368613758134406,24.4813033,91.76596169999999
+4,Barishal,district,Barguna District Hospital,10001943,Barguna,Barguna Sadar,1.4375943868782994,22.156242,90.12789
+4,Barishal,district,Patuakhali 250 bed Sadar Hospital,10002051,Patuakhali,Patuakhali Sadar,1.0377197712546906,22.3622664,90.3269921
+4,Barishal,district,Bhola District Hospital,10002002,Bhola,Bhola Sadar,1.0185481747913925,22.6757402,90.6557361
+4,Barishal,district,Pirojpur District Hospital,10002067,Pirojpur,Pirojpur Sadar,0.9433770909880452,22.5789637,89.97664499999999
+4,Barishal,subdistrict,Amtali Upazila Health Complex,10001933,Barguna,Amtali,1.7397735520813737,22.1303784,90.2301825
+4,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,1.0430738859603583,22.3406339,91.8377319
+4,Chattogram,district,Bandarban District Hospital,10000655,Bandarban,Bandarban Sadar,0.9642305755635857,22.1896135,92.2264957
+4,Chattogram,subdistrict,Sandwip Upazila Health Complex,10000829,Chattogram,Sandwip,1.6249939876195105,22.5438922,91.4705992
+4,Chattogram,tertiary,Chittagong Medical College Hospital,10000756,Chattogram,Panchlaish,1.0168196624568822,22.3592709,91.8308045
+4,Dhaka,district,Gopalganj 250 bed General Hospital,10002233,Gopalganj,Gopalganj Sadar,0.9333923232219113,22.9982121,89.8190072
+4,Khulna,district,"Khulna 250 Bed General Hospital, Khulna",10001805,Khulna,Khulna Sadar,1.1475551900624288,22.8281662,89.5371409
+4,Khulna,district,Bagerhat District Hospital,10001693,Bagerhat,Bagerhat Sadar,0.935281046610111,22.7955887,89.8726916
+4,Khulna,subdistrict,Dacope Upazila Health Complex,10001794,Khulna,Dacope,1.761936360268114,22.5994035,89.5176149
+4,Khulna,subdistrict,Mongla Upazila Health Complex,10001707,Bagerhat,Mongla,1.5878062497926644,22.4942196,89.6016171
+4,Khulna,tertiary,Khulna Medical College Hospital,10001807,Khulna,Sonadanga,1.1097904556377882,22.8281662,89.5371409
+4,Rajshahi,district,Chapai Nababganj District Hospital,10001186,Chapai Nawabganj,Chapai Nababganj Sadar,0.9314489512535001,24.5980828,88.26547479999999
+4,Rajshahi,subdistrict,Paba Upazila Health Complex,10001547,Rajshahi,Paba,1.9188398820910968,24.443884,88.5547879
+4,Rajshahi,tertiary,Rajshahi Medical College Hospital,10001560,Rajshahi,Rajpara,1.3186594354876358,24.372019,88.5864259
+4,Rangpur,district,Gaibandha District Hospital,10001254,Gaibandha,Gaibandha Sadar,1.0009918502150006,25.3259361,89.5493315
+4,Rangpur,subdistrict,Rajibpur Upazila Health Complex,10001330,Kurigram,Rajibpur,1.7162844283757746,25.4443694,89.7909808
+4,Sylhet,district,"Habiganj District Hospital, Habiganj",10002071,Habiganj,Habiganj Sadar,1.0177182423598736,24.373323,91.41763999999999
+4,Sylhet,tertiary,Moulvibazar 250 bed District Sadar Hospital,10002116,Maulvibazar,Maulvibazar Sadar,0.9368613758134406,24.4813033,91.76596169999999
+5,Barishal,district,Barguna District Hospital,10001943,Barguna,Barguna Sadar,1.4375943868782994,22.156242,90.12789
+5,Barishal,district,Patuakhali 250 bed Sadar Hospital,10002051,Patuakhali,Patuakhali Sadar,1.0377197712546906,22.3622664,90.3269921
+5,Barishal,district,Bhola District Hospital,10002002,Bhola,Bhola Sadar,1.0185481747913925,22.6757402,90.6557361
+5,Barishal,district,Pirojpur District Hospital,10002067,Pirojpur,Pirojpur Sadar,0.9433770909880452,22.5789637,89.97664499999999
+5,Barishal,subdistrict,Amtali Upazila Health Complex,10001933,Barguna,Amtali,1.7397735520813737,22.1303784,90.2301825
+5,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,1.0430738859603583,22.3406339,91.8377319
+5,Chattogram,district,Bandarban District Hospital,10000655,Bandarban,Bandarban Sadar,0.9642305755635857,22.1896135,92.2264957
+5,Chattogram,subdistrict,Sandwip Upazila Health Complex,10000829,Chattogram,Sandwip,1.6249939876195105,22.5438922,91.4705992
+5,Chattogram,tertiary,Chittagong Medical College Hospital,10000756,Chattogram,Panchlaish,1.0168196624568822,22.3592709,91.8308045
+5,Dhaka,district,Gopalganj 250 bed General Hospital,10002233,Gopalganj,Gopalganj Sadar,0.9333923232219113,22.9982121,89.8190072
+5,Khulna,district,"Khulna 250 Bed General Hospital, Khulna",10001805,Khulna,Khulna Sadar,1.1475551900624288,22.8281662,89.5371409
+5,Khulna,district,Bagerhat District Hospital,10001693,Bagerhat,Bagerhat Sadar,0.935281046610111,22.7955887,89.8726916
+5,Khulna,subdistrict,Dacope Upazila Health Complex,10001794,Khulna,Dacope,1.761936360268114,22.5994035,89.5176149
+5,Khulna,subdistrict,Mongla Upazila Health Complex,10001707,Bagerhat,Mongla,1.5878062497926644,22.4942196,89.6016171
+5,Khulna,tertiary,Khulna Medical College Hospital,10001807,Khulna,Sonadanga,1.1097904556377882,22.8281662,89.5371409
+5,Rajshahi,district,Chapai Nababganj District Hospital,10001186,Chapai Nawabganj,Chapai Nababganj Sadar,0.9314489512535001,24.5980828,88.26547479999999
+5,Rajshahi,subdistrict,Paba Upazila Health Complex,10001547,Rajshahi,Paba,1.9188398820910968,24.443884,88.5547879
+5,Rajshahi,tertiary,Rajshahi Medical College Hospital,10001560,Rajshahi,Rajpara,1.3186594354876358,24.372019,88.5864259
+5,Rangpur,district,Gaibandha District Hospital,10001254,Gaibandha,Gaibandha Sadar,1.0009918502150006,25.3259361,89.5493315
+5,Rangpur,subdistrict,Rajibpur Upazila Health Complex,10001330,Kurigram,Rajibpur,1.7162844283757746,25.4443694,89.7909808
+5,Sylhet,district,"Habiganj District Hospital, Habiganj",10002071,Habiganj,Habiganj Sadar,1.0177182423598736,24.373323,91.41763999999999
+5,Sylhet,tertiary,Moulvibazar 250 bed District Sadar Hospital,10002116,Maulvibazar,Maulvibazar Sadar,0.9368613758134406,24.4813033,91.76596169999999
+6,Barishal,district,Barguna District Hospital,10001943,Barguna,Barguna Sadar,1.4375943868782994,22.156242,90.12789
+6,Barishal,district,Patuakhali 250 bed Sadar Hospital,10002051,Patuakhali,Patuakhali Sadar,1.0377197712546906,22.3622664,90.3269921
+6,Barishal,district,Bhola District Hospital,10002002,Bhola,Bhola Sadar,1.0185481747913925,22.6757402,90.6557361
+6,Barishal,district,Pirojpur District Hospital,10002067,Pirojpur,Pirojpur Sadar,0.9433770909880452,22.5789637,89.97664499999999
+6,Barishal,subdistrict,Amtali Upazila Health Complex,10001933,Barguna,Amtali,1.7397735520813737,22.1303784,90.2301825
+6,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,1.0430738859603583,22.3406339,91.8377319
+6,Chattogram,district,Bandarban District Hospital,10000655,Bandarban,Bandarban Sadar,0.9642305755635857,22.1896135,92.2264957
+6,Chattogram,subdistrict,Sandwip Upazila Health Complex,10000829,Chattogram,Sandwip,1.6249939876195105,22.5438922,91.4705992
+6,Chattogram,tertiary,Chittagong Medical College Hospital,10000756,Chattogram,Panchlaish,1.0168196624568822,22.3592709,91.8308045
+6,Dhaka,district,Gopalganj 250 bed General Hospital,10002233,Gopalganj,Gopalganj Sadar,0.9333923232219113,22.9982121,89.8190072
+6,Khulna,district,"Khulna 250 Bed General Hospital, Khulna",10001805,Khulna,Khulna Sadar,1.1475551900624288,22.8281662,89.5371409
+6,Khulna,district,Bagerhat District Hospital,10001693,Bagerhat,Bagerhat Sadar,0.935281046610111,22.7955887,89.8726916
+6,Khulna,subdistrict,Dacope Upazila Health Complex,10001794,Khulna,Dacope,1.761936360268114,22.5994035,89.5176149
+6,Khulna,subdistrict,Mongla Upazila Health Complex,10001707,Bagerhat,Mongla,1.5878062497926644,22.4942196,89.6016171
+6,Khulna,tertiary,Khulna Medical College Hospital,10001807,Khulna,Sonadanga,1.1097904556377882,22.8281662,89.5371409
+6,Rajshahi,district,Chapai Nababganj District Hospital,10001186,Chapai Nawabganj,Chapai Nababganj Sadar,0.9314489512535001,24.5980828,88.26547479999999
+6,Rajshahi,subdistrict,Paba Upazila Health Complex,10001547,Rajshahi,Paba,1.9188398820910968,24.443884,88.5547879
+6,Rajshahi,tertiary,Rajshahi Medical College Hospital,10001560,Rajshahi,Rajpara,1.3186594354876358,24.372019,88.5864259
+6,Rangpur,district,Gaibandha District Hospital,10001254,Gaibandha,Gaibandha Sadar,1.0009918502150006,25.3259361,89.5493315
+6,Rangpur,subdistrict,Rajibpur Upazila Health Complex,10001330,Kurigram,Rajibpur,1.7162844283757746,25.4443694,89.7909808
+6,Sylhet,district,"Habiganj District Hospital, Habiganj",10002071,Habiganj,Habiganj Sadar,1.0177182423598736,24.373323,91.41763999999999
+6,Sylhet,tertiary,Moulvibazar 250 bed District Sadar Hospital,10002116,Maulvibazar,Maulvibazar Sadar,0.9368613758134406,24.4813033,91.76596169999999
+7,Barishal,district,Barguna District Hospital,10001943,Barguna,Barguna Sadar,1.4375943868782994,22.156242,90.12789
+7,Barishal,district,Patuakhali 250 bed Sadar Hospital,10002051,Patuakhali,Patuakhali Sadar,1.0377197712546906,22.3622664,90.3269921
+7,Barishal,district,Bhola District Hospital,10002002,Bhola,Bhola Sadar,1.0185481747913925,22.6757402,90.6557361
+7,Barishal,district,Pirojpur District Hospital,10002067,Pirojpur,Pirojpur Sadar,0.9433770909880452,22.5789637,89.97664499999999
+7,Barishal,subdistrict,Amtali Upazila Health Complex,10001933,Barguna,Amtali,1.7397735520813737,22.1303784,90.2301825
+7,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,1.0430738859603583,22.3406339,91.8377319
+7,Chattogram,district,Bandarban District Hospital,10000655,Bandarban,Bandarban Sadar,0.9642305755635857,22.1896135,92.2264957
+7,Chattogram,subdistrict,Sandwip Upazila Health Complex,10000829,Chattogram,Sandwip,1.6249939876195105,22.5438922,91.4705992
+7,Chattogram,tertiary,Chittagong Medical College Hospital,10000756,Chattogram,Panchlaish,1.0168196624568822,22.3592709,91.8308045
+7,Dhaka,district,Gopalganj 250 bed General Hospital,10002233,Gopalganj,Gopalganj Sadar,0.9333923232219113,22.9982121,89.8190072
+7,Khulna,district,"Khulna 250 Bed General Hospital, Khulna",10001805,Khulna,Khulna Sadar,1.1475551900624288,22.8281662,89.5371409
+7,Khulna,district,Bagerhat District Hospital,10001693,Bagerhat,Bagerhat Sadar,0.935281046610111,22.7955887,89.8726916
+7,Khulna,subdistrict,Dacope Upazila Health Complex,10001794,Khulna,Dacope,1.761936360268114,22.5994035,89.5176149
+7,Khulna,subdistrict,Mongla Upazila Health Complex,10001707,Bagerhat,Mongla,1.5878062497926644,22.4942196,89.6016171
+7,Khulna,tertiary,Khulna Medical College Hospital,10001807,Khulna,Sonadanga,1.1097904556377882,22.8281662,89.5371409
+7,Rajshahi,district,Chapai Nababganj District Hospital,10001186,Chapai Nawabganj,Chapai Nababganj Sadar,0.9314489512535001,24.5980828,88.26547479999999
+7,Rajshahi,subdistrict,Paba Upazila Health Complex,10001547,Rajshahi,Paba,1.9188398820910968,24.443884,88.5547879
+7,Rajshahi,tertiary,Rajshahi Medical College Hospital,10001560,Rajshahi,Rajpara,1.3186594354876358,24.372019,88.5864259
+7,Rangpur,district,Gaibandha District Hospital,10001254,Gaibandha,Gaibandha Sadar,1.0009918502150006,25.3259361,89.5493315
+7,Rangpur,subdistrict,Rajibpur Upazila Health Complex,10001330,Kurigram,Rajibpur,1.7162844283757746,25.4443694,89.7909808
+7,Sylhet,district,"Habiganj District Hospital, Habiganj",10002071,Habiganj,Habiganj Sadar,1.0177182423598736,24.373323,91.41763999999999
+7,Sylhet,tertiary,Moulvibazar 250 bed District Sadar Hospital,10002116,Maulvibazar,Maulvibazar Sadar,0.9368613758134406,24.4813033,91.76596169999999
+8,Barishal,district,Barguna District Hospital,10001943,Barguna,Barguna Sadar,1.4375943868782994,22.156242,90.12789
+8,Barishal,district,Patuakhali 250 bed Sadar Hospital,10002051,Patuakhali,Patuakhali Sadar,1.0377197712546906,22.3622664,90.3269921
+8,Barishal,district,Bhola District Hospital,10002002,Bhola,Bhola Sadar,1.0185481747913925,22.6757402,90.6557361
+8,Barishal,district,Pirojpur District Hospital,10002067,Pirojpur,Pirojpur Sadar,0.9433770909880452,22.5789637,89.97664499999999
+8,Barishal,subdistrict,Amtali Upazila Health Complex,10001933,Barguna,Amtali,1.7397735520813737,22.1303784,90.2301825
+8,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,1.0430738859603583,22.3406339,91.8377319
+8,Chattogram,district,Bandarban District Hospital,10000655,Bandarban,Bandarban Sadar,0.9642305755635857,22.1896135,92.2264957
+8,Chattogram,subdistrict,Sandwip Upazila Health Complex,10000829,Chattogram,Sandwip,1.6249939876195105,22.5438922,91.4705992
+8,Chattogram,tertiary,Chittagong Medical College Hospital,10000756,Chattogram,Panchlaish,1.0168196624568822,22.3592709,91.8308045
+8,Dhaka,district,Gopalganj 250 bed General Hospital,10002233,Gopalganj,Gopalganj Sadar,0.9333923232219113,22.9982121,89.8190072
+8,Khulna,district,"Khulna 250 Bed General Hospital, Khulna",10001805,Khulna,Khulna Sadar,1.1475551900624288,22.8281662,89.5371409
+8,Khulna,district,Bagerhat District Hospital,10001693,Bagerhat,Bagerhat Sadar,0.935281046610111,22.7955887,89.8726916
+8,Khulna,subdistrict,Dacope Upazila Health Complex,10001794,Khulna,Dacope,1.761936360268114,22.5994035,89.5176149
+8,Khulna,subdistrict,Mongla Upazila Health Complex,10001707,Bagerhat,Mongla,1.5878062497926644,22.4942196,89.6016171
+8,Khulna,tertiary,Khulna Medical College Hospital,10001807,Khulna,Sonadanga,1.1097904556377882,22.8281662,89.5371409
+8,Rajshahi,district,Chapai Nababganj District Hospital,10001186,Chapai Nawabganj,Chapai Nababganj Sadar,0.9314489512535001,24.5980828,88.26547479999999
+8,Rajshahi,subdistrict,Paba Upazila Health Complex,10001547,Rajshahi,Paba,1.9188398820910968,24.443884,88.5547879
+8,Rajshahi,tertiary,Rajshahi Medical College Hospital,10001560,Rajshahi,Rajpara,1.3186594354876358,24.372019,88.5864259
+8,Rangpur,district,Gaibandha District Hospital,10001254,Gaibandha,Gaibandha Sadar,1.0009918502150006,25.3259361,89.5493315
+8,Rangpur,subdistrict,Rajibpur Upazila Health Complex,10001330,Kurigram,Rajibpur,1.7162844283757746,25.4443694,89.7909808
+8,Sylhet,district,"Habiganj District Hospital, Habiganj",10002071,Habiganj,Habiganj Sadar,1.0177182423598736,24.373323,91.41763999999999
+8,Sylhet,tertiary,Moulvibazar 250 bed District Sadar Hospital,10002116,Maulvibazar,Maulvibazar Sadar,0.9368613758134406,24.4813033,91.76596169999999
+9,Barishal,district,Barguna District Hospital,10001943,Barguna,Barguna Sadar,1.4375943868782994,22.156242,90.12789
+9,Barishal,district,Patuakhali 250 bed Sadar Hospital,10002051,Patuakhali,Patuakhali Sadar,1.0377197712546906,22.3622664,90.3269921
+9,Barishal,district,Bhola District Hospital,10002002,Bhola,Bhola Sadar,1.0185481747913925,22.6757402,90.6557361
+9,Barishal,district,Pirojpur District Hospital,10002067,Pirojpur,Pirojpur Sadar,0.9433770909880452,22.5789637,89.97664499999999
+9,Barishal,subdistrict,Amtali Upazila Health Complex,10001933,Barguna,Amtali,1.7397735520813737,22.1303784,90.2301825
+9,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,1.0430738859603583,22.3406339,91.8377319
+9,Chattogram,district,Bandarban District Hospital,10000655,Bandarban,Bandarban Sadar,0.9642305755635857,22.1896135,92.2264957
+9,Chattogram,subdistrict,Sandwip Upazila Health Complex,10000829,Chattogram,Sandwip,1.6249939876195105,22.5438922,91.4705992
+9,Chattogram,tertiary,Chittagong Medical College Hospital,10000756,Chattogram,Panchlaish,1.0168196624568822,22.3592709,91.8308045
+9,Dhaka,district,Gopalganj 250 bed General Hospital,10002233,Gopalganj,Gopalganj Sadar,0.9333923232219113,22.9982121,89.8190072
+9,Khulna,district,"Khulna 250 Bed General Hospital, Khulna",10001805,Khulna,Khulna Sadar,1.1475551900624288,22.8281662,89.5371409
+9,Khulna,district,Bagerhat District Hospital,10001693,Bagerhat,Bagerhat Sadar,0.935281046610111,22.7955887,89.8726916
+9,Khulna,subdistrict,Dacope Upazila Health Complex,10001794,Khulna,Dacope,1.761936360268114,22.5994035,89.5176149
+9,Khulna,subdistrict,Mongla Upazila Health Complex,10001707,Bagerhat,Mongla,1.5878062497926644,22.4942196,89.6016171
+9,Khulna,tertiary,Khulna Medical College Hospital,10001807,Khulna,Sonadanga,1.1097904556377882,22.8281662,89.5371409
+9,Rajshahi,district,Chapai Nababganj District Hospital,10001186,Chapai Nawabganj,Chapai Nababganj Sadar,0.9314489512535001,24.5980828,88.26547479999999
+9,Rajshahi,subdistrict,Paba Upazila Health Complex,10001547,Rajshahi,Paba,1.9188398820910968,24.443884,88.5547879
+9,Rajshahi,tertiary,Rajshahi Medical College Hospital,10001560,Rajshahi,Rajpara,1.3186594354876358,24.372019,88.5864259
+9,Rangpur,district,Gaibandha District Hospital,10001254,Gaibandha,Gaibandha Sadar,1.0009918502150006,25.3259361,89.5493315
+9,Rangpur,subdistrict,Rajibpur Upazila Health Complex,10001330,Kurigram,Rajibpur,1.7162844283757746,25.4443694,89.7909808
+9,Sylhet,district,"Habiganj District Hospital, Habiganj",10002071,Habiganj,Habiganj Sadar,1.0177182423598736,24.373323,91.41763999999999
+9,Sylhet,tertiary,Moulvibazar 250 bed District Sadar Hospital,10002116,Maulvibazar,Maulvibazar Sadar,0.9368613758134406,24.4813033,91.76596169999999
+10,Barishal,district,Barguna District Hospital,10001943,Barguna,Barguna Sadar,1.4375943868782994,22.156242,90.12789
+10,Barishal,district,Patuakhali 250 bed Sadar Hospital,10002051,Patuakhali,Patuakhali Sadar,1.0377197712546906,22.3622664,90.3269921
+10,Barishal,district,Bhola District Hospital,10002002,Bhola,Bhola Sadar,1.0185481747913925,22.6757402,90.6557361
+10,Barishal,district,Pirojpur District Hospital,10002067,Pirojpur,Pirojpur Sadar,0.9433770909880452,22.5789637,89.97664499999999
+10,Barishal,subdistrict,Amtali Upazila Health Complex,10001933,Barguna,Amtali,1.7397735520813737,22.1303784,90.2301825
+10,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,1.0430738859603583,22.3406339,91.8377319
+10,Chattogram,district,Bandarban District Hospital,10000655,Bandarban,Bandarban Sadar,0.9642305755635857,22.1896135,92.2264957
+10,Chattogram,subdistrict,Sandwip Upazila Health Complex,10000829,Chattogram,Sandwip,1.6249939876195105,22.5438922,91.4705992
+10,Chattogram,tertiary,Chittagong Medical College Hospital,10000756,Chattogram,Panchlaish,1.0168196624568822,22.3592709,91.8308045
+10,Dhaka,district,Gopalganj 250 bed General Hospital,10002233,Gopalganj,Gopalganj Sadar,0.9333923232219113,22.9982121,89.8190072
+10,Khulna,district,"Khulna 250 Bed General Hospital, Khulna",10001805,Khulna,Khulna Sadar,1.1475551900624288,22.8281662,89.5371409
+10,Khulna,district,Bagerhat District Hospital,10001693,Bagerhat,Bagerhat Sadar,0.935281046610111,22.7955887,89.8726916
+10,Khulna,subdistrict,Dacope Upazila Health Complex,10001794,Khulna,Dacope,1.761936360268114,22.5994035,89.5176149
+10,Khulna,subdistrict,Mongla Upazila Health Complex,10001707,Bagerhat,Mongla,1.5878062497926644,22.4942196,89.6016171
+10,Khulna,tertiary,Khulna Medical College Hospital,10001807,Khulna,Sonadanga,1.1097904556377882,22.8281662,89.5371409
+10,Rajshahi,district,Chapai Nababganj District Hospital,10001186,Chapai Nawabganj,Chapai Nababganj Sadar,0.9314489512535001,24.5980828,88.26547479999999
+10,Rajshahi,subdistrict,Paba Upazila Health Complex,10001547,Rajshahi,Paba,1.9188398820910968,24.443884,88.5547879
+10,Rajshahi,tertiary,Rajshahi Medical College Hospital,10001560,Rajshahi,Rajpara,1.3186594354876358,24.372019,88.5864259
+10,Rangpur,district,Gaibandha District Hospital,10001254,Gaibandha,Gaibandha Sadar,1.0009918502150006,25.3259361,89.5493315
+10,Rangpur,subdistrict,Rajibpur Upazila Health Complex,10001330,Kurigram,Rajibpur,1.7162844283757746,25.4443694,89.7909808
+10,Sylhet,district,"Habiganj District Hospital, Habiganj",10002071,Habiganj,Habiganj Sadar,1.0177182423598736,24.373323,91.41763999999999
+10,Sylhet,tertiary,Moulvibazar 250 bed District Sadar Hospital,10002116,Maulvibazar,Maulvibazar Sadar,0.9368613758134406,24.4813033,91.76596169999999
+11,Barishal,district,Barguna District Hospital,10001943,Barguna,Barguna Sadar,1.4375943868782994,22.156242,90.12789
+11,Barishal,district,Patuakhali 250 bed Sadar Hospital,10002051,Patuakhali,Patuakhali Sadar,1.0377197712546906,22.3622664,90.3269921
+11,Barishal,district,Bhola District Hospital,10002002,Bhola,Bhola Sadar,1.0185481747913925,22.6757402,90.6557361
+11,Barishal,district,Pirojpur District Hospital,10002067,Pirojpur,Pirojpur Sadar,0.9433770909880452,22.5789637,89.97664499999999
+11,Barishal,subdistrict,Amtali Upazila Health Complex,10001933,Barguna,Amtali,1.7397735520813737,22.1303784,90.2301825
+11,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,1.0430738859603583,22.3406339,91.8377319
+11,Chattogram,district,Bandarban District Hospital,10000655,Bandarban,Bandarban Sadar,0.9642305755635857,22.1896135,92.2264957
+11,Chattogram,subdistrict,Sandwip Upazila Health Complex,10000829,Chattogram,Sandwip,1.6249939876195105,22.5438922,91.4705992
+11,Chattogram,tertiary,Chittagong Medical College Hospital,10000756,Chattogram,Panchlaish,1.0168196624568822,22.3592709,91.8308045
+11,Dhaka,district,Gopalganj 250 bed General Hospital,10002233,Gopalganj,Gopalganj Sadar,0.9333923232219113,22.9982121,89.8190072
+11,Khulna,district,"Khulna 250 Bed General Hospital, Khulna",10001805,Khulna,Khulna Sadar,1.1475551900624288,22.8281662,89.5371409
+11,Khulna,district,Bagerhat District Hospital,10001693,Bagerhat,Bagerhat Sadar,0.935281046610111,22.7955887,89.8726916
+11,Khulna,subdistrict,Dacope Upazila Health Complex,10001794,Khulna,Dacope,1.761936360268114,22.5994035,89.5176149
+11,Khulna,subdistrict,Mongla Upazila Health Complex,10001707,Bagerhat,Mongla,1.5878062497926644,22.4942196,89.6016171
+11,Khulna,tertiary,Khulna Medical College Hospital,10001807,Khulna,Sonadanga,1.1097904556377882,22.8281662,89.5371409
+11,Rajshahi,district,Chapai Nababganj District Hospital,10001186,Chapai Nawabganj,Chapai Nababganj Sadar,0.9314489512535001,24.5980828,88.26547479999999
+11,Rajshahi,subdistrict,Paba Upazila Health Complex,10001547,Rajshahi,Paba,1.9188398820910968,24.443884,88.5547879
+11,Rajshahi,tertiary,Rajshahi Medical College Hospital,10001560,Rajshahi,Rajpara,1.3186594354876358,24.372019,88.5864259
+11,Rangpur,district,Gaibandha District Hospital,10001254,Gaibandha,Gaibandha Sadar,1.0009918502150006,25.3259361,89.5493315
+11,Rangpur,subdistrict,Rajibpur Upazila Health Complex,10001330,Kurigram,Rajibpur,1.7162844283757746,25.4443694,89.7909808
+11,Sylhet,district,"Habiganj District Hospital, Habiganj",10002071,Habiganj,Habiganj Sadar,1.0177182423598736,24.373323,91.41763999999999
+11,Sylhet,tertiary,Moulvibazar 250 bed District Sadar Hospital,10002116,Maulvibazar,Maulvibazar Sadar,0.9368613758134406,24.4813033,91.76596169999999
+12,Barishal,district,Barguna District Hospital,10001943,Barguna,Barguna Sadar,1.4375943868782994,22.156242,90.12789
+12,Barishal,district,Patuakhali 250 bed Sadar Hospital,10002051,Patuakhali,Patuakhali Sadar,1.0377197712546906,22.3622664,90.3269921
+12,Barishal,district,Bhola District Hospital,10002002,Bhola,Bhola Sadar,1.0185481747913925,22.6757402,90.6557361
+12,Barishal,district,Pirojpur District Hospital,10002067,Pirojpur,Pirojpur Sadar,0.9433770909880452,22.5789637,89.97664499999999
+12,Barishal,subdistrict,Amtali Upazila Health Complex,10001933,Barguna,Amtali,1.7397735520813737,22.1303784,90.2301825
+12,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,1.0430738859603583,22.3406339,91.8377319
+12,Chattogram,district,Bandarban District Hospital,10000655,Bandarban,Bandarban Sadar,0.9642305755635857,22.1896135,92.2264957
+12,Chattogram,subdistrict,Sandwip Upazila Health Complex,10000829,Chattogram,Sandwip,1.6249939876195105,22.5438922,91.4705992
+12,Chattogram,tertiary,Chittagong Medical College Hospital,10000756,Chattogram,Panchlaish,1.0168196624568822,22.3592709,91.8308045
+12,Dhaka,district,Gopalganj 250 bed General Hospital,10002233,Gopalganj,Gopalganj Sadar,0.9333923232219113,22.9982121,89.8190072
+12,Khulna,district,"Khulna 250 Bed General Hospital, Khulna",10001805,Khulna,Khulna Sadar,1.1475551900624288,22.8281662,89.5371409
+12,Khulna,district,Bagerhat District Hospital,10001693,Bagerhat,Bagerhat Sadar,0.935281046610111,22.7955887,89.8726916
+12,Khulna,subdistrict,Dacope Upazila Health Complex,10001794,Khulna,Dacope,1.761936360268114,22.5994035,89.5176149
+12,Khulna,subdistrict,Mongla Upazila Health Complex,10001707,Bagerhat,Mongla,1.5878062497926644,22.4942196,89.6016171
+12,Khulna,tertiary,Khulna Medical College Hospital,10001807,Khulna,Sonadanga,1.1097904556377882,22.8281662,89.5371409
+12,Rajshahi,district,Chapai Nababganj District Hospital,10001186,Chapai Nawabganj,Chapai Nababganj Sadar,0.9314489512535001,24.5980828,88.26547479999999
+12,Rajshahi,subdistrict,Paba Upazila Health Complex,10001547,Rajshahi,Paba,1.9188398820910968,24.443884,88.5547879
+12,Rajshahi,tertiary,Rajshahi Medical College Hospital,10001560,Rajshahi,Rajpara,1.3186594354876358,24.372019,88.5864259
+12,Rangpur,district,Gaibandha District Hospital,10001254,Gaibandha,Gaibandha Sadar,1.0009918502150006,25.3259361,89.5493315
+12,Rangpur,subdistrict,Rajibpur Upazila Health Complex,10001330,Kurigram,Rajibpur,1.7162844283757746,25.4443694,89.7909808
+12,Sylhet,district,"Habiganj District Hospital, Habiganj",10002071,Habiganj,Habiganj Sadar,1.0177182423598736,24.373323,91.41763999999999
+12,Sylhet,tertiary,Moulvibazar 250 bed District Sadar Hospital,10002116,Maulvibazar,Maulvibazar Sadar,0.9368613758134406,24.4813033,91.76596169999999
+13,Barishal,district,Barguna District Hospital,10001943,Barguna,Barguna Sadar,1.4375943868782994,22.156242,90.12789
+13,Barishal,district,Patuakhali 250 bed Sadar Hospital,10002051,Patuakhali,Patuakhali Sadar,1.0377197712546906,22.3622664,90.3269921
+13,Barishal,district,Bhola District Hospital,10002002,Bhola,Bhola Sadar,1.0185481747913925,22.6757402,90.6557361
+13,Barishal,district,Pirojpur District Hospital,10002067,Pirojpur,Pirojpur Sadar,0.9433770909880452,22.5789637,89.97664499999999
+13,Barishal,subdistrict,Amtali Upazila Health Complex,10001933,Barguna,Amtali,1.7397735520813737,22.1303784,90.2301825
+13,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,1.0430738859603583,22.3406339,91.8377319
+13,Chattogram,district,Bandarban District Hospital,10000655,Bandarban,Bandarban Sadar,0.9642305755635857,22.1896135,92.2264957
+13,Chattogram,subdistrict,Sandwip Upazila Health Complex,10000829,Chattogram,Sandwip,1.6249939876195105,22.5438922,91.4705992
+13,Chattogram,tertiary,Chittagong Medical College Hospital,10000756,Chattogram,Panchlaish,1.0168196624568822,22.3592709,91.8308045
+13,Dhaka,district,Gopalganj 250 bed General Hospital,10002233,Gopalganj,Gopalganj Sadar,0.9333923232219113,22.9982121,89.8190072
+13,Khulna,district,"Khulna 250 Bed General Hospital, Khulna",10001805,Khulna,Khulna Sadar,1.1475551900624288,22.8281662,89.5371409
+13,Khulna,district,Bagerhat District Hospital,10001693,Bagerhat,Bagerhat Sadar,0.935281046610111,22.7955887,89.8726916
+13,Khulna,subdistrict,Dacope Upazila Health Complex,10001794,Khulna,Dacope,1.761936360268114,22.5994035,89.5176149
+13,Khulna,subdistrict,Mongla Upazila Health Complex,10001707,Bagerhat,Mongla,1.5878062497926644,22.4942196,89.6016171
+13,Khulna,tertiary,Khulna Medical College Hospital,10001807,Khulna,Sonadanga,1.1097904556377882,22.8281662,89.5371409
+13,Rajshahi,district,Chapai Nababganj District Hospital,10001186,Chapai Nawabganj,Chapai Nababganj Sadar,0.9314489512535001,24.5980828,88.26547479999999
+13,Rajshahi,subdistrict,Paba Upazila Health Complex,10001547,Rajshahi,Paba,1.9188398820910968,24.443884,88.5547879
+13,Rajshahi,tertiary,Rajshahi Medical College Hospital,10001560,Rajshahi,Rajpara,1.3186594354876358,24.372019,88.5864259
+13,Rangpur,district,Gaibandha District Hospital,10001254,Gaibandha,Gaibandha Sadar,1.0009918502150006,25.3259361,89.5493315
+13,Rangpur,subdistrict,Rajibpur Upazila Health Complex,10001330,Kurigram,Rajibpur,1.7162844283757746,25.4443694,89.7909808
+13,Sylhet,district,"Habiganj District Hospital, Habiganj",10002071,Habiganj,Habiganj Sadar,1.0177182423598736,24.373323,91.41763999999999
+13,Sylhet,tertiary,Moulvibazar 250 bed District Sadar Hospital,10002116,Maulvibazar,Maulvibazar Sadar,0.9368613758134406,24.4813033,91.76596169999999
+14,Barishal,district,Barguna District Hospital,10001943,Barguna,Barguna Sadar,1.4375943868782994,22.156242,90.12789
+14,Barishal,district,Patuakhali 250 bed Sadar Hospital,10002051,Patuakhali,Patuakhali Sadar,1.0377197712546906,22.3622664,90.3269921
+14,Barishal,district,Bhola District Hospital,10002002,Bhola,Bhola Sadar,1.0185481747913925,22.6757402,90.6557361
+14,Barishal,district,Pirojpur District Hospital,10002067,Pirojpur,Pirojpur Sadar,0.9433770909880452,22.5789637,89.97664499999999
+14,Barishal,subdistrict,Amtali Upazila Health Complex,10001933,Barguna,Amtali,1.7397735520813737,22.1303784,90.2301825
+14,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,1.0430738859603583,22.3406339,91.8377319
+14,Chattogram,district,Bandarban District Hospital,10000655,Bandarban,Bandarban Sadar,0.9642305755635857,22.1896135,92.2264957
+14,Chattogram,subdistrict,Sandwip Upazila Health Complex,10000829,Chattogram,Sandwip,1.6249939876195105,22.5438922,91.4705992
+14,Chattogram,tertiary,Chittagong Medical College Hospital,10000756,Chattogram,Panchlaish,1.0168196624568822,22.3592709,91.8308045
+14,Dhaka,district,Gopalganj 250 bed General Hospital,10002233,Gopalganj,Gopalganj Sadar,0.9333923232219113,22.9982121,89.8190072
+14,Khulna,district,"Khulna 250 Bed General Hospital, Khulna",10001805,Khulna,Khulna Sadar,1.1475551900624288,22.8281662,89.5371409
+14,Khulna,district,Bagerhat District Hospital,10001693,Bagerhat,Bagerhat Sadar,0.935281046610111,22.7955887,89.8726916
+14,Khulna,subdistrict,Dacope Upazila Health Complex,10001794,Khulna,Dacope,1.761936360268114,22.5994035,89.5176149
+14,Khulna,subdistrict,Mongla Upazila Health Complex,10001707,Bagerhat,Mongla,1.5878062497926644,22.4942196,89.6016171
+14,Khulna,tertiary,Khulna Medical College Hospital,10001807,Khulna,Sonadanga,1.1097904556377882,22.8281662,89.5371409
+14,Rajshahi,district,Chapai Nababganj District Hospital,10001186,Chapai Nawabganj,Chapai Nababganj Sadar,0.9314489512535001,24.5980828,88.26547479999999
+14,Rajshahi,subdistrict,Paba Upazila Health Complex,10001547,Rajshahi,Paba,1.9188398820910968,24.443884,88.5547879
+14,Rajshahi,tertiary,Rajshahi Medical College Hospital,10001560,Rajshahi,Rajpara,1.3186594354876358,24.372019,88.5864259
+14,Rangpur,district,Gaibandha District Hospital,10001254,Gaibandha,Gaibandha Sadar,1.0009918502150006,25.3259361,89.5493315
+14,Rangpur,subdistrict,Rajibpur Upazila Health Complex,10001330,Kurigram,Rajibpur,1.7162844283757746,25.4443694,89.7909808
+14,Sylhet,district,"Habiganj District Hospital, Habiganj",10002071,Habiganj,Habiganj Sadar,1.0177182423598736,24.373323,91.41763999999999
+14,Sylhet,tertiary,Moulvibazar 250 bed District Sadar Hospital,10002116,Maulvibazar,Maulvibazar Sadar,0.9368613758134406,24.4813033,91.76596169999999
+15,Barishal,district,Barguna District Hospital,10001943,Barguna,Barguna Sadar,1.4375943868782994,22.156242,90.12789
+15,Barishal,district,Patuakhali 250 bed Sadar Hospital,10002051,Patuakhali,Patuakhali Sadar,1.0377197712546906,22.3622664,90.3269921
+15,Barishal,district,Bhola District Hospital,10002002,Bhola,Bhola Sadar,1.0185481747913925,22.6757402,90.6557361
+15,Barishal,district,Pirojpur District Hospital,10002067,Pirojpur,Pirojpur Sadar,0.9433770909880452,22.5789637,89.97664499999999
+15,Barishal,subdistrict,Amtali Upazila Health Complex,10001933,Barguna,Amtali,1.7397735520813737,22.1303784,90.2301825
+15,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,1.0430738859603583,22.3406339,91.8377319
+15,Chattogram,district,Bandarban District Hospital,10000655,Bandarban,Bandarban Sadar,0.9642305755635857,22.1896135,92.2264957
+15,Chattogram,subdistrict,Sandwip Upazila Health Complex,10000829,Chattogram,Sandwip,1.6249939876195105,22.5438922,91.4705992
+15,Chattogram,tertiary,Chittagong Medical College Hospital,10000756,Chattogram,Panchlaish,1.0168196624568822,22.3592709,91.8308045
+15,Dhaka,district,Gopalganj 250 bed General Hospital,10002233,Gopalganj,Gopalganj Sadar,0.9333923232219113,22.9982121,89.8190072
+15,Khulna,district,"Khulna 250 Bed General Hospital, Khulna",10001805,Khulna,Khulna Sadar,1.1475551900624288,22.8281662,89.5371409
+15,Khulna,district,Bagerhat District Hospital,10001693,Bagerhat,Bagerhat Sadar,0.935281046610111,22.7955887,89.8726916
+15,Khulna,subdistrict,Dacope Upazila Health Complex,10001794,Khulna,Dacope,1.761936360268114,22.5994035,89.5176149
+15,Khulna,subdistrict,Mongla Upazila Health Complex,10001707,Bagerhat,Mongla,1.5878062497926644,22.4942196,89.6016171
+15,Khulna,tertiary,Khulna Medical College Hospital,10001807,Khulna,Sonadanga,1.1097904556377882,22.8281662,89.5371409
+15,Rajshahi,district,Chapai Nababganj District Hospital,10001186,Chapai Nawabganj,Chapai Nababganj Sadar,0.9314489512535001,24.5980828,88.26547479999999
+15,Rajshahi,subdistrict,Paba Upazila Health Complex,10001547,Rajshahi,Paba,1.9188398820910968,24.443884,88.5547879
+15,Rajshahi,tertiary,Rajshahi Medical College Hospital,10001560,Rajshahi,Rajpara,1.3186594354876358,24.372019,88.5864259
+15,Rangpur,district,Gaibandha District Hospital,10001254,Gaibandha,Gaibandha Sadar,1.0009918502150006,25.3259361,89.5493315
+15,Rangpur,subdistrict,Rajibpur Upazila Health Complex,10001330,Kurigram,Rajibpur,1.7162844283757746,25.4443694,89.7909808
+15,Sylhet,district,"Habiganj District Hospital, Habiganj",10002071,Habiganj,Habiganj Sadar,1.0177182423598736,24.373323,91.41763999999999
+15,Sylhet,tertiary,Moulvibazar 250 bed District Sadar Hospital,10002116,Maulvibazar,Maulvibazar Sadar,0.9368613758134406,24.4813033,91.76596169999999
+16,Barishal,district,Barguna District Hospital,10001943,Barguna,Barguna Sadar,1.4375943868782994,22.156242,90.12789
+16,Barishal,district,Patuakhali 250 bed Sadar Hospital,10002051,Patuakhali,Patuakhali Sadar,1.0377197712546906,22.3622664,90.3269921
+16,Barishal,district,Bhola District Hospital,10002002,Bhola,Bhola Sadar,1.0185481747913925,22.6757402,90.6557361
+16,Barishal,district,Pirojpur District Hospital,10002067,Pirojpur,Pirojpur Sadar,0.9433770909880452,22.5789637,89.97664499999999
+16,Barishal,subdistrict,Amtali Upazila Health Complex,10001933,Barguna,Amtali,1.7397735520813737,22.1303784,90.2301825
+16,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,1.0430738859603583,22.3406339,91.8377319
+16,Chattogram,district,Bandarban District Hospital,10000655,Bandarban,Bandarban Sadar,0.9642305755635857,22.1896135,92.2264957
+16,Chattogram,subdistrict,Sandwip Upazila Health Complex,10000829,Chattogram,Sandwip,1.6249939876195105,22.5438922,91.4705992
+16,Chattogram,tertiary,Chittagong Medical College Hospital,10000756,Chattogram,Panchlaish,1.0168196624568822,22.3592709,91.8308045
+16,Dhaka,district,Gopalganj 250 bed General Hospital,10002233,Gopalganj,Gopalganj Sadar,0.9333923232219113,22.9982121,89.8190072
+16,Khulna,district,"Khulna 250 Bed General Hospital, Khulna",10001805,Khulna,Khulna Sadar,1.1475551900624288,22.8281662,89.5371409
+16,Khulna,district,Bagerhat District Hospital,10001693,Bagerhat,Bagerhat Sadar,0.935281046610111,22.7955887,89.8726916
+16,Khulna,subdistrict,Dacope Upazila Health Complex,10001794,Khulna,Dacope,1.761936360268114,22.5994035,89.5176149
+16,Khulna,subdistrict,Mongla Upazila Health Complex,10001707,Bagerhat,Mongla,1.5878062497926644,22.4942196,89.6016171
+16,Khulna,tertiary,Khulna Medical College Hospital,10001807,Khulna,Sonadanga,1.1097904556377882,22.8281662,89.5371409
+16,Rajshahi,district,Chapai Nababganj District Hospital,10001186,Chapai Nawabganj,Chapai Nababganj Sadar,0.9314489512535001,24.5980828,88.26547479999999
+16,Rajshahi,subdistrict,Paba Upazila Health Complex,10001547,Rajshahi,Paba,1.9188398820910968,24.443884,88.5547879
+16,Rajshahi,tertiary,Rajshahi Medical College Hospital,10001560,Rajshahi,Rajpara,1.3186594354876358,24.372019,88.5864259
+16,Rangpur,district,Gaibandha District Hospital,10001254,Gaibandha,Gaibandha Sadar,1.0009918502150006,25.3259361,89.5493315
+16,Rangpur,subdistrict,Rajibpur Upazila Health Complex,10001330,Kurigram,Rajibpur,1.7162844283757746,25.4443694,89.7909808
+16,Sylhet,district,"Habiganj District Hospital, Habiganj",10002071,Habiganj,Habiganj Sadar,1.0177182423598736,24.373323,91.41763999999999
+16,Sylhet,tertiary,Moulvibazar 250 bed District Sadar Hospital,10002116,Maulvibazar,Maulvibazar Sadar,0.9368613758134406,24.4813033,91.76596169999999
+17,Barishal,district,Barguna District Hospital,10001943,Barguna,Barguna Sadar,1.4375943868782994,22.156242,90.12789
+17,Barishal,district,Patuakhali 250 bed Sadar Hospital,10002051,Patuakhali,Patuakhali Sadar,1.0377197712546906,22.3622664,90.3269921
+17,Barishal,district,Bhola District Hospital,10002002,Bhola,Bhola Sadar,1.0185481747913925,22.6757402,90.6557361
+17,Barishal,district,Pirojpur District Hospital,10002067,Pirojpur,Pirojpur Sadar,0.9433770909880452,22.5789637,89.97664499999999
+17,Barishal,subdistrict,Amtali Upazila Health Complex,10001933,Barguna,Amtali,1.7397735520813737,22.1303784,90.2301825
+17,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,1.0430738859603583,22.3406339,91.8377319
+17,Chattogram,district,Bandarban District Hospital,10000655,Bandarban,Bandarban Sadar,0.9642305755635857,22.1896135,92.2264957
+17,Chattogram,subdistrict,Sandwip Upazila Health Complex,10000829,Chattogram,Sandwip,1.6249939876195105,22.5438922,91.4705992
+17,Chattogram,tertiary,Chittagong Medical College Hospital,10000756,Chattogram,Panchlaish,1.0168196624568822,22.3592709,91.8308045
+17,Dhaka,district,Gopalganj 250 bed General Hospital,10002233,Gopalganj,Gopalganj Sadar,0.9333923232219113,22.9982121,89.8190072
+17,Khulna,district,"Khulna 250 Bed General Hospital, Khulna",10001805,Khulna,Khulna Sadar,1.1475551900624288,22.8281662,89.5371409
+17,Khulna,district,Bagerhat District Hospital,10001693,Bagerhat,Bagerhat Sadar,0.935281046610111,22.7955887,89.8726916
+17,Khulna,subdistrict,Dacope Upazila Health Complex,10001794,Khulna,Dacope,1.761936360268114,22.5994035,89.5176149
+17,Khulna,subdistrict,Mongla Upazila Health Complex,10001707,Bagerhat,Mongla,1.5878062497926644,22.4942196,89.6016171
+17,Khulna,tertiary,Khulna Medical College Hospital,10001807,Khulna,Sonadanga,1.1097904556377882,22.8281662,89.5371409
+17,Rajshahi,district,Chapai Nababganj District Hospital,10001186,Chapai Nawabganj,Chapai Nababganj Sadar,0.9314489512535001,24.5980828,88.26547479999999
+17,Rajshahi,subdistrict,Paba Upazila Health Complex,10001547,Rajshahi,Paba,1.9188398820910968,24.443884,88.5547879
+17,Rajshahi,tertiary,Rajshahi Medical College Hospital,10001560,Rajshahi,Rajpara,1.3186594354876358,24.372019,88.5864259
+17,Rangpur,district,Gaibandha District Hospital,10001254,Gaibandha,Gaibandha Sadar,1.0009918502150006,25.3259361,89.5493315
+17,Rangpur,subdistrict,Rajibpur Upazila Health Complex,10001330,Kurigram,Rajibpur,1.7162844283757746,25.4443694,89.7909808
+17,Sylhet,district,"Habiganj District Hospital, Habiganj",10002071,Habiganj,Habiganj Sadar,1.0177182423598736,24.373323,91.41763999999999
+17,Sylhet,tertiary,Moulvibazar 250 bed District Sadar Hospital,10002116,Maulvibazar,Maulvibazar Sadar,0.9368613758134406,24.4813033,91.76596169999999
+18,Barishal,district,Barguna District Hospital,10001943,Barguna,Barguna Sadar,1.4375943868782994,22.156242,90.12789
+18,Barishal,district,Patuakhali 250 bed Sadar Hospital,10002051,Patuakhali,Patuakhali Sadar,1.0377197712546906,22.3622664,90.3269921
+18,Barishal,district,Bhola District Hospital,10002002,Bhola,Bhola Sadar,1.0185481747913925,22.6757402,90.6557361
+18,Barishal,district,Pirojpur District Hospital,10002067,Pirojpur,Pirojpur Sadar,0.9433770909880452,22.5789637,89.97664499999999
+18,Barishal,subdistrict,Amtali Upazila Health Complex,10001933,Barguna,Amtali,1.7397735520813737,22.1303784,90.2301825
+18,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,1.0430738859603583,22.3406339,91.8377319
+18,Chattogram,district,Bandarban District Hospital,10000655,Bandarban,Bandarban Sadar,0.9642305755635857,22.1896135,92.2264957
+18,Chattogram,subdistrict,Sandwip Upazila Health Complex,10000829,Chattogram,Sandwip,1.6249939876195105,22.5438922,91.4705992
+18,Chattogram,tertiary,Chittagong Medical College Hospital,10000756,Chattogram,Panchlaish,1.0168196624568822,22.3592709,91.8308045
+18,Dhaka,district,Gopalganj 250 bed General Hospital,10002233,Gopalganj,Gopalganj Sadar,0.9333923232219113,22.9982121,89.8190072
+18,Khulna,district,"Khulna 250 Bed General Hospital, Khulna",10001805,Khulna,Khulna Sadar,1.1475551900624288,22.8281662,89.5371409
+18,Khulna,district,Bagerhat District Hospital,10001693,Bagerhat,Bagerhat Sadar,0.935281046610111,22.7955887,89.8726916
+18,Khulna,subdistrict,Dacope Upazila Health Complex,10001794,Khulna,Dacope,1.761936360268114,22.5994035,89.5176149
+18,Khulna,subdistrict,Mongla Upazila Health Complex,10001707,Bagerhat,Mongla,1.5878062497926644,22.4942196,89.6016171
+18,Khulna,tertiary,Khulna Medical College Hospital,10001807,Khulna,Sonadanga,1.1097904556377882,22.8281662,89.5371409
+18,Rajshahi,district,Chapai Nababganj District Hospital,10001186,Chapai Nawabganj,Chapai Nababganj Sadar,0.9314489512535001,24.5980828,88.26547479999999
+18,Rajshahi,subdistrict,Paba Upazila Health Complex,10001547,Rajshahi,Paba,1.9188398820910968,24.443884,88.5547879
+18,Rajshahi,tertiary,Rajshahi Medical College Hospital,10001560,Rajshahi,Rajpara,1.3186594354876358,24.372019,88.5864259
+18,Rangpur,district,Gaibandha District Hospital,10001254,Gaibandha,Gaibandha Sadar,1.0009918502150006,25.3259361,89.5493315
+18,Rangpur,subdistrict,Rajibpur Upazila Health Complex,10001330,Kurigram,Rajibpur,1.7162844283757746,25.4443694,89.7909808
+18,Sylhet,district,"Habiganj District Hospital, Habiganj",10002071,Habiganj,Habiganj Sadar,1.0177182423598736,24.373323,91.41763999999999
+18,Sylhet,tertiary,Moulvibazar 250 bed District Sadar Hospital,10002116,Maulvibazar,Maulvibazar Sadar,0.9368613758134406,24.4813033,91.76596169999999
+19,Barishal,district,Barguna District Hospital,10001943,Barguna,Barguna Sadar,1.4375943868782994,22.156242,90.12789
+19,Barishal,district,Patuakhali 250 bed Sadar Hospital,10002051,Patuakhali,Patuakhali Sadar,1.0377197712546906,22.3622664,90.3269921
+19,Barishal,district,Bhola District Hospital,10002002,Bhola,Bhola Sadar,1.0185481747913925,22.6757402,90.6557361
+19,Barishal,district,Pirojpur District Hospital,10002067,Pirojpur,Pirojpur Sadar,0.9433770909880452,22.5789637,89.97664499999999
+19,Barishal,subdistrict,Amtali Upazila Health Complex,10001933,Barguna,Amtali,1.7397735520813737,22.1303784,90.2301825
+19,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,1.0430738859603583,22.3406339,91.8377319
+19,Chattogram,district,Bandarban District Hospital,10000655,Bandarban,Bandarban Sadar,0.9642305755635857,22.1896135,92.2264957
+19,Chattogram,subdistrict,Sandwip Upazila Health Complex,10000829,Chattogram,Sandwip,1.6249939876195105,22.5438922,91.4705992
+19,Chattogram,tertiary,Chittagong Medical College Hospital,10000756,Chattogram,Panchlaish,1.0168196624568822,22.3592709,91.8308045
+19,Dhaka,district,Gopalganj 250 bed General Hospital,10002233,Gopalganj,Gopalganj Sadar,0.9333923232219113,22.9982121,89.8190072
+19,Khulna,district,"Khulna 250 Bed General Hospital, Khulna",10001805,Khulna,Khulna Sadar,1.1475551900624288,22.8281662,89.5371409
+19,Khulna,district,Bagerhat District Hospital,10001693,Bagerhat,Bagerhat Sadar,0.935281046610111,22.7955887,89.8726916
+19,Khulna,subdistrict,Dacope Upazila Health Complex,10001794,Khulna,Dacope,1.761936360268114,22.5994035,89.5176149
+19,Khulna,subdistrict,Mongla Upazila Health Complex,10001707,Bagerhat,Mongla,1.5878062497926644,22.4942196,89.6016171
+19,Khulna,tertiary,Khulna Medical College Hospital,10001807,Khulna,Sonadanga,1.1097904556377882,22.8281662,89.5371409
+19,Rajshahi,district,Chapai Nababganj District Hospital,10001186,Chapai Nawabganj,Chapai Nababganj Sadar,0.9314489512535001,24.5980828,88.26547479999999
+19,Rajshahi,subdistrict,Paba Upazila Health Complex,10001547,Rajshahi,Paba,1.9188398820910968,24.443884,88.5547879
+19,Rajshahi,tertiary,Rajshahi Medical College Hospital,10001560,Rajshahi,Rajpara,1.3186594354876358,24.372019,88.5864259
+19,Rangpur,district,Gaibandha District Hospital,10001254,Gaibandha,Gaibandha Sadar,1.0009918502150006,25.3259361,89.5493315
+19,Rangpur,subdistrict,Rajibpur Upazila Health Complex,10001330,Kurigram,Rajibpur,1.7162844283757746,25.4443694,89.7909808
+19,Sylhet,district,"Habiganj District Hospital, Habiganj",10002071,Habiganj,Habiganj Sadar,1.0177182423598736,24.373323,91.41763999999999
+19,Sylhet,tertiary,Moulvibazar 250 bed District Sadar Hospital,10002116,Maulvibazar,Maulvibazar Sadar,0.9368613758134406,24.4813033,91.76596169999999
+20,Barishal,district,Barguna District Hospital,10001943,Barguna,Barguna Sadar,1.4375943868782994,22.156242,90.12789
+20,Barishal,district,Patuakhali 250 bed Sadar Hospital,10002051,Patuakhali,Patuakhali Sadar,1.0377197712546906,22.3622664,90.3269921
+20,Barishal,district,Bhola District Hospital,10002002,Bhola,Bhola Sadar,1.0185481747913925,22.6757402,90.6557361
+20,Barishal,district,Pirojpur District Hospital,10002067,Pirojpur,Pirojpur Sadar,0.9433770909880452,22.5789637,89.97664499999999
+20,Barishal,subdistrict,Amtali Upazila Health Complex,10001933,Barguna,Amtali,1.7397735520813737,22.1303784,90.2301825
+20,Chattogram,district,Chittagong 250 Bed General Hospital,10000753,Chattogram,Kotwali,1.0430738859603583,22.3406339,91.8377319
+20,Chattogram,district,Bandarban District Hospital,10000655,Bandarban,Bandarban Sadar,0.9642305755635857,22.1896135,92.2264957
+20,Chattogram,subdistrict,Sandwip Upazila Health Complex,10000829,Chattogram,Sandwip,1.6249939876195105,22.5438922,91.4705992
+20,Chattogram,tertiary,Chittagong Medical College Hospital,10000756,Chattogram,Panchlaish,1.0168196624568822,22.3592709,91.8308045
+20,Dhaka,district,Gopalganj 250 bed General Hospital,10002233,Gopalganj,Gopalganj Sadar,0.9333923232219113,22.9982121,89.8190072
+20,Khulna,district,"Khulna 250 Bed General Hospital, Khulna",10001805,Khulna,Khulna Sadar,1.1475551900624288,22.8281662,89.5371409
+20,Khulna,district,Bagerhat District Hospital,10001693,Bagerhat,Bagerhat Sadar,0.935281046610111,22.7955887,89.8726916
+20,Khulna,subdistrict,Dacope Upazila Health Complex,10001794,Khulna,Dacope,1.761936360268114,22.5994035,89.5176149
+20,Khulna,subdistrict,Mongla Upazila Health Complex,10001707,Bagerhat,Mongla,1.5878062497926644,22.4942196,89.6016171
+20,Khulna,tertiary,Khulna Medical College Hospital,10001807,Khulna,Sonadanga,1.1097904556377882,22.8281662,89.5371409
+20,Rajshahi,district,Chapai Nababganj District Hospital,10001186,Chapai Nawabganj,Chapai Nababganj Sadar,0.9314489512535001,24.5980828,88.26547479999999
+20,Rajshahi,subdistrict,Paba Upazila Health Complex,10001547,Rajshahi,Paba,1.9188398820910968,24.443884,88.5547879
+20,Rajshahi,tertiary,Rajshahi Medical College Hospital,10001560,Rajshahi,Rajpara,1.3186594354876358,24.372019,88.5864259
+20,Rangpur,district,Gaibandha District Hospital,10001254,Gaibandha,Gaibandha Sadar,1.0009918502150006,25.3259361,89.5493315
+20,Rangpur,subdistrict,Rajibpur Upazila Health Complex,10001330,Kurigram,Rajibpur,1.7162844283757746,25.4443694,89.7909808
+20,Sylhet,district,"Habiganj District Hospital, Habiganj",10002071,Habiganj,Habiganj Sadar,1.0177182423598736,24.373323,91.41763999999999
+20,Sylhet,tertiary,Moulvibazar 250 bed District Sadar Hospital,10002116,Maulvibazar,Maulvibazar Sadar,0.9368613758134406,24.4813033,91.76596169999999

@@ -20,6 +20,7 @@ reload_source <- function(){
   library(scales)
   library(magrittr)
   library(ggpol)
+  library(numform)
   
   source("source/util.R")
   

@@ -95,14 +95,22 @@ fig_wd <- "figures/"
   ## note: used sampled estimates instead (sample_rr) because drew one random map for whole country and provides estimates for each cell in that random map. (sample_total=sample_rate*cell_population)
 
   ## checking overlapping grid cells 
-  # which(!boots$grid_id[1:6163] %in% sero_import$grid_id) #94, 1097, 5504, 6118 don't overlap so can get rid of     this grid_ids in boots file (likely islands/edge grid cells)
+  # which(!boots$grid_id[1:6163] %in% sero_import$grid_id) #94, 1097, 5504, 6118 don't overlap so can get rid of this grid_ids in boots file (likely islands/edge grid cells)
+  
+  ## checking duplicate ids in sero data file - 1721 duplicated grid_ids
+  # y <- sero %>% dplyr::filter(duplicated(grid_id)) %>% dplyr::arrange(grid_id)
+  # c <- sero %>% arrange(grid_id)
+  # y.dup <- sero %>% arrange(grid_id) %>% dplyr::filter(!duplicated(grid_id)) 
+  # all duplicated grid_ids appear to have same values except NA values for pop_toAgg and implied_inf_toAgg so will get rid of duplicated grid_ids from sero file used to merge to boots file
   
 boots <- readRDS("data/all-boots.rds") %>%
   as_tibble() %>%
   dplyr::select(grid_id,sample_rate,sample_total,sample_rr,rep) %>%
   dplyr::filter(grid_id!=94&grid_id!=1097&grid_id!=5504&grid_id!=6118) %>%
-  left_join(.,sero_import %>% dplyr::select(grid_id,pop_toAgg,pop_toPlt)) %>%
-  dplyr::mutate(implied_inf = sample_total)
+  left_join(sero %>% 
+              dplyr::select(grid_id,pop_toAgg,pop_toPlt) %>%
+              dplyr::filter(!duplicated(grid_id)), by = c("grid_id")) %>%
+  dplyr::mutate(implied_inf = sample_total) 
 
 
 ## loading location of serosurvey sites 

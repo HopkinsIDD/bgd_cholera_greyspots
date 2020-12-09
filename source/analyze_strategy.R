@@ -5,8 +5,8 @@ source("source/strategy_analysis_utils.R")
 
 #### settings ####
 clear_orig <- TRUE
-nsims <- 1:2 ## sort(unique(sentinel_df$sim))
-nboots <- 1:2
+nsims <- 1:20 ## sort(unique(sentinel_df$sim))
+nboots <- 1:1000
 mrc_vec = c("rr", "inf")
 radii_vec <- c(10, 20, 30, 30)
 buffstring <- paste(radii_vec, collapse="-")
@@ -14,7 +14,7 @@ quant_vec <- c(0.025, 0.25, 0.5, 0.75, 0.975)
 
 #### paths ####
 out_dir <- "generated_data/"
-ss_filenames <- list.files(path = out_dir, pattern = "sentinelSamples")[1]
+ss_filenames <- list.files(path = out_dir, pattern = "sentinelSamples")
 
 #### helper ####
 quibble <- function(x, q = c(0.25, 0.5, 0.75)) {
@@ -150,6 +150,8 @@ for (ix in 1:length(ss_filenames)){
                   perc_pop_cat_survzone = round(pop_cat_survzone/pop_cat_total*100, 1))
     ## IN SOME CASES THE PERC>100 AND I THINK IT IS BECAUSE WE WERE NOT USING THE FULL RANGE OF THE DISTRIBUTION TO ESTIMATE TOTAL INFECTIONS AND POPULATIONS ##
 
+
+  save(tab_survzone, tab_survzone_cat, tab_survzone_in_bang, file = stringr::str_replace(paste0(out_dir, "outputTables_", strat_code), ".csv", ".RData"))
 
   # rm(strategy_survzone_data_ls)
   # gc()

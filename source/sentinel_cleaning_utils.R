@@ -44,14 +44,19 @@ get_facilities_buffers <- function(df, radii){
     stop("The dataframe object df does not have the required columns LON and LAT.")
   } else if (!("org_lvl" %in% names(df))){
     stop("The df object does not have the required column org_lvl.")
-  } else if(!is.numeric(radii) | length(radii) != 3){
-    stop("The object radii is not a numeric vector of length 3.")
+  } else if(!is.numeric(radii) | !(length(radii) %in% c(3,4))){
+    stop("The object radii is not a numeric vector of length 3 or 4.")
   }
 
   std_crs_txt <- get_crs("standard")
   gadm_crs_txt <- get_crs("gadm")
 
-  buffer_radii <- data.frame(org_lvl = c("subdistrict", "district", "tertiary"), buff_radius = radii)
+  if(length(radii)==4){
+    buffer_radii <- data.frame(org_lvl = c("subdistrict", "district", "tertiary", "icddrb"), buff_radius = radii)
+  } else if(length(radii)==3){
+    buffer_radii <- data.frame(org_lvl = c("subdistrict", "district", "tertiary"), buff_radius = radii)
+  }
+  
   df_sf_gadm <- sf::st_as_sf(df, coords = c("LON", "LAT"), crs = gadm_crs_txt, remove = FALSE) %>%
     left_join(buffer_radii, by = c("org_lvl")) 
   df_sf <- sf::st_transform(df_sf_gadm, std_crs_txt)

@@ -4,9 +4,10 @@ source("source/sentinel_cleaning_utils.R")
 source("source/strategy_analysis_utils.R")
 
 #### settings ####
+test_version <- TRUE
 clear_orig <- TRUE
 nsims <- 1:20 ## sort(unique(sentinel_df$sim))
-nboots <- 1:1000
+nboots <- 1:100
 mrc_vec = c("rr", "inf")
 radii_vec <- c(10, 20, 30, 30)
 buffstring <- paste(radii_vec, collapse="-")
@@ -14,7 +15,7 @@ quant_vec <- c(0.025, 0.25, 0.5, 0.75, 0.975)
 
 #### paths ####
 out_dir <- "generated_data/"
-ss_filenames <- list.files(path = out_dir, pattern = "sentinelSamples")
+ss_filenames <- grep(paste0("nsims", max(nsims)), list.files(path = out_dir, pattern = "sentinelSamples"), value = TRUE)
 
 #### helper ####
 quibble <- function(x, q = c(0.25, 0.5, 0.75)) {
@@ -24,6 +25,7 @@ quibble <- function(x, q = c(0.25, 0.5, 0.75)) {
 #### main ####
 if(clear_orig){
   file.remove(paste0(out_dir, list.files(path = out_dir, pattern = "survZoneBootData_")))
+  file.remove(paste0(out_dir, list.files(path = out_dir, pattern = "outputTables_")))
 }
 all_ids <- expand.grid(sim_id = nsims, rep_id = nboots, mrc = mrc_vec) %>% 
       dplyr::arrange(mrc, sim_id, rep_id)
@@ -61,6 +63,10 @@ serocat <- dplyr::bind_rows(serocat_inf, serocat_rr) %>%
 
 ## write surveillance zone outputs to file ##
 
+if(test_version){
+  ss_filenames <- ss_filenames[1]
+}
+
 for (ix in 1:length(ss_filenames)){
 
   ss_fn <- ss_filenames[ix]
@@ -93,7 +99,7 @@ for (ix in 1:length(ss_filenames)){
       return(boot_buff_df)
     })
 
-    strategy_survzone_data <- data.table::rbindlist(strategy_survzone_data_ls)
+    strategy_survzone_data <- data.table::rbindlist(strategy_survzone_data_ls, use.names=TRUE, fill=TRUE)
     write_csv(strategy_survzone_data, path = out_fn)
 
     rm(strategy_survzone_data_ls)

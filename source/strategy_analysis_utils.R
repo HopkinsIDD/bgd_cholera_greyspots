@@ -70,10 +70,11 @@ add_threshold_categories <- function(boot_obj, metric = "rr", sero_fn = "data/en
 
   if(metric == "rr"){
     boot_obj <- dplyr::rename(boot_obj, value = sample_rr) %>%
-      dplyr::mutate(metric = "rr")
+      dplyr::mutate(metric = "rr") 
   } else if(metric == "inf"){
-    boot_obj <- dplyr::rename(boot_obj, value = sample_implied_inf) %>%
-      dplyr::mutate(metric = "inf")
+    boot_obj <- dplyr::mutate(boot_obj, value = sample_implied_inf) %>%
+      dplyr::mutate(metric = "inf") %>%
+      dplyr::select(-sample_rr)
   } else{
     stop("You have provided an invalid metric. Please check add_threshold_categories call. Only 'rr' and 'inf' are valid options.")
   }

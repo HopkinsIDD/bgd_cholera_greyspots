@@ -1,0 +1,20 @@
+README
+
+Updated 8 April 2021
+
+# Steps for running greyspots analysis
+
+1. Assign sentinels according to different strategies with `assign_sentinels.R`. This is lightweight and can be run on a laptop. This script generates sentinelSamples... CSVs which list all sentinel sample groups from a given strategy.
+
+2. Calculate total infections and population in each risk category for each bootstrap using `bang_in_boots.R` 
+
+3. Analyze different strategies with `analyze_strategy.R`. This takes a long time and should be run on a cluster. This script generates survZoneBootData... CSVs and outputTable... RData, which are the primary results of these analyses.
+
+
+# Notes
+
+Key columns in all-boots.rds
+* grid_id
+* sample_rate: sampled infection rate
+* sample_rr: sampled relative risk
+* sample_total: sampled total infections

@@ -111,7 +111,7 @@ for (ix in 1:length(ss_filenames)){
 
     tmp_fns <- list.files(path = tmp_dir, pattern = "tmpout")
     strategy_survzone_data_ls <- lapply(1:length(tmp_fns), function(j){
-      readr::read_csv(paste0(tmp_dir, tmp_fns[j]))
+      readr::read_csv(paste0(tmp_dir, tmp_fns[j]), col_types = cols(rep = "c"))
     })
 
     strategy_survzone_data <- data.table::rbindlist(strategy_survzone_data_ls, use.names=TRUE, fill=TRUE)

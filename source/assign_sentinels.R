@@ -6,12 +6,12 @@ source("source/sentinel_assignment_utils.R")
 #### settings ####
 seednum <- 544400
 set.seed(seednum)
-nsims <- 20
+nsims <- 1
 radii_vec <- c(10, 20, 30)
 buffstring <- paste(radii_vec, collapse="-")
 
 #### paths ####
-out_dir <- "generated_data/"
+out_dir <- paste0("generated_data/sentSamp_nsims", nsims, "/")
 core_str <- glue::glue("buff{buffstring}_seed{seednum}")
 
 #### load files ####

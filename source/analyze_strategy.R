@@ -18,7 +18,7 @@ fn <- opt$filename
 
 # nsimmax <- 1
 # nbootmax <- 2
-# fn <- "sentinelSamples_absOpt_buff10-20-30_seed544400_nsims1.csv"
+# fn <- "generated_data/nsims1/sentinelSamples_absOpt_buff10-20-30_seed544400_nsims1.csv"
 
 #### settings ####
 test_version <- FALSE
@@ -72,7 +72,7 @@ for (ix in 1:length(ss_filenames)){
   print(paste("**** Starting", ss_fn, "****"))
 
   if(!file.exists(out_fn)){
-    sentinel_df <- read_csv(paste0(out_dir, ss_fn))
+    sentinel_df <- read_csv(paste0(ss_fn))
 
     strategy_survzone_data_ls <- lapply(1:nrow(all_ids), function(i){
 

@@ -32,6 +32,7 @@ quant_vec <- c(0.025, 0.25, 0.5, 0.75, 0.975)
 #### paths ####
 out_dir <- "generated_data/"
 ss_dir <- paste0(out_dir, "sentSamp_nsims", nsimmax, "/")
+tmp_dir <- paste0(out_dir, "tmp_nsims", nsimmax, "/")
 ss_filenames <- fn ## grep(paste0("nsims", max(nsims)), list.files(path = out_dir, pattern = "sentinelSamples"), value = TRUE)
 
 #### helper ####
@@ -71,7 +72,8 @@ for (ix in 1:length(ss_filenames)){
   if(!file.exists(out_fn)){
     sentinel_df <- read_csv(paste0(ss_dir, ss_fn))
 
-    strategy_survzone_data_ls <- lapply(1:nrow(all_ids), function(i){
+    # strategy_survzone_data_ls <- lapply(1:nrow(all_ids), function(i){
+    for(i in 1:nrow(all_ids)){
 
       print(paste("** In", i, "of", nrow(all_ids), "combinations **"))
       rep_id <- all_ids[i,]$rep_id
@@ -96,12 +98,23 @@ for (ix in 1:length(ss_filenames)){
         dplyr::rename(implied_inf_toPlt = sample_implied_inf,
                       rate_toPlt = sample_rate)
 
-      return(boot_buff_df)
+      tmp_fn <- paste0(tmp_dir, "tmpout_", i, ".csv")
+      readr::write_csv(boot_buff_df, path = tmp_fn)
+      
+      rm(buff_sp, buff_mp, boot_buff_df, oneboot, onesent)
+      gc()
+    #   return(boot_buff_df)
+    # })
+    }
+
+    tmp_fns <- list.files(path = tmp_dir, pattern = "tmpout")
+    strategy_survzone_data_ls <- lapply(1:length(tmp_fns), function(j){
+      readr::read_csv(paste0(tmp_dir, tmp_fns[j]))
     })
 
     strategy_survzone_data <- data.table::rbindlist(strategy_survzone_data_ls, use.names=TRUE, fill=TRUE)
     print(paste("**** Writing", out_fn, "****"))
-    write_csv(strategy_survzone_data, path = out_fn)
+    readr::write_csv(strategy_survzone_data, path = out_fn)
 
     rm(strategy_survzone_data_ls)
     gc()

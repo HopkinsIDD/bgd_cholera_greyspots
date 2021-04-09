@@ -3,11 +3,28 @@ library(sf)
 source("source/sentinel_cleaning_utils.R")
 source("source/strategy_analysis_utils.R")
 
+#### run options ####
+option_list <- list(
+  optparse::make_option(c("-n", "--nsims"), action = "store", default = 1, type="integer", help = "number of simulations per sentinel assignment strategy"),
+  optparse::make_option(c("-b", "--boots"), action = "store", default = 2, type="integer", help = "number of bootstrap samples to use"),
+  optparse::make_option(c("-f", "--filename"), action = "store", default = NULL, type="character", help = "sentinel assignment filename")
+)
+
+opt <- optparse::OptionParser(option_list = option_list) %>% optparse::parse_args()
+
+nsimmax <- opt$nsims
+nbootmax <- opt$boots
+fn <- opt$filename
+
+# nsimmax <- 1
+# nbootmax <- 2
+# fn <- "sentinelSamples_absOpt_buff10-20-30_seed544400_nsims1.csv"
+
 #### settings ####
-test_version <- TRUE
+test_version <- FALSE
 clear_orig <- TRUE
-nsims <- 1:1 ## sort(unique(sentinel_df$sim))
-nboots <- 1:2
+nsims <- 1:nsimmax 
+nboots <- 1:nbootmax
 mrc_vec = c("rr", "inf")
 radii_vec <- c(10, 20, 30, 30)
 buffstring <- paste(radii_vec, collapse="-")
@@ -15,7 +32,7 @@ quant_vec <- c(0.025, 0.25, 0.5, 0.75, 0.975)
 
 #### paths ####
 out_dir <- "generated_data/"
-ss_filenames <- grep(paste0("nsims", max(nsims)), list.files(path = out_dir, pattern = "sentinelSamples"), value = TRUE)
+ss_filenames <- fn ## grep(paste0("nsims", max(nsims)), list.files(path = out_dir, pattern = "sentinelSamples"), value = TRUE)
 
 #### helper ####
 quibble <- function(x, q = c(0.25, 0.5, 0.75)) {
@@ -44,6 +61,7 @@ denom_inf <- dplyr::select(denominators, rep, tot_inf)
 if(test_version){
   ss_filenames <- ss_filenames[1]
 }
+
 
 for (ix in 1:length(ss_filenames)){
 
@@ -76,7 +94,10 @@ for (ix in 1:length(ss_filenames)){
       boot_buff_df <- sf::st_intersection(oneboot, buff_mp) %>%
         sf::st_drop_geometry() %>%
         tibble::as_tibble() %>%
-        dplyr::mutate(sim = sim_id)
+        dplyr::mutate(sim = sim_id,
+                      implied_inf_toAgg = ifelse(is.na(pop_toAgg), NA, sample_implied_inf)) %>% ## make duplicate cells NA for aggregation purposes
+        dplyr::rename(implied_inf_toPlt = sample_implied_inf,
+                      rate_toPlt = sample_rate)
 
       return(boot_buff_df)
     })
@@ -101,7 +122,7 @@ for (ix in 1:length(ss_filenames)){
   reps_survzone <- strategy_survzone_data %>%
     dplyr::group_by(metric, sim, rep) %>%
     dplyr::summarise(pop_survzone = sum(pop_toAgg, na.rm = TRUE),
-                    inf_survzone = sum(sample_implied_inf)) %>%
+                    inf_survzone = sum(implied_inf_toAgg, na.rm = TRUE)) %>%
     dplyr::mutate(prop_pop_survzone = pop_survzone/tot_pop)
 
   tab_survzone <- reps_survzone %>%
@@ -126,7 +147,7 @@ for (ix in 1:length(ss_filenames)){
   reps_survzone_cat <- strategy_survzone_data %>%
     dplyr::group_by(metric, sim, rep, category) %>%
     dplyr::summarise(pop_cat_survzone = sum(pop_toAgg, na.rm = TRUE),
-                    inf_cat_survzone = sum(sample_implied_inf)
+                    inf_cat_survzone = sum(implied_inf_toAgg, na.rm = TRUE)
                     ) %>%
     dplyr::left_join(reps_survzone, by = c("metric", "sim", "rep")) %>%
     dplyr::mutate(distr_inf_cat_survzone = inf_cat_survzone/inf_survzone*100,
@@ -171,6 +192,8 @@ for (ix in 1:length(ss_filenames)){
   # gc()
 }
 
-
+# Rprof("prof.out")
+# Rprof(NULL)
+# summaryRprof("prof.out")$by.self
 
 

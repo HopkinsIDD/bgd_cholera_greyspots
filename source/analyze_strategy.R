@@ -22,7 +22,6 @@ fn <- opt$filename
 
 #### settings ####
 test_version <- FALSE
-clear_orig <- TRUE
 nsims <- 1:nsimmax 
 nboots <- 1:nbootmax
 mrc_vec = c("rr", "inf")
@@ -40,10 +39,7 @@ quibble <- function(x, q = c(0.25, 0.5, 0.75)) {
 }
 
 #### main ####
-if(clear_orig){
-  file.remove(paste0(out_dir, list.files(path = out_dir, pattern = "survZoneBootData_")))
-  file.remove(paste0(out_dir, list.files(path = out_dir, pattern = "outputTables_")))
-}
+
 all_ids <- expand.grid(sim_id = nsims, rep_id = nboots, mrc = mrc_vec) %>% 
       dplyr::arrange(mrc, sim_id, rep_id)
 

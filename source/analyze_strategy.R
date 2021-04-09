@@ -31,6 +31,7 @@ quant_vec <- c(0.025, 0.25, 0.5, 0.75, 0.975)
 
 #### paths ####
 out_dir <- "generated_data/"
+ss_dir <- paste0(out_dir, "sentSamp_nsims", nsimmax, "/")
 ss_filenames <- fn ## grep(paste0("nsims", max(nsims)), list.files(path = out_dir, pattern = "sentinelSamples"), value = TRUE)
 
 #### helper ####
@@ -68,7 +69,7 @@ for (ix in 1:length(ss_filenames)){
   print(paste("**** Starting", ss_fn, "****"))
 
   if(!file.exists(out_fn)){
-    sentinel_df <- read_csv(paste0(ss_fn))
+    sentinel_df <- read_csv(paste0(ss_dir, ss_fn))
 
     strategy_survzone_data_ls <- lapply(1:nrow(all_ids), function(i){
 
@@ -99,6 +100,7 @@ for (ix in 1:length(ss_filenames)){
     })
 
     strategy_survzone_data <- data.table::rbindlist(strategy_survzone_data_ls, use.names=TRUE, fill=TRUE)
+    print(paste("**** Writing", out_fn, "****"))
     write_csv(strategy_survzone_data, path = out_fn)
 
     rm(strategy_survzone_data_ls)

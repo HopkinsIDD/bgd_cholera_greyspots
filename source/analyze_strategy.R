@@ -33,6 +33,8 @@ quant_vec <- c(0.025, 0.25, 0.5, 0.75, 0.975)
 out_dir <- "generated_data/"
 ss_dir <- paste0(out_dir, "sentSamp_nsims", nsimmax, "/")
 tmp_dir <- paste0(out_dir, "tmp_nsims", nsimmax, "/")
+dir.create(ss_dir, showWarnings = FALSE)
+dir.create(tmp_dir, showWarnings = FALSE)
 ss_filenames <- fn ## grep(paste0("nsims", max(nsims)), list.files(path = out_dir, pattern = "sentinelSamples"), value = TRUE)
 
 #### helper ####
@@ -120,7 +122,7 @@ for (ix in 1:length(ss_filenames)){
     gc()
 
   } else{
-    strategy_survzone_data <- read_csv(out_fn) %>%
+    strategy_survzone_data <- readr::read_csv(out_fn, col_types = readr::cols(rep = "c")) %>%
       dplyr::mutate(category = factor(category, levels = c("High", "Moderate", "Mild")))
   }
   

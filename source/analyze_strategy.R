@@ -32,9 +32,7 @@ quant_vec <- c(0.025, 0.25, 0.5, 0.75, 0.975)
 #### paths ####
 out_dir <- "generated_data/"
 ss_dir <- paste0(out_dir, "sentSamp_nsims", nsimmax, "/")
-tmp_dir <- paste0(out_dir, "tmp_nsims", nsimmax, "/")
 dir.create(ss_dir, showWarnings = FALSE)
-dir.create(tmp_dir, showWarnings = FALSE)
 ss_filenames <- fn ## grep(paste0("nsims", max(nsims)), list.files(path = out_dir, pattern = "sentinelSamples"), value = TRUE)
 
 #### helper ####
@@ -66,8 +64,10 @@ if(test_version){
 for (ix in 1:length(ss_filenames)){
 
   ss_fn <- ss_filenames[ix]
-  strat_code <- stringr::str_remove(ss_fn, "sentinelSamples_")
-  out_fn <- paste0(out_dir, "survZoneBootData_", strat_code)
+  strat_code <- stringr::str_replace(stringr::str_remove(ss_fn, "sentinelSamples_"), ".csv", "")
+  out_fn <- paste0(out_dir, "survZoneBootData_", strat_code, ".csv")
+  tmp_dir <- paste0(out_dir, "tmp_", strat_code, "/")
+  dir.create(tmp_dir, showWarnings = FALSE)
 
   print(paste("**** Starting", ss_fn, "****"))
 
@@ -199,7 +199,7 @@ for (ix in 1:length(ss_filenames)){
     dplyr::relocate(metric, category, q)
 
 
-  save(tab_survzone, tab_survzone_cat, tab_survzone_in_bang, file = stringr::str_replace(paste0(out_dir, "outputTables_", strat_code), ".csv", ".RData"))
+  save(tab_survzone, tab_survzone_cat, tab_survzone_in_bang, file = paste0(out_dir, "outputTables_", strat_code, ".RData"))
 
   # rm(strategy_survzone_data_ls)
   # gc()

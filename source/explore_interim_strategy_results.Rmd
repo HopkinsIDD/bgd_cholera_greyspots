@@ -1,0 +1,109 @@
+---
+title: "Greyspot sentinel assignment interim report"
+output:
+  html_document:
+    fig_caption: TRUE
+    toc: TRUE
+    code_folding: hide
+    fig_width: 10
+    fig_height: 10
+params:
+  home_directory: ~/gh/bgd_cholera_greyspots
+  niters: 99
+  testing: FALSE
+---
+Interrogate interm outputs from analyze strategy -- 
+Variation by rep (bootstrap sample) and sim (sentinel assignment) samples
+
+```{r setup, include = FALSE}
+
+knitr::opts_knit$set(root.dir = params$home_directory)
+knitr::opts_chunk$set(echo = TRUE, error = TRUE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(lme4)
+library(sjPlot)
+# params <- list(home_directory = "C:/Users/eclee/Dropbox (Bansal Lab)/IDDynamicsJHU/gh/bgd_cholera_greyspots", niters=99, testing=TRUE)
+# 
+
+```
+
+```{r readfiles}
+
+nboots <- 1:params$niters
+tmpdirs <- grep("^tmp", list.dirs(path = "generated_data", full.names = FALSE), value=TRUE)
+tmpfiles <- paste0("tmpout_", nboots, ".csv")
+tmpdf <- expand.grid(dir = tmpdirs, file = tmpfiles, stringsAsFactors = FALSE) %>%
+  dplyr::mutate(fn = paste0("generated_data/", dir, "/", file))
+
+## get denominators
+bootcat <- readr::read_csv("data/boot_cat_denominators.csv", col_types = "cccdd")
+## total infections & pop in bangladesh
+denominators <- dplyr::filter(bootcat, metric == "inf") %>%
+  dplyr::group_by(rep) %>%
+  dplyr::summarise(tot_inf = sum(inf_cat_total), tot_pop = sum(pop_cat_total))
+tot_pop <- denominators[1,]$tot_pop ## same for all reps
+denom_inf <- dplyr::select(denominators, rep, tot_inf)
+
+```
+
+```{r cleandata}
+## clean data
+orig_grid <- purrr::map_dfr(1:nrow(tmpdf), function(i){ 
+  readr::read_csv(tmpdf[i,]$fn) %>%
+    dplyr::mutate(strategy = stringr::str_remove(stringr::str_remove(tmpdf[i,]$dir, "^tmp_"), "_buff10-20-30_seed544400_nsims20"))
+})
+
+cl_grid <- dplyr::filter(orig_grid, !is.na(implied_inf_toAgg)) %>%
+  dplyr::mutate(rep = as.character(rep))
+
+cl_iter <- dplyr::group_by(cl_grid, strategy, metric, sim, rep) %>%
+  dplyr::summarise(pop_survzone = sum(pop_toAgg, na.rm = TRUE),
+                  inf_survzone = sum(implied_inf_toAgg, na.rm = TRUE)) 
+```
+
+# Variability in total infections in surveillance zone
+## Relative Risk Thresholds
+
+```{r models_rr, results = "asis"}
+
+unique_strategies <- unique(cl_iter$strategy)
+for (i in 1:length(unique_strategies)){
+
+  rrdat <- dplyr::filter(cl_iter, strategy == unique_strategies[i] & metric == "rr") 
+  if(params$testing){
+    print("Warning: These are testing results!!!")
+    rrdat <- dplyr::mutate(rrdat, rep = factor(c(rep(1, 40), rep(2, 59))), sim = factor(c(rep(1, 20), rep(2, 9), rep(3, 70))))
+  }
+  rrdat <- dplyr::mutate(rrdat, rep = factor(rep), sim = factor(sim))
+
+  r1 <- lmer(inf_survzone ~ (1 | rep) , data = rrdat)
+  r2 <- lmer(inf_survzone ~ (1 | sim), data = rrdat)
+  r3 <- lmer(inf_survzone ~ (1 | rep) + (1 | sim) , data = rrdat)
+  r4 <- lmer(inf_survzone ~ (1 | rep) + (1 | sim) + (1 | rep:sim), data = rrdat)
+  
+  cat(
+    tab_model(
+    title = paste("relative risk:", unique_strategies[i]),
+    r1,
+    r2,
+    r3,
+    r4,
+    transform = NULL,
+    dv.labels = c(
+      "bootsrap (rep)",
+      "strategy sample (sim)",
+      "rep, sim",
+      "rep, sim, rep:sim"),
+    show.aic = T,
+    show.dev = T,
+    show.se = T,
+    show.ci = T,
+    show.df = T,
+    collapse.ci = T
+    )$knitr, "\n -----\n")
+  
+
+}
+
+
+```

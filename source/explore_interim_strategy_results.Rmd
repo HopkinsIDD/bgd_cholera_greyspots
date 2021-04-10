@@ -79,7 +79,6 @@ for (i in 1:length(unique_strategies)){
   r1 <- lmer(inf_survzone ~ (1 | rep) , data = rrdat)
   r2 <- lmer(inf_survzone ~ (1 | sim), data = rrdat)
   r3 <- lmer(inf_survzone ~ (1 | rep) + (1 | sim) , data = rrdat)
-  r4 <- lmer(inf_survzone ~ (1 | rep) + (1 | sim) + (1 | rep:sim), data = rrdat)
   
   cat(
     tab_model(
@@ -87,13 +86,12 @@ for (i in 1:length(unique_strategies)){
     r1,
     r2,
     r3,
-    r4,
+    # r4,
     transform = NULL,
     dv.labels = c(
       "bootsrap (rep)",
       "strategy sample (sim)",
-      "rep, sim",
-      "rep, sim, rep:sim"),
+      "rep, sim"),
     show.aic = T,
     show.dev = T,
     show.se = T,

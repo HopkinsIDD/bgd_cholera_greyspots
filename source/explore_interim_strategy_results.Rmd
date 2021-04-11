@@ -10,6 +10,7 @@ output:
 params:
   home_directory: ~/gh/bgd_cholera_greyspots
   niters: 99
+  nboots: 200
   testing: FALSE
 ---
 Interrogate interm outputs from analyze strategy -- 
@@ -29,9 +30,10 @@ library(sjPlot)
 
 ```{r readfiles}
 
-nboots <- 1:params$niters
+niters <- 1:params$niters
+nboots <- params$nboots
 tmpdirs <- grep("^tmp", list.dirs(path = "generated_data", full.names = FALSE), value=TRUE)
-tmpfiles <- paste0("tmpout_", nboots, ".csv")
+tmpfiles <- paste0("tmpout_", niters, ".csv")
 tmpdf <- expand.grid(dir = tmpdirs, file = tmpfiles, stringsAsFactors = FALSE) %>%
   dplyr::mutate(fn = paste0("generated_data/", dir, "/", file))
 
@@ -53,8 +55,13 @@ orig_grid <- purrr::map_dfr(1:nrow(tmpdf), function(i){
     dplyr::mutate(strategy = stringr::str_remove(stringr::str_remove(tmpdf[i,]$dir, "^tmp_"), "_buff10-20-30_seed544400_nsims20"))
 })
 
+print("Cleaning data ******")
+print(paste("Filter down to", nboots, "bootstrapped samples for comparison"))
+
 cl_grid <- dplyr::filter(orig_grid, !is.na(implied_inf_toAgg)) %>%
-  dplyr::mutate(rep = as.character(rep))
+  dplyr::filter(rep <= nboots) %>%
+  dplyr::mutate(rep = as.character(rep)) 
+
 
 cl_iter <- dplyr::group_by(cl_grid, strategy, metric, sim, rep) %>%
   dplyr::summarise(pop_survzone = sum(pop_toAgg, na.rm = TRUE),
@@ -71,7 +78,7 @@ for (i in 1:length(unique_strategies)){
 
   print(paste("Working on", unique_strategies[i]))
   rrdat <- dplyr::filter(cl_iter, strategy == unique_strategies[i] & metric == "rr") 
-  
+
   if(params$testing){
     print("Warning: These are testing results!!!")
     rrdat <- dplyr::mutate(rrdat, rep = factor(c(rep(1, 40), rep(2, 59))), sim = factor(c(rep(1, 20), rep(2, 9), rep(3, 70))))

@@ -64,12 +64,14 @@ cl_iter <- dplyr::group_by(cl_grid, strategy, metric, sim, rep) %>%
 # Variability in total infections in surveillance zone
 ## Relative Risk Thresholds
 
-```{r models_rr, results = "asis"}
+```{r models_rr, results = "asis", error = TRUE}
 
 unique_strategies <- unique(cl_iter$strategy)
 for (i in 1:length(unique_strategies)){
 
+  print(paste("Working on", unique_strategies[i]))
   rrdat <- dplyr::filter(cl_iter, strategy == unique_strategies[i] & metric == "rr") 
+  
   if(params$testing){
     print("Warning: These are testing results!!!")
     rrdat <- dplyr::mutate(rrdat, rep = factor(c(rep(1, 40), rep(2, 59))), sim = factor(c(rep(1, 20), rep(2, 9), rep(3, 70))))
@@ -79,6 +81,8 @@ for (i in 1:length(unique_strategies)){
   r1 <- lmer(inf_survzone ~ (1 | rep) , data = rrdat)
   r2 <- lmer(inf_survzone ~ (1 | sim), data = rrdat)
   r3 <- lmer(inf_survzone ~ (1 | rep) + (1 | sim) , data = rrdat)
+  print(summary(r1))
+  print(summary(r2))
   
   cat(
     tab_model(

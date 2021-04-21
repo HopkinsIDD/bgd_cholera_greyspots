@@ -1,0 +1,113 @@
+---
+title: "Greyspot sentinel assignment results"
+output:
+  html_document:
+    fig_caption: TRUE
+    toc: TRUE
+    code_folding: hide
+    fig_width: 10
+    fig_height: 10
+params:
+  home_directory: "C:/Users/eclee/Dropbox (Bansal Lab)/IDDynamicsJHU/gh/bgd_cholera_greyspots"
+  testing: FALSE
+---
+=
+```{r setup, include = FALSE}
+
+knitr::opts_knit$set(root.dir = params$home_directory)
+knitr::opts_chunk$set(echo = TRUE, error = TRUE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(lme4)
+# params <- list(home_directory = "C:/Users/eclee/Dropbox (Bansal Lab)/IDDynamicsJHU/gh/bgd_cholera_greyspots", testing=TRUE)
+ 
+
+```
+
+```{r readsentinels}
+sentfns <- list.files(path = paste0(params$home_directory, "/generated_data/sentSamp_nsims20"), full.names = TRUE)
+sentfns2 <- list.files(path = paste0(params$home_directory, "/generated_data/sentSamp_nsims20"))
+stratcodes_sent <- stringr::str_remove(stringr::str_remove(sentfns2, "^sentinelSamples_"), "_buff10-20-30_seed544400_nsims20.csv")
+
+sent_df <- purrr::map_dfr(1:length(sentfns), function(i){
+  readr::read_csv(sentfns[i]) %>%
+    dplyr::mutate(strategy = stratcodes_sent[i])
+})
+
+org_count <- sent_df %>% 
+  dplyr::filter(!grepl("Opt", strategy)) %>% 
+  dplyr::group_by(org_code) %>% 
+  count 
+
+allsent <- readr::read_csv("data/healthcare_facilities/geocoded_potential_sentinels.csv")
+
+print(paste(nrow(org_count), "out of", nrow(allsent), "unique facilities were selected as sentinels across all strategies"))
+
+print(paste(max(sent_df$sim), "simulations were run for each strategy"))
+
+sent_df %>% 
+  dplyr::group_by(strategy) %>%
+  dplyr::distinct(org_code) %>%
+  count %>%
+  kableExtra::kable(col.names = c("strategy", "unique facilities across sims")) %>%
+    kableExtra::kable_styling(bootstrap_options = c("striped"))
+
+notsent <- allsent %>% dplyr::filter(org_code %in% unique(sent_df$org_code))
+
+## 286 sites included among sentinels
+## 205 not include among sentinels
+
+```
+
+```{r tab_survzone}
+
+tabfns <- list.files(path = paste0(params$home_directory, "/generated_data/"), pattern = "^outputTables", full.names = TRUE)
+tabfns2 <- list.files(path = paste0(params$home_directory, "/generated_data/"), pattern = "^outputTables")
+stratcodes_tab <- stringr::str_remove(stringr::str_remove(tabfns2, "^outputTables_"), "_buff10-20-30_seed544400_nsims20.RData")
+tab_survzone <- purrr::map_dfr(1:length(tabfns), function(i){
+  load(tabfns[i])
+  rc <- dplyr::mutate(tab_survzone, strategy = stratcodes_tab[i]) %>%
+    dplyr::mutate(perc_pop_survzone = prop_pop_survzone*100) %>%
+    dplyr::filter(metric == "Inf") %>% ## same between Inf & rr
+    dplyr::select(-metric)
+  return(rc)
+})
+
+tab_survzone_plt <- dplyr::select(tab_survzone, contains("perc"), strategy, q) %>%
+  tidyr::pivot_longer(cols = contains("perc"), names_to = "metric", values_to = "value") %>%
+  tidyr::pivot_wider(names_prefix = "q", names_from = "q", values_from = "value")
+
+
+szpop <- ggplot2::ggplot(dplyr::filter(tab_survzone_plt, metric == "perc_pop_survzone"), ggplot2::aes(y = strategy)) +
+  ggplot2::geom_pointrange(ggplot2::aes(x = qmean, xmin = q0.025, xmax = q0.975)) +
+  ggplot2::scale_x_continuous("Surveillance Zone Population", limits = c(0, 50))
+
+
+szinf <- ggplot2::ggplot(dplyr::filter(tab_survzone_plt, metric == "perc_inf_survzone"), ggplot2::aes(y = strategy)) +
+  ggplot2::geom_pointrange(ggplot2::aes(x = qmean, xmin = q0.025, xmax = q0.975)) +
+  ggplot2::scale_x_continuous("Surveillance Zone Infections", limits = c(0, 50))
+
+gridExtra::grid.arrange(szpop, szinf, ncol = 1)
+
+```
+
+```{r tab_survzone_cat}
+
+tab_survzone_cat <- purrr::map_dfr(1:length(tabfns), function(i){
+  load(tabfns[i])
+  rc <- dplyr::mutate(tab_survzone_cat, strategy = stratcodes_tab[i])
+  return(rc)
+})
+
+```
+
+```{r tab_survzone_in_bang}
+
+tab_survzone_in_bang <- purrr::map_dfr(1:length(tabfns), function(i){
+  load(tabfns[i])
+  rc <- dplyr::mutate(tab_survzone_in_bang, strategy = stratcodes_tab[i])
+  return(rc)
+})
+
+## There are NAs concentrated among Inf values (inf_cat_total, pop_cat_total, perc_inf_cat_survzone, perc_pop_cat_survzone)
+
+```

@@ -53,8 +53,8 @@ denom_inf <- dplyr::select(denominators, rep, tot_inf)
 
 ```{r cleandata}
 ## clean data
-orig_grid <- purrr::map_dfr(1:nrow(tmpdf), function(i){ 
-  readr::read_csv(tmpdf[i,]$fn) %>%
+orig_grid <- purrr::map_dfr(1:nrow(tmpdf), function(i){
+  readr::read_csv(tmpdf[i,]$fn, col_types = cols(metric = col_character())) %>%
     dplyr::mutate(strategy = stringr::str_remove(stringr::str_remove(tmpdf[i,]$dir, "^tmp_"), "_buff10-20-30_seed544400_nsims20"))
 })
 

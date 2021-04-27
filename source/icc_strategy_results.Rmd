@@ -38,8 +38,6 @@ tmpfiles <- paste0("tmpout_", niters, ".csv")
 tmpdf <- expand.grid(dir = tmpdirs, file = tmpfiles, stringsAsFactors = FALSE) %>%
   dplyr::mutate(fn = paste0("generated_data/", dir, "/", file))
 
-
-
 ## get denominators
 bootcat <- readr::read_csv("data/boot_cat_denominators.csv", col_types = "cccdd")
 ## total infections & pop in bangladesh
@@ -51,116 +49,22 @@ denom_inf <- dplyr::select(denominators, rep, tot_inf)
 
 ```
 
-```{r cleandata}
-## clean data
-orig_grid <- purrr::map_dfr(1:nrow(tmpdf), function(i){
-  readr::read_csv(tmpdf[i,]$fn, col_types = cols(metric = col_character())) %>%
-    dplyr::mutate(strategy = stringr::str_remove(stringr::str_remove(tmpdf[i,]$dir, "^tmp_"), "_buff10-20-30_seed544400_nsims20"))
-})
-
-print("Cleaning data ******")
-print(paste("Filter down to", nboots, "bootstrapped samples for comparison"))
-
-cl_grid <- dplyr::filter(orig_grid, !is.na(implied_inf_toAgg)) %>%
-  dplyr::filter(rep <= nboots) %>%
-  dplyr::mutate(rep = as.character(rep)) 
-
-
-cl_iter <- dplyr::group_by(cl_grid, strategy, metric, sim, rep) %>%
-  dplyr::summarise(pop_survzone = sum(pop_toAgg, na.rm = TRUE),
-                  inf_survzone = sum(implied_inf_toAgg, na.rm = TRUE)) 
-```
-
-# Variability in total infections in surveillance zone across strategies
-## Relative Risk Thresholds
-
-```{r models_rr_across, results = "asis", error = TRUE}
-
-rrdat_ac <- dplyr::filter(cl_iter, metric == "rr") 
-
-rrdat <- dplyr::mutate(rrdat_ac, rep = factor(rep), sim = factor(sim), strategy = factor(strategy))
-
-r1 <- lmer(inf_survzone ~ (1 | rep) , data = rrdat)
-r2 <- lmer(inf_survzone ~ (1 | sim), data = rrdat)
-r3 <- lmer(inf_survzone ~ (1 | strategy), data = rrdat)
-r4 <- lmer(inf_survzone ~ (1 | rep) + (1 | sim) , data = rrdat)
-r5 <- lmer(inf_survzone ~ (1 | rep) + (1 | sim) + (1 | strategy), data = rrdat)
-
-cat(
-  tab_model(
-  title = paste("relative risk: across strategies"),
-  r1,
-  r2,
-  r3,
-  r4,
-  r5,
-  transform = NULL,
-  dv.labels = c(
-    "bootsrap (rep)",
-    "strategy sample (sim)",
-    "strategy",
-    "rep, sim",
-    "rep, sim, strategy"),
-  show.aic = T,
-  show.dev = T,
-  show.se = T,
-  show.ci = T,
-  show.df = T,
-  collapse.ci = T
-  )$knitr, "\n -----\n")
-
-```
-
-## Absolute Risk Thresholds
-
-```{r models_abs_across, results = "asis", error = TRUE}
-
-rrdat_ac <- dplyr::filter(cl_iter, metric == "inf") 
-
-rrdat <- dplyr::mutate(rrdat_ac, rep = factor(rep), sim = factor(sim), strategy = factor(strategy))
-
-r1 <- lmer(inf_survzone ~ (1 | rep) , data = rrdat)
-r2 <- lmer(inf_survzone ~ (1 | sim), data = rrdat)
-r3 <- lmer(inf_survzone ~ (1 | strategy), data = rrdat)
-r4 <- lmer(inf_survzone ~ (1 | rep) + (1 | sim) , data = rrdat)
-r5 <- lmer(inf_survzone ~ (1 | rep) + (1 | sim) + (1 | strategy), data = rrdat)
-
-cat(
-  tab_model(
-  title = paste("absolute risk: across strategies"),
-  r1,
-  r2,
-  r3,
-  r4,
-  r5,
-  transform = NULL,
-  dv.labels = c(
-    "bootsrap (rep)",
-    "strategy sample (sim)",
-    "strategy",
-    "rep, sim",
-    "rep, sim, strategy"),
-  show.aic = T,
-  show.dev = T,
-  show.se = T,
-  show.ci = T,
-  show.df = T,
-  collapse.ci = T
-  )$knitr, "\n -----\n")
-
-```
-
-
 # Variability in total infections in surveillance zone by strategy
 ## Relative Risk Thresholds
 
 ```{r models_rr, results = "asis", error = TRUE}
 
-unique_strategies <- unique(cl_iter$strategy)
-for (i in 1:length(unique_strategies)){
+for (i in 1:length(tmpdirs)){
 
-  print(paste("Working on", unique_strategies[i]))
-  rrdat <- dplyr::filter(cl_iter, strategy == unique_strategies[i] & metric == "rr") 
+  smalltmpdf <- dplyr::filter(tmpdf, dir == tmpdirs[i])
+  cl_iter <- purrr::map_dfr(1:nrow(smalltmpdf), function(j){
+    readr::read_csv(smalltmpdf[j,]$fn, col_types = cols(metric = col_character())) %>%
+      dplyr::mutate(strategy = stringr::str_remove(stringr::str_remove(tmpdf[j,]$dir, "^tmp_"), "_buff10-20-30_seed544400_nsims20"))
+  })
+  unique_strategies <- unique(cl_iter$strategy)
+
+  print(paste("Working on", unique_strategies))
+  rrdat <- dplyr::filter(cl_iter, strategy == unique_strategies & metric == "rr") 
 
   if(params$testing){
     print("Warning: These are testing results!!!")
@@ -175,7 +79,7 @@ for (i in 1:length(unique_strategies)){
   
   cat(
     tab_model(
-    title = paste("relative risk thresholds:", unique_strategies[i]),
+    title = paste("relative risk thresholds:", unique_strategies),
     r1,
     r2,
     r3,
@@ -201,11 +105,18 @@ for (i in 1:length(unique_strategies)){
 
 ```{r models_abs, results = "asis", error = TRUE}
 
-unique_strategies <- unique(cl_iter$strategy)
-for (i in 1:length(unique_strategies)){
 
-  print(paste("Working on", unique_strategies[i]))
-  rrdat <- dplyr::filter(cl_iter, strategy == unique_strategies[i] & metric == "inf") 
+for (i in 1:length(tmpdirs)){
+
+  smalltmpdf <- dplyr::filter(tmpdf, dir == tmpdirs[i])
+  cl_iter <- purrr::map_dfr(1:nrow(smalltmpdf), function(j){
+    readr::read_csv(smalltmpdf[j,]$fn, col_types = cols(metric = col_character())) %>%
+      dplyr::mutate(strategy = stringr::str_remove(stringr::str_remove(tmpdf[j,]$dir, "^tmp_"), "_buff10-20-30_seed544400_nsims20"))
+  })
+  unique_strategies <- unique(cl_iter$strategy)
+
+  print(paste("Working on", unique_strategies))
+  rrdat <- dplyr::filter(cl_iter, strategy == unique_strategies & metric == "inf") 
 
   if(params$testing){
     print("Warning: These are testing results!!!")
@@ -222,7 +133,7 @@ for (i in 1:length(unique_strategies)){
   
   cat(
     tab_model(
-    title = paste("absolute risk thresholds:", unique_strategies[i]),
+    title = paste("absolute risk thresholds:", unique_strategies),
     r1,
     r2,
     r3,
@@ -241,5 +152,108 @@ for (i in 1:length(unique_strategies)){
 
 }
 
+
+```
+
+
+The cleandata block has memory limitations
+```{r cleandata}
+## clean data
+# orig_grid <- purrr::map_dfr(1:nrow(tmpdf), function(i){
+#   readr::read_csv(tmpdf[i,]$fn, col_types = cols(metric = col_character())) %>%
+#     dplyr::mutate(strategy = stringr::str_remove(stringr::str_remove(tmpdf[i,]$dir, "^tmp_"), "_buff10-20-30_seed544400_nsims20"))
+# })
+
+# print("Cleaning data ******")
+# print(paste("Filter down to", nboots, "bootstrapped samples for comparison"))
+
+# cl_grid <- dplyr::filter(orig_grid, !is.na(implied_inf_toAgg)) %>%
+#   dplyr::filter(rep <= nboots) %>%
+#   dplyr::mutate(rep = as.character(rep)) 
+
+
+# cl_iter <- dplyr::group_by(cl_grid, strategy, metric, sim, rep) %>%
+#   dplyr::summarise(pop_survzone = sum(pop_toAgg, na.rm = TRUE),
+#                   inf_survzone = sum(implied_inf_toAgg, na.rm = TRUE)) 
+```
+
+# Variability in total infections in surveillance zone across strategies
+Skipping this section now because of memory limitations.
+
+## Relative Risk Thresholds
+
+```{r models_rr_across, results = "asis", error = TRUE}
+
+# rrdat_ac <- dplyr::filter(cl_iter, metric == "rr") 
+
+# rrdat <- dplyr::mutate(rrdat_ac, rep = factor(rep), sim = factor(sim), strategy = factor(strategy))
+
+# r1 <- lmer(inf_survzone ~ (1 | rep) , data = rrdat)
+# r2 <- lmer(inf_survzone ~ (1 | sim), data = rrdat)
+# r3 <- lmer(inf_survzone ~ (1 | strategy), data = rrdat)
+# r4 <- lmer(inf_survzone ~ (1 | rep) + (1 | sim) , data = rrdat)
+# r5 <- lmer(inf_survzone ~ (1 | rep) + (1 | sim) + (1 | strategy), data = rrdat)
+
+# cat(
+#   tab_model(
+#   title = paste("relative risk: across strategies"),
+#   r1,
+#   r2,
+#   r3,
+#   r4,
+#   r5,
+#   transform = NULL,
+#   dv.labels = c(
+#     "bootsrap (rep)",
+#     "strategy sample (sim)",
+#     "strategy",
+#     "rep, sim",
+#     "rep, sim, strategy"),
+#   show.aic = T,
+#   show.dev = T,
+#   show.se = T,
+#   show.ci = T,
+#   show.df = T,
+#   collapse.ci = T
+#   )$knitr, "\n -----\n")
+
+```
+
+## Absolute Risk Thresholds
+
+```{r models_abs_across, results = "asis", error = TRUE}
+
+# rrdat_ac <- dplyr::filter(cl_iter, metric == "inf") 
+
+# rrdat <- dplyr::mutate(rrdat_ac, rep = factor(rep), sim = factor(sim), strategy = factor(strategy))
+
+# r1 <- lmer(inf_survzone ~ (1 | rep) , data = rrdat)
+# r2 <- lmer(inf_survzone ~ (1 | sim), data = rrdat)
+# r3 <- lmer(inf_survzone ~ (1 | strategy), data = rrdat)
+# r4 <- lmer(inf_survzone ~ (1 | rep) + (1 | sim) , data = rrdat)
+# r5 <- lmer(inf_survzone ~ (1 | rep) + (1 | sim) + (1 | strategy), data = rrdat)
+
+# cat(
+#   tab_model(
+#   title = paste("absolute risk: across strategies"),
+#   r1,
+#   r2,
+#   r3,
+#   r4,
+#   r5,
+#   transform = NULL,
+#   dv.labels = c(
+#     "bootsrap (rep)",
+#     "strategy sample (sim)",
+#     "strategy",
+#     "rep, sim",
+#     "rep, sim, strategy"),
+#   show.aic = T,
+#   show.dev = T,
+#   show.se = T,
+#   show.ci = T,
+#   show.df = T,
+#   collapse.ci = T
+#   )$knitr, "\n -----\n")
 
 ```

@@ -50,7 +50,6 @@ denom_inf <- dplyr::select(denominators, rep, tot_inf)
 ```
 
 # Variability in total infections in surveillance zone by strategy
-## Relative Risk Thresholds
 
 ```{r models_rr, results = "asis", error = TRUE}
 
@@ -66,92 +65,81 @@ for (i in 1:length(tmpdirs)){
                   inf_survzone = sum(implied_inf_toAgg, na.rm = TRUE)) 
   unique_strategies <- unique(cl_iter$strategy)
 
-  print(paste("Working on", unique_strategies))
-  rrdat <- dplyr::filter(cl_iter, strategy == unique_strategies & metric == "rr") 
+  try({
 
-  if(params$testing){
-    print("Warning: These are testing results!!!")
-    rrdat <- dplyr::mutate(rrdat, rep = factor(c(rep(1, 40), rep(2, 59))), sim = factor(c(rep(1, 20), rep(2, 9), rep(3, 70))))
-  }
+    print(paste("Working on", unique_strategies))
+    rrdat <- dplyr::filter(cl_iter, strategy == unique_strategies & metric == "rr") 
 
-  rrdat <- dplyr::mutate(rrdat, rep = factor(rep), sim = factor(sim))
+    if(params$testing){
+      print("Warning: These are testing results!!!")
+      rrdat <- dplyr::mutate(rrdat, rep = factor(c(rep(1, 40), rep(2, 59))), sim = factor(c(rep(1, 20), rep(2, 9), rep(3, 70))))
+    }
 
-  r1 <- lmer(inf_survzone ~ (1 | rep) , data = rrdat)
-  r2 <- lmer(inf_survzone ~ (1 | sim), data = rrdat)
-  r3 <- lmer(inf_survzone ~ (1 | rep) + (1 | sim) , data = rrdat)
-  
-  cat(
-    tab_model(
-    title = paste("relative risk thresholds:", unique_strategies),
-    r1,
-    r2,
-    r3,
-    transform = NULL,
-    dv.labels = c(
-      "bootsrap (rep)",
-      "strategy sample (sim)",
-      "rep, sim"),
-    show.aic = T,
-    show.dev = T,
-    show.se = T,
-    show.ci = T,
-    show.df = T,
-    collapse.ci = T
-    )$knitr, "\n -----\n")
+    rrdat <- dplyr::mutate(rrdat, rep = factor(rep), sim = factor(sim))
 
-}
+    r1 <- lmer(inf_survzone ~ (1 | rep) , data = rrdat)
+    r2 <- lmer(inf_survzone ~ (1 | sim), data = rrdat)
+    r3 <- lmer(inf_survzone ~ (1 | rep) + (1 | sim) , data = rrdat)
+    
+    cat(
+      tab_model(
+      title = paste("relative risk thresholds:", unique_strategies),
+      r1,
+      r2,
+      r3,
+      transform = NULL,
+      dv.labels = c(
+        "bootsrap (rep)",
+        "strategy sample (sim)",
+        "rep, sim"),
+      show.aic = T,
+      show.dev = T,
+      show.se = T,
+      show.ci = T,
+      show.df = T,
+      collapse.ci = T
+      )$knitr, "\n -----\n")
 
-
-```
-
-## Absolute Risk Thresholds 
-
-```{r models_abs, results = "asis", error = TRUE}
-
-
-for (i in 1:length(tmpdirs)){
-
-  smalltmpdf <- dplyr::filter(tmpdf, dir == tmpdirs[i])
-  cl_iter <- purrr::map_dfr(1:nrow(smalltmpdf), function(j){
-    readr::read_csv(smalltmpdf[j,]$fn, col_types = cols(metric = col_character())) %>%
-      dplyr::mutate(strategy = stringr::str_remove(stringr::str_remove(smalltmpdf[j,]$dir, "^tmp_"), "_buff10-20-30_seed544400_nsims20"))
   })
-  unique_strategies <- unique(cl_iter$strategy)
 
-  print(paste("Working on", unique_strategies))
-  rrdat <- dplyr::filter(cl_iter, strategy == unique_strategies & metric == "inf") 
 
-  if(params$testing){
-    print("Warning: These are testing results!!!")
-    rrdat <- dplyr::mutate(rrdat, rep = factor(c(rep(1, 40), rep(2, 59))), sim = factor(c(rep(1, 20), rep(2, 9), rep(3, 70))))
-  }
+  try({
 
-  rrdat <- dplyr::mutate(rrdat, rep = factor(rep), sim = factor(sim))
+    print(paste("Working on", unique_strategies))
+    infdat <- dplyr::filter(cl_iter, strategy == unique_strategies & metric == "inf") 
 
-  r1 <- lmer(inf_survzone ~ (1 | rep) , data = rrdat)
-  r2 <- lmer(inf_survzone ~ (1 | sim), data = rrdat)
-  r3 <- lmer(inf_survzone ~ (1 | rep) + (1 | sim) , data = rrdat)
-  print(summary(r1))
-  print(summary(r2))
+    if(params$testing){
+      print("Warning: These are testing results!!!")
+      infdat <- dplyr::mutate(infdat, rep = factor(c(rep(1, 40), rep(2, 59))), sim = factor(c(rep(1, 20), rep(2, 9), rep(3, 70))))
+    }
+
+    infdat <- dplyr::mutate(infdat, rep = factor(rep), sim = factor(sim))
+
+    m1 <- lmer(inf_survzone ~ (1 | rep) , data = infdat)
+    m2 <- lmer(inf_survzone ~ (1 | sim), data = infdat)
+    m3 <- lmer(inf_survzone ~ (1 | rep) + (1 | sim) , data = infdat)
+
+    cat(
+      tab_model(
+      title = paste("absolute risk thresholds:", unique_strategies),
+      m1,
+      m2,
+      m3,
+      transform = NULL,
+      dv.labels = c(
+        "bootsrap (rep)",
+        "strategy sample (sim)",
+        "rep, sim"),
+      show.aic = T,
+      show.dev = T,
+      show.se = T,
+      show.ci = T,
+      show.df = T,
+      collapse.ci = T
+      )$knitr, "\n -----\n")
+    
+  })
   
-  cat(
-    tab_model(
-    title = paste("absolute risk thresholds:", unique_strategies),
-    r1,
-    r2,
-    r3,
-    transform = NULL,
-    dv.labels = c(
-      "bootsrap (rep)",
-      "strategy sample (sim)",
-      "rep, sim"),
-    show.aic = T,
-    show.dev = T,
-    show.se = T,
-    show.ci = T,
-    show.df = T,
-    collapse.ci = T
-    )$knitr, "\n -----\n")
 
 }
 

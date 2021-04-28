@@ -59,7 +59,7 @@ for (i in 1:length(tmpdirs)){
   smalltmpdf <- dplyr::filter(tmpdf, dir == tmpdirs[i])
   cl_grid <- purrr::map_dfr(1:nrow(smalltmpdf), function(j){
     readr::read_csv(smalltmpdf[j,]$fn, col_types = cols(metric = col_character())) %>%
-      dplyr::mutate(strategy = stringr::str_remove(stringr::str_remove(tmpdf[j,]$dir, "^tmp_"), "_buff10-20-30_seed544400_nsims20"))
+      dplyr::mutate(strategy = stringr::str_remove(stringr::str_remove(smalltmpdf[j,]$dir, "^tmp_"), "_buff10-20-30_seed544400_nsims20"))
   })
   cl_iter <- dplyr::group_by(cl_grid, strategy, metric, sim, rep) %>%
     dplyr::summarise(pop_survzone = sum(pop_toAgg, na.rm = TRUE),
@@ -114,7 +114,7 @@ for (i in 1:length(tmpdirs)){
   smalltmpdf <- dplyr::filter(tmpdf, dir == tmpdirs[i])
   cl_iter <- purrr::map_dfr(1:nrow(smalltmpdf), function(j){
     readr::read_csv(smalltmpdf[j,]$fn, col_types = cols(metric = col_character())) %>%
-      dplyr::mutate(strategy = stringr::str_remove(stringr::str_remove(tmpdf[j,]$dir, "^tmp_"), "_buff10-20-30_seed544400_nsims20"))
+      dplyr::mutate(strategy = stringr::str_remove(stringr::str_remove(smalltmpdf[j,]$dir, "^tmp_"), "_buff10-20-30_seed544400_nsims20"))
   })
   unique_strategies <- unique(cl_iter$strategy)
 

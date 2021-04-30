@@ -6,7 +6,7 @@ source("source/sentinel_assignment_utils.R")
 #### settings ####
 seednum <- 544400
 set.seed(seednum)
-nsims <- 1
+nsims <- 20
 radii_vec <- c(10, 20, 30)
 buffstring <- paste(radii_vec, collapse="-")
 
@@ -98,7 +98,7 @@ div_list <- lapply(seq.int(nsims), function(i){
   generate_division(sentinels, allhosp) 
 })
 div <- data.table::rbindlist(div_list, idcol = "sim")
-write_csv(rdm, glue::glue("{out_dir}sentinelSamples_division_buff{buffstring}_seed{seednum}_nsims{nsims}.csv"))
+write_csv(div, glue::glue("{out_dir}sentinelSamples_division_{core_str}_nsims{nsims}.csv"))
 
 ######### Positive controls (deterministic) ##############
 

@@ -90,6 +90,15 @@ gridExtra::grid.arrange(szpop, szinf, ncol = 1)
 
 ```
 
+```{r tab_survzone2}
+tab_survzone %>%
+  dplyr::select(strategy, perc_inf_survzone, q) %>%
+  tidyr::pivot_wider(names_from = "q", names_prefix = "q", values_from = perc_inf_survzone) %>%
+  dplyr::select(strategy, qmean, q0.025, q0.975, q0.5, q0.25, q0.75) %>%
+  kableExtra::kable() %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped"))
+```
+
 ```{r tab_survzone_cat}
 
 tab_survzone_cat <- purrr::map_dfr(1:length(tabfns), function(i){

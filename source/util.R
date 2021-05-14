@@ -21,6 +21,8 @@ reload_source <- function(){
   library(magrittr)
   library(ggpol)
   library(numform)
+  library(ggforce)
+  library(ggpattern) 
   
   source("source/util.R")
   

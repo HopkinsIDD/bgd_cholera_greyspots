@@ -631,6 +631,14 @@ i <- barplot %>%
   dplyr::mutate(output="infections") %>%
   bind_rows(.,p) %>% 
   mutate(risk_cat = factor(risk_cat, levels = c("High", "Moderate", "Low")))
+wide_data <- i %>% 
+  dplyr::filter(denominator=="Bangladesh") %>%
+  dplyr::rename(pop=number, pop_percent=percent) %>%
+  dplyr::select(-denominator) %>%
+  bind_cols(.,i %>% 
+              dplyr::filter(denominator=="Surveillance zone") %>% 
+              dplyr::rename(inf=number, inf_percent=percent) %>% 
+              dplyr::select(inf,inf_percent))
 
 
 fig3_num <- ggplot(data=i,aes(x=risk_cat,fill=risk_cat,alpha=denominator)) + 
@@ -713,9 +721,101 @@ pyramid_perc <- i %>% ggplot(aes(x=risk_cat)) +
 
 
 plt <- ggpubr::ggarrange(pyramid_num, pyramid_perc, labels=c("A", "B"), nrow=2, ncol=1)
-print(plt)
+#print(plt)
 ggsave(filename = paste0(fig_wd, "pyr-plot-numbers", code_str, ".pdf"), pyramid_num, width = 6, height = 6, units = "in")
 ggsave(filename = paste0(fig_wd, "pyr-plot-percent", code_str, ".pdf"), pyramid_perc, width = 6, height = 6, units = "in")
+
+
+
+
+
+
+########stacked bar plot
+
+stack_bar_A <- i %>% 
+  ggplot(aes(risk_cat, number, fill=output)) + 
+  geom_col(data = . %>% filter(risk_measure=="Relative risk", denominator=="Bangladesh"),aes(risk_cat, number, fill =output), position = "dodge", alpha = 0.4,stat="identity") +
+  geom_col(data = . %>% filter(risk_measure=="Relative risk", denominator=="Surveillance zone"), aes(risk_cat, number, fill =output), position = "dodge", alpha = 1) +
+  geom_tile(aes(y=NA_integer_, alpha = factor(denominator))) + 
+  geom_hline(yintercept=0, size=1.5, alpha=0.5) + coord_flip() +
+  theme_minimal() + 
+  xlab("Risk category") + 
+  ylab("Number of people (in millions)") +
+  scale_fill_manual("Total count", values = category_cols_rev, guide = guide_legend(reverse = TRUE)) +
+  #scale_color_manual("Risk category", values=six_colors) +
+  scale_alpha_discrete(name="Geographic frame",range = c(.4,1)) +
+  scale_y_continuous(breaks = c(0,15000000,30000000,45000000,60000000),labels = abs(c(0,15,30,45,60)),limits=c(0,65000000)) 
+
+stack_bar_B <- i %>% 
+  ggplot(aes(risk_cat, number, fill=output)) + 
+  geom_col(data = . %>% filter(risk_measure=="Absolute infections", denominator=="Bangladesh"),aes(risk_cat, number, fill =output), position = "dodge", alpha = 0.4,stat="identity") +
+  geom_col(data = . %>% filter(risk_measure=="Absolute infections", denominator=="Surveillance zone"), aes(risk_cat, number, fill =output), position = "dodge", alpha = 1) +
+  geom_tile(aes(y=NA_integer_, alpha = factor(denominator))) + 
+  geom_hline(yintercept=0, size=1.5, alpha=0.5) + coord_flip() +
+  theme_minimal() + 
+  xlab("Risk category") + 
+  ylab("Number of people (in millions)") +
+  scale_fill_manual("Total count", values = category_cols_rev, guide = guide_legend(reverse = TRUE)) +
+  #scale_color_manual("Risk category", values=six_colors) +
+  scale_alpha_discrete(name="Geographic frame",range = c(.4,1)) +
+  scale_y_continuous(breaks = c(0,15000000,30000000,45000000,60000000,75000000,90000000),labels = abs(c(0,15,30,45,60,75,90)),limits=c(0,90000000)) 
+  #scale_y_continuous(trans='log10')
+  #facet_zoom(ylim = c(0, 1000000), zoom.data = ifelse(a <= 1000000, NA, FALSE))
+
+  
+stack_bar_mirror_A <- i %>% 
+  ggplot(aes(risk_cat, number, fill=output)) + 
+  geom_col(data = . %>% filter(risk_measure=="Relative risk", denominator=="Bangladesh"),aes(risk_cat, number, fill =output), position = "dodge", alpha = 0.4,stat="identity") +
+  geom_col(data = . %>% filter(risk_measure=="Relative risk", denominator=="Surveillance zone"), aes(risk_cat, number, fill =output), position = "dodge", alpha = 1) +
+  geom_col(data = . %>% filter(risk_measure=="Absolute infections", denominator=="Bangladesh"),aes(risk_cat, -number, fill =output), position = "dodge", alpha = 0.4,stat="identity") +
+  geom_col(data = . %>% filter(risk_measure=="Absolute infections", denominator=="Surveillance zone"), aes(risk_cat, -number, fill =output), position = "dodge", alpha = 1) +
+  geom_tile(aes(y=NA_integer_, alpha = factor(denominator))) + 
+  geom_hline(yintercept=0, size=1.5, alpha=0.5) + 
+  theme_minimal() + 
+  xlab("Risk category") + 
+  ylab("Number of people (in millions)") +
+  scale_fill_manual("Captured population\nin each risk threshold", values = category_cols_rev,labels = c("Total infected population","Total population")) +
+  #scale_color_manual("Risk category", values=six_colors) +
+  scale_alpha_discrete(name="Geographic frame",range = c(.4,1)) +
+  scale_y_continuous(breaks = c(-90000000,-75000000,-60000000,-45000000,-30000000,-15000000,0,15000000,30000000,45000000,60000000,75000000),labels = abs(c(-90,-75,-60,-45,-30,-15,0,15,30,45,60,75)),limits=c(-90000000,75000000)) 
+  
+stack_bar_2_A <- i %>% 
+  ggplot(aes(risk_cat, number)) + 
+  geom_col(data = . %>% filter(output=="population", denominator=="Surveillance zone"), aes(risk_cat, number, pattern=risk_measure,fill=risk_cat), position = "dodge", alpha = 1,pattern_color = "white",
+                       pattern_fill = "black", pattern_alpha = 1) +
+  geom_col_pattern(data = . %>% filter(output=="population", denominator=="Bangladesh"),aes(risk_cat, number, pattern=risk_measure,fill=risk_cat), position = "dodge", alpha = 0.4, pattern_color = "white",
+                       pattern_fill = "black", pattern_alpha = 0.4) +
+  geom_tile(aes(y=NA_integer_, alpha = factor(denominator))) + 
+  geom_hline(yintercept=0, size=1.5, alpha=0.5) + 
+  theme_minimal() + 
+  xlab("Risk category") + 
+  ylab("Number of total people captured\n(in millions)") +
+  scale_fill_manual("Risk category", values = category_cols) +
+  scale_alpha_discrete(name="Geographic frame",range = c(.4,1)) +
+  scale_pattern_discrete(name="Risk metric", labels=c("Absolute risk","Relative risk")) +
+  scale_y_continuous(breaks = c(0,15000000,30000000,45000000,60000000,75000000,90000000),labels = abs(c(0,15,30,45,60,75,90)),limits=c(0,90000000))
+  
+stack_bar_2_B <- i %>% 
+  ggplot(aes(risk_cat, number)) + 
+  geom_col(data = . %>% filter(output=="infections", denominator=="Surveillance zone"), aes(risk_cat, number, pattern=risk_measure,fill=risk_cat), position = "dodge", alpha = 1,pattern_color = "white",
+                       pattern_fill = "black", pattern_alpha = 1) +
+  geom_col_pattern(data = . %>% filter(output=="infections", denominator=="Bangladesh"),aes(risk_cat, number, pattern=risk_measure,fill=risk_cat), position = "dodge", alpha = 0.4, pattern_color = "white",
+                       pattern_fill = "black", pattern_alpha = 0.4) +
+  geom_tile(aes(y=NA_integer_, alpha = factor(denominator)))+ 
+  geom_hline(yintercept=0, size=1.5, alpha=0.5) + 
+  theme_minimal() + 
+  xlab("Risk category") + 
+  ylab("Number of total infected people captured\n(in millions)") +
+  scale_fill_manual("Risk category", values = category_cols) +
+  scale_alpha_discrete(name="Geographic frame",range = c(.4,1)) +
+  scale_pattern_discrete(name="Risk metric", labels=c("Absolute risk","Relative risk")) +
+  scale_y_continuous(breaks = c(0,5000000,10000000,15000000),labels = abs(c(0,5,10,15)),limits=c(0,15000000))   
+
+plt <- ggpubr::ggarrange(stack_bar_2_A, stack_bar_2_B, labels=c("A", "B"), nrow=2, ncol=1)
+print(plt)
+ggsave(filename = paste0(fig_wd, "stack-bar-plot-numbers", code_str, ".pdf"), stack_bar_2_A, width = 6, height = 6, units = "in")
+ggsave(filename = paste0(fig_wd, "stack-bar-plot-percent", code_str, ".pdf"), stack_bar_2_B, width = 6, height = 6, units = "in")
+
 
 
 ```

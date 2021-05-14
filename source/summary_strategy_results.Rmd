@@ -70,7 +70,8 @@ tab_survzone <- purrr::map_dfr(1:length(tabfns), function(i){
     dplyr::filter(metric == "Inf") %>% ## same between Inf & rr
     dplyr::select(-metric)
   return(rc)
-})
+}) %>%
+  dplyr::mutate(strategy = factor(strategy, levels = c("random", "division", "popDiv", "popEq", "popOpt", "rrDiv", "rrEq", "rrOpt", "absDiv", "absEq", "absOpt")))
 
 tab_survzone_plt <- dplyr::select(tab_survzone, contains("perc"), strategy, q) %>%
   tidyr::pivot_longer(cols = contains("perc"), names_to = "metric", values_to = "value") %>%
@@ -90,11 +91,49 @@ gridExtra::grid.arrange(szpop, szinf, ncol = 1)
 
 ```
 
+## Percentage of infections in the surveillance zone
 ```{r tab_survzone2}
 tab_survzone %>%
   dplyr::select(strategy, perc_inf_survzone, q) %>%
   tidyr::pivot_wider(names_from = "q", names_prefix = "q", values_from = perc_inf_survzone) %>%
   dplyr::select(strategy, qmean, q0.025, q0.975, q0.5, q0.25, q0.75) %>%
+  dplyr::arrange(strategy) %>%
+  kableExtra::kable() %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped"))
+```
+
+## Millions of infections in the surveillance zone
+```{r tab_survzone3}
+tab_survzone %>%
+  dplyr::mutate(inf_survzoneM = inf_survzone/1E6) %>%
+  dplyr::select(strategy, inf_survzoneM, q) %>%
+  tidyr::pivot_wider(names_from = "q", names_prefix = "q", values_from = inf_survzoneM) %>%
+  dplyr::select(strategy, qmean, q0.025, q0.975, q0.5, q0.25, q0.75) %>%
+  dplyr::arrange(strategy) %>%
+  kableExtra::kable() %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped"))
+```
+
+
+## Percentage living in the surveillance zone
+```{r tab_survzone4}
+tab_survzone %>%
+  dplyr::select(strategy, perc_pop_survzone, q) %>%
+  tidyr::pivot_wider(names_from = "q", names_prefix = "q", values_from = perc_pop_survzone) %>%
+  dplyr::select(strategy, qmean, q0.025, q0.975, q0.5, q0.25, q0.75) %>%
+  dplyr::arrange(strategy) %>%
+  kableExtra::kable() %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped"))
+```
+
+## Millions living in the surveillance zone
+```{r tab_survzone5}
+tab_survzone %>%
+  dplyr::mutate(pop_survzoneM = pop_survzone/1E6) %>%
+  dplyr::select(strategy, pop_survzoneM, q) %>%
+  tidyr::pivot_wider(names_from = "q", names_prefix = "q", values_from = pop_survzoneM) %>%
+  dplyr::select(strategy, qmean, q0.025, q0.975, q0.5, q0.25, q0.75) %>%
+  dplyr::arrange(strategy) %>%
   kableExtra::kable() %>%
   kableExtra::kable_styling(bootstrap_options = c("striped"))
 ```

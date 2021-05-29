@@ -1,6 +1,6 @@
 ---
 title: "Bangladesh surveillance greyspots"
-subtitle: "April 22, 2021"
+subtitle: "May 28, 2021"
 author: "Elonia"
 description: "Developing a data-driven approach to improve sentinel surveillance design with a case study of cholera in Bangladesh."
 output: 
@@ -11,7 +11,7 @@ output:
 knit: (function(inputFile, encoding) { 
           rmarkdown::render(inputFile,
                         encoding=encoding, 
-                output_file='explore_greyspots_20210422.html') })
+                output_file='explore_greyspots_20210528.html') })
 ---
 
 ```{r setup, include=FALSE, eval=TRUE}
@@ -560,287 +560,6 @@ fig_nums(name = "fig-sero-cat-map-cap", caption = "A. **Cholera risk map as cate
 
 
 
-```{r, fig-bar-plot, fig.dim = c(12,12)}
-
-## Figure 3. The overall percentage of the population living in high-moderate-low risk areas as defined by relative seroincidence risk and absolute number of infections risk measures. B. Bar plot of the percentage of the population in the cholera surveillance zone and percentage of _V. cholerae_ infections in the cholera surveillance zone across Bangladesh and in high-moderate-low risk areas  using the relative seroincidence risk and absolute number of infections as measures of risk. 
-
-
-## Percent of infections and percent of population in BGD in each risk category for each risk measure (absolute infections and relative risk)
-display_inf_riskpops <- sero2 %>%
-  group_by(inf_risk_cat_toPlt) %>%
-  dplyr::summarise(pop1 = sum(pop_toAgg, na.rm = TRUE), inf1 = sum(implied_inf_toAgg, na.rm = TRUE)) %>% 
-  data.frame %>%
-  dplyr::select(inf_risk_cat_toPlt, pop1, inf1) 
-display_rr_riskpops <- sero2 %>%
-  group_by(rr_risk_cat) %>%
-  dplyr::summarise(pop1 = sum(pop_toAgg, na.rm = TRUE), inf1 = sum(implied_inf_toAgg, na.rm = TRUE)) %>% 
-  data.frame %>%
-  dplyr::select(rr_risk_cat, pop1, inf1)
-partA_inf <- display_inf_riskpops %>%
-  dplyr::rename(risk_cat=inf_risk_cat_toPlt) %>%
-  dplyr::mutate(risk_measure="Absolute infections")
-partA <- display_rr_riskpops %>%
-  dplyr::rename(risk_cat=rr_risk_cat) %>%
-  dplyr::mutate(risk_measure="Relative risk") %>%
-  bind_rows(., partA_inf) %>%
-  dplyr::mutate(perc_pop=(pop1/tot_pop)*100,perc_inf=(inf1/tot_inf)*100,denominator="Bangladesh") %>%
-  as_tibble()
-
-
-## Percent of infections and percent of population in cholera surveillance zone in each risk category for each risk measure (absolute infections and relative risk)
-## what is denominator here?? percent of all high risk infections and population in zone among all infections and population in the zone 
-
-tot_inf_rrcat <- sero_buff_df %>% 
-  group_by(buff) %>%
-  dplyr::summarise(tot_infcat=sum(implied_inf_toAgg, na.rm = TRUE), tot_popcat=sum(pop_toAgg, na.rm = TRUE)) 
-display_rrcat_in_buffers <- sero_buff_df %>% 
-  group_by(buff, rr_risk_cat) %>%
-  dplyr::summarise(num_inf = round(sum(implied_inf_toAgg, na.rm = TRUE)), num_pop = round(sum(pop_toAgg, na.rm = TRUE))) %>%
-  left_join(tot_inf_rrcat, by = c("buff")) %>%
-  dplyr::mutate(perc_inf = round(num_inf/tot_infcat*100, 1),
-                perc_pop = round(num_pop/tot_popcat*100, 1)) %>% 
-  dplyr::select(buff, rr_risk_cat, num_inf, perc_inf, num_pop, perc_pop,tot_infcat,tot_popcat) #%>%
-  #dplyr::mutate(num_pop=comma_format(digits = 12)(num_pop),num_inf=comma_format(digits = 12)(num_inf))
-partB_rr_zone <- display_rrcat_in_buffers %>%
-  ungroup %>%
-  dplyr::select(rr_risk_cat, num_pop, num_inf, perc_pop, perc_inf) %>%
-  dplyr::rename(risk_cat=rr_risk_cat, pop1=num_pop, inf1=num_inf) %>%
-  dplyr::mutate(risk_measure="Relative risk", denominator="Surveillance zone") #%>%
-  #add_row(risk_cat = "Total", value = display_survzone_tab$prop_buffer*100, fig_type = "Percent of population in the zone", risk_measure="Relative risk")
-
-tot_inf_infcat <- sero_buff_df %>% 
-  group_by(buff) %>%
-  dplyr::summarise(tot_infcat=sum(implied_inf_toAgg, na.rm = TRUE), tot_popcat=sum(pop_toAgg, na.rm = TRUE)) 
-display_infcat_in_buffers <- sero_buff_df %>% 
-  group_by(buff, inf_risk_cat_toPlt) %>% 
-  dplyr::summarise(num_inf = round(sum(implied_inf_toAgg, na.rm = TRUE)), num_pop = round(sum(pop_toAgg, na.rm = TRUE))) %>%
-  left_join(tot_inf_infcat, by = c("buff")) %>%
-  dplyr::mutate(perc_inf = round(num_inf/tot_infcat*100, 1),
-                perc_pop = round(num_pop/tot_popcat*100, 1)) %>% 
-  dplyr::select(buff, inf_risk_cat_toPlt, num_inf, perc_inf, num_pop, perc_pop, tot_infcat, tot_popcat) #%>%
-  #dplyr::mutate(num_pop=comma_format(digits = 12)(num_pop),num_inf=comma_format(digits = 12)(num_inf))
-partB_inf_zone <- display_infcat_in_buffers %>%
-  ungroup %>%
-  dplyr::select(inf_risk_cat_toPlt, num_pop, num_inf, perc_pop, perc_inf) %>%
-  dplyr::rename(risk_cat=inf_risk_cat_toPlt, pop1=num_pop, inf1=num_inf) %>%
-  dplyr::mutate(risk_measure="Absolute infections", denominator="Surveillance zone") #%>%
-  #add_row(risk_cat = "Total", value = display_survzone_tab$prop_buffer*100, fig_type = "Percent of population in the zone", risk_measure="Absolute infections")
-
-
-## Plot
-
-barplot <- partA %>% 
-  bind_rows(., partB_rr_zone, partB_inf_zone)
-p <- barplot %>%
-  dplyr::select(-inf1,-perc_inf) %>%
-  dplyr::rename(number=pop1, percent=perc_pop) %>%
-  dplyr::mutate(output="population") %>% 
-  mutate(risk_cat = factor(risk_cat, levels = c("High", "Moderate", "Low")))
-i <- barplot %>%
-  dplyr::select(-pop1,-perc_pop) %>%
-  dplyr::rename(number=inf1, percent=perc_inf) %>%
-  dplyr::mutate(output="infections") %>%
-  bind_rows(.,p) %>% 
-  mutate(risk_cat = factor(risk_cat, levels = c("High", "Moderate", "Low")))
-wide_data <- i %>% 
-  dplyr::filter(denominator=="Bangladesh") %>%
-  dplyr::rename(pop=number, pop_percent=percent) %>%
-  dplyr::select(-denominator) %>%
-  bind_cols(.,i %>% 
-              dplyr::filter(denominator=="Surveillance zone") %>% 
-              dplyr::rename(inf=number, inf_percent=percent) %>% 
-              dplyr::select(inf,inf_percent))
-
-
-fig3_num <- ggplot(data=i,aes(x=risk_cat,fill=risk_cat,alpha=denominator)) + 
-  geom_bar(data=i %>% filter(output=="population"),aes(y=number),
-           position="dodge",stat="identity") + 
-  geom_bar(data=i %>% filter(output=="infections"),aes(y=-number),
-           position="dodge",stat="identity") +  
-  #coord_flip() + 
-  facet_grid( ~ risk_measure) +
-  scale_fill_manual("Risk category", values = category_cols) +
-  #scale_fill_manual(values = c(category_cols_6,category_cols_6), name = "Risk") +
-  scale_y_continuous(breaks = c(-25000000,-10000000,0,25000000,50000000,100000000),labels = abs(c(25,10,0,25,50,100)),limits=c(-25000000,100000000)) +
-  scale_alpha_discrete(name="Geographic frame",range = c(1,.4)) + 
-  theme_minimal() + 
-  xlab("Risk category") + 
-  ylab("Number (in millions)") +
-  geom_hline(yintercept=0, lwd=0.3, colour="grey20") 
-  #annotate(x = c(2,4.5,2,2), y = c(20,2,2,25), label=c("Infections","Population","Infections","Population"),    geom="text", angle=90, hjust=0.5, size=3)
-  #geom_text(aes(y=number,label=round(number, 1)), vjust=-0.3, color="#6e6666", size=3.5)  
-  #facet_share( ~ output, dir = "h", scales = "free", reverse_num = TRUE)
-
-
-fig3_perc <- ggplot(data=i,aes(x=risk_cat,fill=risk_cat,alpha=denominator)) + 
-  geom_bar(data=i %>% filter(output=="population"),aes(y=percent),
-           position="dodge",stat="identity") + 
-  geom_bar(data=i %>% filter(output=="infections"),aes(y=-percent),
-           position="dodge",stat="identity") +  
-  #coord_flip() + 
-  facet_grid( ~ risk_measure) +
-  scale_fill_manual("Risk category", values = category_cols) +
-  #scale_fill_manual(values = c(category_cols_6,category_cols_6), name = "Risk") +
-  scale_y_continuous(breaks = c(-80,-40,0,40,80),labels = abs(c(80,40,0,40,80)),limits=c(-100,100)) +
-  scale_alpha_discrete(name="Geographic frame",range = c(1,.4)) + 
-  theme_minimal() + 
-  xlab("Risk category") + 
-  ylab("Percent (%)") +
-  geom_hline(yintercept=0, lwd=0.3, colour="grey20") 
-
-
-plt <- ggpubr::ggarrange(fig3_num, fig3_perc, labels=c("A", "B"), nrow=2, ncol=1)
-#print(plt)
-ggsave(filename = paste0(fig_wd, "bar-plot-numbers", code_str, ".pdf"), fig3_num, width = 6, height = 6, units = "in")
-ggsave(filename = paste0(fig_wd, "bar-plot-percent", code_str, ".pdf"), fig3_perc, width = 6, height = 6, units = "in")
-##"A. Bar plot of the number of people (above x-axis) and number of infections (below x-axis) in the Bangladesh population and in the cholera surveillance zone living in high-moderate-low risk areas as defined by relative seroincidence risk and absolute number of infections risk measures. B. Bar plot of the percentage of the population (above x-axis) and percentage of infections (below x-axis) in Bangladesh and the cholera surveillance zone living in high-moderate-low risk areas using the relative seroincidence risk and absolute number of infections as measures of risk."
-
-######bar plot displayed as population pyramid with bars showing infections and dots showing pop
-
-
-
-pyramid_num <- i %>% ggplot(aes(x=risk_cat)) + 
-  geom_histogram(data = i %>% filter(output=="infections", risk_measure=="Relative risk"),aes(x=risk_cat,fill=risk_cat,y=number,alpha=denominator),position="dodge",
-                 binwidth = 1,stat="identity") + 
-  geom_histogram(data = i %>% filter(output=="infections", risk_measure=="Absolute infections"),aes(fill=risk_cat,y=-number,alpha=denominator),position="dodge",
-                 binwidth = 1,stat="identity") + 
-  geom_point(data = p %>% filter(risk_measure=="Relative risk"),aes(x=risk_cat,y=number,alpha=denominator),position=position_dodge(width = 0.9)) +
-  geom_point(data = p %>% filter(risk_measure=="Absolute infections"),aes(x=risk_cat,y=-number,alpha=denominator),position=position_dodge(width = 0.9)) +
-  geom_hline(yintercept=0, size=1.5, alpha=0.5) + coord_flip() + 
-  scale_y_continuous(breaks = c(-100000000,-75000000,-50000000,-25000000,0,25000000,50000000,75000000,100000000),labels = abs(c(100,75,50,25,0,25,50,75,100)),limits=c(-100000000,100000000)) +
-  theme_minimal() + 
-  xlab("Risk category") + 
-  ylab("Number of infections (in millions)") +
-  scale_fill_manual("Risk category", values = category_cols_rev, guide = guide_legend(reverse = TRUE)) +
-  scale_alpha_discrete(name="Geographic frame",range = c(1,.4))
-
-
-pyramid_perc <- i %>% ggplot(aes(x=risk_cat)) + 
-  geom_histogram(data = i %>% filter(output=="infections", risk_measure=="Relative risk"),aes(x=risk_cat,fill=risk_cat,y=percent,alpha=denominator),position="dodge",
-                 binwidth = 1,stat="identity") + 
-  geom_histogram(data = i %>% filter(output=="infections", risk_measure=="Absolute infections"),aes(fill=risk_cat,y=-percent,alpha=denominator),position="dodge",
-                 binwidth = 1,stat="identity") + 
-  geom_point(data = p %>% filter(risk_measure=="Relative risk"),aes(x=risk_cat,y=percent,alpha=denominator),position=position_dodge(width = 0.9)) +
-  geom_point(data = p %>% filter(risk_measure=="Absolute infections"),aes(x=risk_cat,y=-percent,alpha=denominator),position=position_dodge(width = 0.9)) +
-  geom_hline(yintercept=0, size=1.5, alpha=0.5) + coord_flip() + 
-  scale_y_continuous(breaks = c(-100,-80,-60,-40,-20,0,20,40,60,80,100),labels = abs(c(100,80,60,40,20,0,20,40,60,80,100)),limits=c(-100,100)) +
-  theme_minimal() + 
-  xlab("Risk category") + 
-  ylab("Percent of infections (%)") +
-  scale_fill_manual("Risk category", values = category_cols_rev, guide = guide_legend(reverse = TRUE)) +
-  scale_alpha_discrete(name="Geographic frame",range = c(1,.4))
-
-
-plt <- ggpubr::ggarrange(pyramid_num, pyramid_perc, labels=c("A", "B"), nrow=2, ncol=1)
-#print(plt)
-ggsave(filename = paste0(fig_wd, "pyr-plot-numbers", code_str, ".pdf"), pyramid_num, width = 6, height = 6, units = "in")
-ggsave(filename = paste0(fig_wd, "pyr-plot-percent", code_str, ".pdf"), pyramid_perc, width = 6, height = 6, units = "in")
-
-
-
-
-
-
-########stacked bar plot
-
-stack_bar_A <- i %>% 
-  ggplot(aes(risk_cat, number, fill=output)) + 
-  geom_col(data = . %>% filter(risk_measure=="Relative risk", denominator=="Bangladesh"),aes(risk_cat, number, fill =output), position = "dodge", alpha = 0.4,stat="identity") +
-  geom_col(data = . %>% filter(risk_measure=="Relative risk", denominator=="Surveillance zone"), aes(risk_cat, number, fill =output), position = "dodge", alpha = 1) +
-  geom_tile(aes(y=NA_integer_, alpha = factor(denominator))) + 
-  geom_hline(yintercept=0, size=1.5, alpha=0.5) + coord_flip() +
-  theme_minimal() + 
-  xlab("Risk category") + 
-  ylab("Number of people (in millions)") +
-  scale_fill_manual("Total count", values = category_cols_rev, guide = guide_legend(reverse = TRUE)) +
-  #scale_color_manual("Risk category", values=six_colors) +
-  scale_alpha_discrete(name="Geographic frame",range = c(.4,1)) +
-  scale_y_continuous(breaks = c(0,15000000,30000000,45000000,60000000),labels = abs(c(0,15,30,45,60)),limits=c(0,65000000)) 
-
-stack_bar_B <- i %>% 
-  ggplot(aes(risk_cat, number, fill=output)) + 
-  geom_col(data = . %>% filter(risk_measure=="Absolute infections", denominator=="Bangladesh"),aes(risk_cat, number, fill =output), position = "dodge", alpha = 0.4,stat="identity") +
-  geom_col(data = . %>% filter(risk_measure=="Absolute infections", denominator=="Surveillance zone"), aes(risk_cat, number, fill =output), position = "dodge", alpha = 1) +
-  geom_tile(aes(y=NA_integer_, alpha = factor(denominator))) + 
-  geom_hline(yintercept=0, size=1.5, alpha=0.5) + coord_flip() +
-  theme_minimal() + 
-  xlab("Risk category") + 
-  ylab("Number of people (in millions)") +
-  scale_fill_manual("Total count", values = category_cols_rev, guide = guide_legend(reverse = TRUE)) +
-  #scale_color_manual("Risk category", values=six_colors) +
-  scale_alpha_discrete(name="Geographic frame",range = c(.4,1)) +
-  scale_y_continuous(breaks = c(0,15000000,30000000,45000000,60000000,75000000,90000000),labels = abs(c(0,15,30,45,60,75,90)),limits=c(0,90000000)) 
-  #scale_y_continuous(trans='log10')
-  #facet_zoom(ylim = c(0, 1000000), zoom.data = ifelse(a <= 1000000, NA, FALSE))
-
-  
-stack_bar_mirror_A <- i %>% 
-  ggplot(aes(risk_cat, number, fill=output)) + 
-  geom_col(data = . %>% filter(risk_measure=="Relative risk", denominator=="Bangladesh"),aes(risk_cat, number, fill =output), position = "dodge", alpha = 0.4,stat="identity") +
-  geom_col(data = . %>% filter(risk_measure=="Relative risk", denominator=="Surveillance zone"), aes(risk_cat, number, fill =output), position = "dodge", alpha = 1) +
-  geom_col(data = . %>% filter(risk_measure=="Absolute infections", denominator=="Bangladesh"),aes(risk_cat, -number, fill =output), position = "dodge", alpha = 0.4,stat="identity") +
-  geom_col(data = . %>% filter(risk_measure=="Absolute infections", denominator=="Surveillance zone"), aes(risk_cat, -number, fill =output), position = "dodge", alpha = 1) +
-  geom_tile(aes(y=NA_integer_, alpha = factor(denominator))) + 
-  geom_hline(yintercept=0, size=1.5, alpha=0.5) + 
-  theme_minimal() + 
-  xlab("Risk category") + 
-  ylab("Number of people (in millions)") +
-  scale_fill_manual("Captured population\nin each risk threshold", values = category_cols_rev,labels = c("Total infected population","Total population")) +
-  #scale_color_manual("Risk category", values=six_colors) +
-  scale_alpha_discrete(name="Geographic frame",range = c(.4,1)) +
-  scale_y_continuous(breaks = c(-90000000,-75000000,-60000000,-45000000,-30000000,-15000000,0,15000000,30000000,45000000,60000000,75000000),labels = abs(c(-90,-75,-60,-45,-30,-15,0,15,30,45,60,75)),limits=c(-90000000,75000000)) 
-  
-stack_bar_2_A <- i %>% 
-  ggplot(aes(risk_cat, number)) + 
-  geom_col(data = . %>% filter(output=="population", denominator=="Surveillance zone"), aes(risk_cat, number, pattern=risk_measure,fill=risk_cat), position = "dodge", alpha = 1,pattern_color = "white",
-                       pattern_fill = "black", pattern_alpha = 1) +
-  geom_col_pattern(data = . %>% filter(output=="population", denominator=="Bangladesh"),aes(risk_cat, number, pattern=risk_measure,fill=risk_cat), position = "dodge", alpha = 0.4, pattern_color = "white",
-                       pattern_fill = "black", pattern_alpha = 0.4) +
-  geom_tile(aes(y=NA_integer_, alpha = factor(denominator))) + 
-  geom_hline(yintercept=0, size=1.5, alpha=0.5) + 
-  theme_minimal() + 
-  xlab("Risk category") + 
-  ylab("Number of total people captured\n(in millions)") +
-  scale_fill_manual("Risk category", values = category_cols) +
-  scale_alpha_discrete(name="Geographic frame",range = c(.4,1)) +
-  scale_pattern_discrete(name="Risk metric", labels=c("Absolute risk","Relative risk")) +
-  scale_y_continuous(breaks = c(0,15000000,30000000,45000000,60000000,75000000,90000000),labels = abs(c(0,15,30,45,60,75,90)),limits=c(0,90000000))
-  
-stack_bar_2_B <- i %>% 
-  ggplot(aes(risk_cat, number)) + 
-  geom_col(data = . %>% filter(output=="infections", denominator=="Surveillance zone"), aes(risk_cat, number, pattern=risk_measure,fill=risk_cat), position = "dodge", alpha = 1,pattern_color = "white",
-                       pattern_fill = "black", pattern_alpha = 1) +
-  geom_col_pattern(data = . %>% filter(output=="infections", denominator=="Bangladesh"),aes(risk_cat, number, pattern=risk_measure,fill=risk_cat), position = "dodge", alpha = 0.4, pattern_color = "white",
-                       pattern_fill = "black", pattern_alpha = 0.4) +
-  geom_tile(aes(y=NA_integer_, alpha = factor(denominator)))+ 
-  geom_hline(yintercept=0, size=1.5, alpha=0.5) + 
-  theme_minimal() + 
-  xlab("Risk category") + 
-  ylab("Number of total infected people captured\n(in millions)") +
-  scale_fill_manual("Risk category", values = category_cols) +
-  scale_alpha_discrete(name="Geographic frame",range = c(.4,1)) +
-  scale_pattern_discrete(name="Risk metric", labels=c("Absolute risk","Relative risk")) +
-  scale_y_continuous(breaks = c(0,5000000,10000000,15000000),labels = abs(c(0,5,10,15)),limits=c(0,15000000))   
-
-plt <- ggpubr::ggarrange(stack_bar_2_A, stack_bar_2_B, labels=c("A", "B"), nrow=2, ncol=1)
-print(plt)
-ggsave(filename = paste0(fig_wd, "stack-bar-plot-numbers", code_str, ".pdf"), stack_bar_2_A, width = 6, height = 6, units = "in")
-ggsave(filename = paste0(fig_wd, "stack-bar-plot-percent", code_str, ".pdf"), stack_bar_2_B, width = 6, height = 6, units = "in")
-
-
-
-```
-
-
-```{r, fig-bar-plot-cap}
-
-fig_nums(name = "fig-bar-plot-cap", caption = "A. The number of people living in high-moderate-low risk areas as defined by the relative and absolute risk metrics across Bangladesh and captured in the cholera surveillance zone (shown in different shades as the geographic frame). The percentages in each bar represent the percentage of the people living in high-moderate-low risk areas captured in the cholera surveillance zone. B. The number of people infected with V. cholerae living in high-moderate-low risk areas as defined by the relative and absolute risk metrics across Bangladesh and captured in the cholera surveillance zone (shown in different shades as the geographic frame). The percentages in each bar represent the percentage of infected people living in high-moderate-low risk areas captured in the cholera surveillance zone.", display = FALSE)
-
-```
-
-`r fig_nums("fig-bar-plot-cap", display = "full")`
-
-
 
 ```{r, sfig-sero-buffers-rr, fig.dim = c(12,12)}
 
@@ -1189,4 +908,104 @@ knitr::kable(part3, format = "pandoc", booktabs = T, align = "c", row.names = FA
 ```
 
 
+
+
+```{r, fig-bar-plot, fig.dim = c(12,12)}
+
+## Figure 3. The overall percentage of the population living in high-moderate-low risk areas as defined by relative seroincidence risk and absolute number of infections risk measures. B. Bar plot of the percentage of the population in the cholera surveillance zone and percentage of _V. cholerae_ infections in the cholera surveillance zone across Bangladesh and in high-moderate-low risk areas  using the relative seroincidence risk and absolute number of infections as measures of risk. 
+
+
+## Plot
+barplot <- tbl3 %>% 
+  dplyr::mutate(BGD_pop=pop/(perc_pop/100), BGD_inf=num_inf/(perc_inf/100)) %>%
+  group_by(risk_type,risk_cat) %>%
+  dplyr::summarise(pop_mean=mean(pop),
+                   pop_lb=quantile(pop, c(.025)),pop_ub=quantile(pop, c(.975)),
+                   num_inf_mean=mean(num_inf),
+                   num_inf_lb=quantile(num_inf, c(.025)),num_inf_ub=quantile(num_inf, c(.975)),
+                   perc_pop_mean=mean(perc_pop),
+                   perc_pop_lb=quantile(perc_pop,c(0.25)),perc_pop_ub=quantile(perc_pop,c(0.975)),
+                   perc_inf_mean=mean(perc_inf),
+                   perc_inf_lb=quantile(perc_inf,c(0.25)),perc_inf_ub=quantile(perc_inf,c(0.975)),
+                   BGD_pop_mean=mean(BGD_pop),
+                   BGD_pop_lb=quantile(BGD_pop,c(0.25)),BGD_pop_ub=quantile(BGD_pop,c(0.975)),
+                   BGD_inf_mean=mean(BGD_inf),
+                   BGD_inf_lb=quantile(BGD_inf,c(0.25)),BGD_inf_ub=quantile(BGD_inf,c(0.975))) %>%
+  ungroup 
+
+p1 <- barplot %>%
+  dplyr::select(risk_type,risk_cat,pop_mean,perc_pop_mean) %>%
+  dplyr::rename(number=pop_mean, percent=perc_pop_mean) %>%
+  dplyr::mutate(output="population", denominator="Surveillance zone") %>% 
+  mutate(risk_cat = factor(risk_cat, levels = c("High", "Moderate", "Low"))) 
+p2 <- barplot %>%
+  dplyr::select(risk_type,risk_cat,BGD_pop_mean,perc_pop_mean) %>%
+  dplyr::rename(number=BGD_pop_mean, percent=perc_pop_mean) %>%
+  dplyr::mutate(output="population", denominator="Bangladesh") %>% 
+  mutate(risk_cat = factor(risk_cat, levels = c("High", "Moderate", "Low"))) 
+p3 <- barplot %>%
+  dplyr::select(risk_type,risk_cat,num_inf_mean,perc_inf_mean) %>%
+  dplyr::rename(number=num_inf_mean, percent=perc_inf_mean) %>%
+  dplyr::mutate(output="infections", denominator="Surveillance zone") %>% 
+  mutate(risk_cat = factor(risk_cat, levels = c("High", "Moderate", "Low"))) 
+p4 <- barplot %>%
+  dplyr::select(risk_type,risk_cat,BGD_inf_mean,perc_inf_mean) %>%
+  dplyr::rename(number=BGD_inf_mean, percent=perc_inf_mean) %>%
+  dplyr::mutate(output="infections", denominator="Bangladesh") %>% 
+  mutate(risk_cat = factor(risk_cat, levels = c("High", "Moderate", "Low"))) 
+i <- bind_rows(p1,p2,p3,p4) %>% 
+  mutate(risk_cat = factor(risk_cat, levels = c("High", "Moderate", "Low")))
+ 
+
+########stacked bar plot
+
+stack_bar_2_A <- i %>% 
+  ggplot(aes(risk_cat, number)) + 
+  geom_col(data = . %>% filter(output=="population", denominator=="Surveillance zone"), aes(risk_cat, number, pattern=risk_type,fill=risk_cat), position = "dodge", alpha = 1,pattern_color = "white",
+                       pattern_fill = "black", pattern_alpha = 1) +
+  geom_col_pattern(data = . %>% filter(output=="population", denominator=="Bangladesh"),aes(risk_cat, number, pattern=risk_type,fill=risk_cat), position = "dodge", alpha = 0.4, pattern_color = "white",
+                       pattern_fill = "black", pattern_alpha = 0.4) +
+  geom_tile(aes(y=NA_integer_, alpha = factor(denominator))) + 
+  geom_hline(yintercept=0, size=1.5, alpha=0.5) + 
+  theme_minimal() + 
+  xlab("Risk category") + 
+  ylab("Number of people\n(in millions)") +
+  scale_fill_manual("Risk category", values = category_cols) +
+  scale_alpha_discrete(name="Geographic frame",range = c(.4,1)) +
+  scale_pattern_discrete(name="Risk metric", labels=c("Absolute risk","Relative risk")) +
+  scale_y_continuous(breaks = c(0,15000000,30000000,45000000,60000000,75000000),labels = abs(c(0,15,30,45,60,75)),limits=c(0,80000000))
+  
+stack_bar_2_B <- i %>% 
+  ggplot(aes(risk_cat, number)) + 
+  geom_col(data = . %>% filter(output=="infections", denominator=="Surveillance zone"), aes(risk_cat, number, pattern=risk_type,fill=risk_cat), position = "dodge", alpha = 1,pattern_color = "white",
+                       pattern_fill = "black", pattern_alpha = 1) +
+  geom_col_pattern(data = . %>% filter(output=="infections", denominator=="Bangladesh"),aes(risk_cat, number, pattern=risk_type,fill=risk_cat), position = "dodge", alpha = 0.4, pattern_color = "white",
+                       pattern_fill = "black", pattern_alpha = 0.4) +
+  geom_tile(aes(y=NA_integer_, alpha = factor(denominator)))+ 
+  geom_hline(yintercept=0, size=1.5, alpha=0.5) + 
+  theme_minimal() + 
+  xlab("Risk category") + 
+  ylab("Number of infected people\n(in millions)") +
+  scale_fill_manual("Risk category", values = category_cols) +
+  scale_alpha_discrete(name="Geographic frame",range = c(.4,1)) +
+  scale_pattern_discrete(name="Risk metric", labels=c("Absolute risk","Relative risk")) +
+  scale_y_continuous(breaks = c(0,5000000,10000000,15000000,20000000),labels = abs(c(0,5,10,15,20)),limits=c(0,20000000))   
+
+plt <- ggpubr::ggarrange(stack_bar_2_A, stack_bar_2_B, labels=c("A", "B"), nrow=2, ncol=1)
+print(plt)
+ggsave(filename = paste0(fig_wd, "stack-bar-plot-numbers", code_str, ".pdf"), stack_bar_2_A, width = 6, height = 6, units = "in")
+ggsave(filename = paste0(fig_wd, "stack-bar-plot-percent", code_str, ".pdf"), stack_bar_2_B, width = 6, height = 6, units = "in")
+
+
+
+```
+
+
+```{r, fig-bar-plot-cap}
+
+fig_nums(name = "fig-bar-plot-cap", caption = "A. The number of people living in high-moderate-low risk areas as defined by the relative and absolute risk metrics across Bangladesh and captured in the cholera surveillance zone (shown in different shades as the geographic frame). The percentages in each bar represent the percentage of the people living in high-moderate-low risk areas captured in the cholera surveillance zone. B. The number of people infected with V. cholerae living in high-moderate-low risk areas as defined by the relative and absolute risk metrics across Bangladesh and captured in the cholera surveillance zone (shown in different shades as the geographic frame). The percentages in each bar represent the percentage of infected people living in high-moderate-low risk areas captured in the cholera surveillance zone.", display = FALSE)
+
+```
+
+`r fig_nums("fig-bar-plot-cap", display = "full")`
 
